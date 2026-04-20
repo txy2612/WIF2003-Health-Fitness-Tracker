@@ -308,18 +308,366 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
-                    <h1 class="h3 mb-2 text-gray-800">Progress Chart</h1>
-                    <p class="mb-4">Use the progress charts to visualize your fitness and nutrition progress over time,
-                        helping you stay motivated and on track with your health goals.
-                    </p>
-
-
+ 
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <div>
+                        <h1 class="h3 mb-0 text-gray-800">Progress Charts</h1>
+                        <p class="mb-4">Visualize your fitness performance over time.</p>
+                    </div>
+                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mt-2 mt-sm-0">
+                        <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+                    </a>
                 </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
+ 
+                <!-- Tab Selector Card -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <ul class="nav nav-tabs card-header-tabs" id="progressTabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="daily-tab" data-toggle="tab" href="#dailyPanel" role="tab" aria-controls="dailyPanel" aria-selected="true">
+                                    <i class="fas fa-sun fa-sm mr-1"></i> Daily
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="weekly-tab" data-toggle="tab" href="#weeklyPanel" role="tab" aria-controls="weeklyPanel" aria-selected="false">
+                                    <i class="fas fa-calendar-week fa-sm mr-1"></i> Weekly
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tab" data-toggle="tab" href="#customPanel" role="tab" aria-controls="customPanel" aria-selected="false">
+                                    <i class="fas fa-calendar-alt fa-sm mr-1"></i> Custom Range
+                                </a>
+                            </li>
+                        </ul>
+                    </div><!-- /.card-header -->
+ 
+                    <div class="card-body">
+                        <div class="tab-content" id="progressTabsContent">
+ 
+                            <!-- ===================== DAILY TAB ===================== -->
+                            <div class="tab-pane fade show active" id="dailyPanel" role="tabpanel" aria-labelledby="daily-tab">
+ 
+                                <div class="row mb-4">
+                                    <!-- Steps Today -->
+                                    <div class="col-xl-4 col-md-6 mb-3">
+                                        <div class="card border-left-success shadow h-100 py-2">
+                                            <div class="card-body">
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col mr-2">
+                                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Steps Today</div>
+                                                        <div class="h5 mb-0 font-weight-bold text-gray-800">8,542</div>
+                                                        <div class="small text-muted">Goal: 10,000</div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-walking fa-2x text-gray-300"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+ 
+                                    <!-- Workout Sessions Today -->
+                                    <div class="col-xl-4 col-md-6 mb-3">
+                                        <div class="card border-left-danger shadow h-100 py-2">
+                                            <div class="card-body">
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col mr-2">
+                                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Workout Sessions Today</div>
+                                                        <div class="h5 mb-0 font-weight-bold text-gray-800">2 Sessions</div>
+                                                        <div class="small text-muted">Morning run + evening gym</div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-dumbbell fa-2x text-gray-300"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- /.row -->
+ 
+                                <!-- Daily Bar Chart -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            <i class="fas fa-chart-bar mr-1"></i>
+                                            Steps by Time Block (Today)
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="chart-bar">
+                                            <canvas id="dailyBarChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+ 
+                                <!-- Daily Insight -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            <i class="fas fa-lightbulb mr-1"></i>
+                                            Daily Insight
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-2">
+                                                <span class="text-xs font-weight-bold text-uppercase text-muted">Most Active Time</span>
+                                                <p class="font-weight-bold text-gray-800 mb-0">
+                                                    <i class="fas fa-clock text-warning mr-1"></i>
+                                                    6:00 PM - 8:00 PM
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6 mb-2">
+                                                <span class="text-xs font-weight-bold text-uppercase text-muted">Total Steps Today</span>
+                                                <p class="font-weight-bold text-gray-800 mb-0">
+                                                    <i class="fas fa-shoe-prints text-info mr-1"></i>
+                                                    8,342 Steps
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+ 
+                            </div><!-- /#dailyPanel -->
+ 
+                            <!-- ===================== WEEKLY TAB ===================== -->
+                            <div class="tab-pane fade" id="weeklyPanel" role="tabpanel" aria-labelledby="weekly-tab">
+ 
+                                <div class="row mb-4">
+                                    <!-- Total Steps This Week -->
+                                    <div class="col-xl-3 col-md-6 mb-3">
+                                        <div class="card border-left-success shadow h-100 py-2">
+                                            <div class="card-body">
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col mr-2">
+                                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Steps This Week</div>
+                                                        <div class="h5 mb-0 font-weight-bold text-gray-800">45,672</div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-walking fa-2x text-gray-300"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+ 
+                                    <!-- Calories This Week -->
+                                    <div class="col-xl-3 col-md-6 mb-3">
+                                        <div class="card border-left-danger shadow h-100 py-2">
+                                            <div class="card-body">
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col mr-2">
+                                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Calories This Week</div>
+                                                        <div class="h5 mb-0 font-weight-bold text-gray-800">1,234 kcal</div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-fire fa-2x text-gray-300"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+ 
+                                    <!-- Sessions This Week -->
+                                    <div class="col-xl-3 col-md-6 mb-3">
+                                        <div class="card border-left-info shadow h-100 py-2">
+                                            <div class="card-body">
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col mr-2">
+                                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Workout Sessions This Week</div>
+                                                        <div class="h5 mb-0 font-weight-bold text-gray-800">5 Sessions</div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-dumbbell fa-2x text-gray-300"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+ 
+                                    <!-- Average Steps Per Day -->
+                                    <div class="col-xl-3 col-md-6 mb-3">
+                                        <div class="card border-left-primary shadow h-100 py-2">
+                                            <div class="card-body">
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col mr-2">
+                                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Average Steps per Day</div>
+                                                        <div class="h5 mb-0 font-weight-bold text-gray-800">6,524 Steps</div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-shoe-prints fa-2x text-gray-300"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- /.row -->
+ 
+                                <!-- Weekly Insight (fixed: was "cartd" typo) -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            <i class="fas fa-lightbulb mr-1"></i>
+                                            Weekly Insight
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-2">
+                                                <span class="text-xs font-weight-bold text-uppercase text-muted">Most Active Day</span>
+                                                <p class="font-weight-bold text-gray-800 mb-0">Wednesday - 11,200 steps</p>
+                                            </div>
+                                            <div class="col-md-6 mb-2">
+                                                <span class="text-xs font-weight-bold text-uppercase text-muted">Average Steps / Day</span>
+                                                <p class="font-weight-bold text-gray-800 mb-0">
+                                                    <i class="fas fa-shoe-prints text-success mr-1"></i> 7,744 steps
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+ 
+                            </div><!-- /#weeklyPanel -->
+ 
+                            <!-- ===================== CUSTOM RANGE TAB ===================== -->
+                            <!-- Fixed: was displaced outside tab-content due to broken weekly tab nesting -->
+                            <div class="tab-pane fade" id="customPanel" role="tabpanel" aria-labelledby="custom-tab">
+ 
+                                <!-- Date Picker -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            <i class="fas fa-calendar-alt mr-1"></i> Select Date Range
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row align-items-end">
+                                            <div class="col-md-4 mb-3 mb-md-0">
+                                                <div class="form-group mb-0">
+                                                    <label for="startDate">Start Date</label>
+                                                    <input type="date" class="form-control" id="startDate">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 mb-3 mb-md-0">
+                                                <div class="form-group mb-0">
+                                                    <label for="endDate">End Date</label>
+                                                    <input type="date" class="form-control" id="endDate">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button class="btn btn-primary" id="applyRangeBtn" onclick="applyCustomRange()">
+                                                    <i class="fas fa-search mr-1"></i> Apply
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+ 
+                                <!-- Results (hidden until Apply is clicked) -->
+                                <div id="customResults" class="d-none">
+ 
+                                    <div class="row mb-4">
+                                        <div class="col-xl-4 col-md-6 mb-3">
+                                            <div class="card border-left-success shadow h-100 py-2">
+                                                <div class="card-body">
+                                                    <div class="row no-gutters align-items-center">
+                                                        <div class="col mr-2">
+                                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Steps</div>
+                                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="customSteps">—</div>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <i class="fas fa-walking fa-2x text-gray-300"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-md-6 mb-3">
+                                            <div class="card border-left-danger shadow h-100 py-2">
+                                                <div class="card-body">
+                                                    <div class="row no-gutters align-items-center">
+                                                        <div class="col mr-2">
+                                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Total Calories Burned</div>
+                                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="customCalories">—</div>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <i class="fas fa-fire fa-2x text-gray-300"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-4 col-md-6 mb-3">
+                                            <div class="card border-left-primary shadow h-100 py-2">
+                                                <div class="card-body">
+                                                    <div class="row no-gutters align-items-center">
+                                                        <div class="col mr-2">
+                                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Sessions</div>
+                                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="customSessions">—</div>
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <i class="fas fa-dumbbell fa-2x text-gray-300"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+ 
+                                    <!-- Custom Range Chart -->
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">
+                                                <i class="fas fa-chart-area mr-1"></i> Steps Over Selected Range
+                                            </h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="chart-area">
+                                                <canvas id="customAreaChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+ 
+                                    <!-- Range Insights -->
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">
+                                                <i class="fas fa-lightbulb mr-1"></i> Range Insights
+                                            </h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6 mb-2">
+                                                    <span class="text-xs font-weight-bold text-uppercase text-muted">Best Day in Range</span>
+                                                    <p class="font-weight-bold text-gray-800 mb-0" id="customBestDay">
+                                                        <i class="fas fa-trophy text-warning mr-1"></i> —
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-6 mb-2">
+                                                    <span class="text-xs font-weight-bold text-uppercase text-muted">Average Steps / Day</span>
+                                                    <p class="font-weight-bold text-gray-800 mb-0" id="customAvg">
+                                                        <i class="fas fa-shoe-prints text-success mr-1"></i> —
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+ 
+                                </div><!-- /#customResults -->
+ 
+                                <!-- Empty state — shown before Apply is clicked -->
+                                <div id="customEmptyState" class="text-center py-5">
+                                    <i class="fas fa-calendar-alt fa-3x text-gray-300 mb-3"></i>
+                                    <p class="text-muted">Select a start and end date, then click <strong>Apply</strong> to view your progress.</p>
+                                </div>
+ 
+                            </div><!-- /#customPanel -->
+ 
+                        </div><!-- /#progressTabsContent -->
+                    </div><!-- /.card-body -->
+                </div><!-- /.card (tab selector) -->
+ 
+            </div><!-- /.container-fluid (end page content) -->
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
