@@ -320,74 +320,156 @@
 
   <!-- Section 1: Profile Overview -->
   <!-- Section 2: Fitness Snapshot -->
-<div class="card shadow mb-4">
-  <div class="card-body">
+<div class="card shadow mb-4" style="background-color: #f8f9fc;">
+  <div class="card-body p-4">
 
     <!-- Profile Overview Header -->
     <h5 class="mb-1">Profile Overview</h5>
     <p class="text-muted small mb-4">Your personal information and fitness summary</p>
 
     <!-- Profile Info Row -->
-    <div class="row align-items-start mb-4">
+<div class="card p-4 mb-4" style="background-color: #ffffff; border: 1px solid #e3e6f0;">
 
-      <!-- Profile Photo -->
-      <div class="col-auto text-center">
-        <img id="profilePhoto"
-             src="img/undraw_profile.svg"
-             alt="Profile Photo"
-             class="rounded-circle mb-2"
-             style="width:100px; height:100px; object-fit:cover; border:2px solid #e3e6f0;">
-        <br>
-        <label for="photoUpload" class="btn btn-outline-primary btn-sm mt-1" style="cursor:pointer;">
-          Change Photo
-        </label>
-        <input type="file" id="photoUpload" accept="image/*" style="display:none;">
-      </div>
+  <!-- Avatar + Name -->
+  <div class="text-center mb-4">
+    <img id="profilePhoto"
+         src="img/undraw_profile.svg"
+         alt="Profile Photo"
+         class="rounded-circle mb-3"
+         style="width:110px; height:110px; object-fit:cover; border:3px solid #e3e6f0;">
+    <br>
+    <label for="photoUpload" class="btn btn-outline-primary btn-sm mb-2" style="cursor:pointer;">
+      <i class="fas fa-camera mr-1"></i> Change Photo
+    </label>
+    <input type="file" id="photoUpload" accept="image/*" style="display:none;">
+    <h5 class="font-weight-bold mb-0">Ahmad Hafiz</h5>
+    <p class="text-muted small">Member since January 2025</p>
+  </div>
 
-      <!-- Profile Details -->
-      <div class="col" style="padding-left: 2rem;">
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <p class="mb-1 text-muted">Name</p>
-            <p class="mb-0 font-weight-bold h5">Ahmad Hafiz</p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <p class="mb-1 text-muted">Email</p>
-            <p class="mb-0 font-weight-bold h5">ahmad@email.com</p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <p class="mb-1 text-muted">Age</p>
-            <p class="mb-0 font-weight-bold h5">24 years</p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <p class="mb-1 text-muted">Height</p>
-            <p class="mb-0 font-weight-bold h5">172 cm</p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <p class="mb-1 text-muted">Weight</p>
-            <p class="mb-0 font-weight-bold h5">68 kg</p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <p class="mb-1 text-muted">Goal / Plan</p>
-            <p class="mb-0 font-weight-bold h5">Lose weight</p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <p class="mb-1 text-muted">Gender</p>
-            <p class="mb-0 font-weight-bold h5">Male</p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <p class="mb-1 text-muted">Phone</p>
-            <p class="mb-0 font-weight-bold h5">+60 12-345 6789</p>
-          </div>
-        </div>
+  <hr style="border-color: rgba(0,0,0,0.08);">
 
-        <div class="mt-2">
-          <a href="edit-profile.html" class="btn btn-outline-primary btn-sm">
-            <i class="fas fa-edit mr-1"></i> Edit Profile
-          </a>
-        </div>
-      </div>
+  <!-- Name -->
+  <div class="profile-field d-flex align-items-center justify-content-between py-3"
+       style="border-bottom: 1px solid rgba(0,0,0,0.08);">
+    <div style="flex:1;">
+      <p class="text-muted small mb-1">Name</p>
+      <p class="font-weight-bold h5 mb-0 field-display" id="display-name">Ahmad Hafiz</p>
+      <input type="text" class="form-control border-0 border-bottom rounded-0 px-0 font-weight-bold h5 mb-0 field-input d-none"
+             id="input-name" value="Ahmad Hafiz" style="background:transparent; font-size:1.25rem;">
+    </div>
+    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('name')" style="color:#4e73df;">
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+  </div>
 
+  <!-- Email -->
+  <div class="profile-field d-flex align-items-center justify-content-between py-3"
+       style="border-bottom: 1px solid rgba(0,0,0,0.08);">
+    <div style="flex:1;">
+      <p class="text-muted small mb-1">Email</p>
+      <p class="font-weight-bold h5 mb-0 field-display" id="display-email">ahmad@email.com</p>
+      <input type="email" class="form-control border-0 border-bottom rounded-0 px-0 font-weight-bold h5 mb-0 field-input d-none"
+             id="input-email" value="ahmad@email.com" style="background:transparent; font-size:1.25rem;">
+    </div>
+    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('email')" style="color:#4e73df;">
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+  </div>
+
+  <!-- Age -->
+  <div class="profile-field d-flex align-items-center justify-content-between py-3"
+       style="border-bottom: 1px solid rgba(0,0,0,0.08);">
+    <div style="flex:1;">
+      <p class="text-muted small mb-1">Age</p>
+      <p class="font-weight-bold h5 mb-0 field-display" id="display-age">24 years</p>
+      <input type="number" class="form-control border-0 border-bottom rounded-0 px-0 font-weight-bold h5 mb-0 field-input d-none"
+             id="input-age" value="24" style="background:transparent; font-size:1.25rem;">
+    </div>
+    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('age')" style="color:#4e73df;">
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+  </div>
+
+  <!-- Height -->
+  <div class="profile-field d-flex align-items-center justify-content-between py-3"
+       style="border-bottom: 1px solid rgba(0,0,0,0.08);">
+    <div style="flex:1;">
+      <p class="text-muted small mb-1">Height (cm)</p>
+      <p class="font-weight-bold h5 mb-0 field-display" id="display-height">172 cm</p>
+      <input type="number" class="form-control border-0 border-bottom rounded-0 px-0 font-weight-bold h5 mb-0 field-input d-none"
+             id="input-height" value="172" style="background:transparent; font-size:1.25rem;">
+    </div>
+    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('height')" style="color:#4e73df;">
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+  </div>
+
+  <!-- Weight -->
+  <div class="profile-field d-flex align-items-center justify-content-between py-3"
+       style="border-bottom: 1px solid rgba(0,0,0,0.08);">
+    <div style="flex:1;">
+      <p class="text-muted small mb-1">Weight (kg)</p>
+      <p class="font-weight-bold h5 mb-0 field-display" id="display-weight">68 kg</p>
+      <input type="number" class="form-control border-0 border-bottom rounded-0 px-0 font-weight-bold h5 mb-0 field-input d-none"
+             id="input-weight" value="68" style="background:transparent; font-size:1.25rem;">
+    </div>
+    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('weight')" style="color:#4e73df;">
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+  </div>
+
+  <!-- Goal / Plan -->
+  <div class="profile-field d-flex align-items-center justify-content-between py-3"
+       style="border-bottom: 1px solid rgba(0,0,0,0.08);">
+    <div style="flex:1;">
+      <p class="text-muted small mb-1">Goal / Plan</p>
+      <p class="font-weight-bold h5 mb-0 field-display" id="display-goal">Lose weight</p>
+      <select class="form-control border-0 border-bottom rounded-0 px-0 font-weight-bold h5 mb-0 field-input d-none"
+              id="input-goal" style="background:transparent; font-size:1.25rem;">
+        <option selected>Lose weight</option>
+        <option>Maintain weight</option>
+        <option>Gain muscle</option>
+        <option>Improve fitness</option>
+        <option>Increase endurance</option>
+      </select>
+    </div>
+    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('goal')" style="color:#4e73df;">
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+  </div>
+
+  <!-- Gender -->
+  <div class="profile-field d-flex align-items-center justify-content-between py-3"
+       style="border-bottom: 1px solid rgba(0,0,0,0.08);">
+    <div style="flex:1;">
+      <p class="text-muted small mb-1">Gender</p>
+      <p class="font-weight-bold h5 mb-0 field-display" id="display-gender">Male</p>
+      <select class="form-control border-0 border-bottom rounded-0 px-0 font-weight-bold h5 mb-0 field-input d-none"
+              id="input-gender" style="background:transparent; font-size:1.25rem;">
+        <option selected>Male</option>
+        <option>Female</option>
+        <option>Prefer not to say</option>
+      </select>
+    </div>
+    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('gender')" style="color:#4e73df;">
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+  </div>
+
+  <!-- Phone -->
+  <div class="profile-field d-flex align-items-center justify-content-between py-3">
+    <div style="flex:1;">
+      <p class="text-muted small mb-1">Phone</p>
+      <p class="font-weight-bold h5 mb-0 field-display" id="display-phone">+60 12-345 6789</p>
+      <input type="tel" class="form-control border-0 border-bottom rounded-0 px-0 font-weight-bold h5 mb-0 field-input d-none"
+             id="input-phone" value="+60 12-345 6789" style="background:transparent; font-size:1.25rem;">
+    </div>
+    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('phone')" style="color:#4e73df;">
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+  </div>
+
+</div>
     </div>
 
     <!-- Divider -->
@@ -399,74 +481,74 @@
 
     <div class="row">
 
-      <!-- Current Goal -->
-      <div class="col-xl-3 col-md-6 mb-3">
-        <div class="card border-left-primary h-100 py-3 px-3">
-          <div class="d-flex align-items-center mb-2">
-            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
-                 style="width:42px; height:42px; background-color:#e8f0fe;">
-              <i class="fas fa-bullseye" style="color:#4e73df; font-size:18px;"></i>
-            </div>
-            <span class="text-xs font-weight-bold text-primary text-uppercase">Current Goal</span>
-          </div>
-          <div class="h5 mb-0 font-weight-bold text-gray-800">Lose Weight</div>
-          <p class="text-muted small mt-1 mb-0">Active plan</p>
+  <!-- Current Goal -->
+  <div class="col-xl-3 col-md-6 mb-3">
+    <div class="card h-100 py-3 px-3" style="border: 1px solid #e3e6f0;">
+      <div class="d-flex align-items-center mb-2">
+        <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
+             style="width:42px; height:42px; background-color:#e8f0fe;">
+          <i class="fas fa-bullseye" style="color:#4e73df; font-size:18px;"></i>
         </div>
+        <span class="text-xs font-weight-bold text-uppercase" style="color:#858796;">Current Goal</span>
       </div>
-
-      <!-- Target Weight -->
-      <div class="col-xl-3 col-md-6 mb-3">
-        <div class="card border-left-success h-100 py-3 px-3">
-          <div class="d-flex align-items-center mb-2">
-            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
-                 style="width:42px; height:42px; background-color:#e6f4ea;">
-              <i class="fas fa-weight" style="color:#1cc88a; font-size:18px;"></i>
-            </div>
-            <span class="text-xs font-weight-bold text-success text-uppercase">Target Weight</span>
-          </div>
-          <div class="h5 mb-0 font-weight-bold text-gray-800">62 kg</div>
-          <p class="text-muted small mt-1 mb-0">Current: 68 kg</p>
-        </div>
-      </div>
-
-      <!-- Activity Level -->
-      <div class="col-xl-3 col-md-6 mb-3">
-        <div class="card border-left-info h-100 py-3 px-3">
-          <div class="d-flex align-items-center mb-2">
-            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
-                 style="width:42px; height:42px; background-color:#e0f4fb;">
-              <i class="fas fa-running" style="color:#36b9cc; font-size:18px;"></i>
-            </div>
-            <span class="text-xs font-weight-bold text-info text-uppercase">Activity Level</span>
-          </div>
-          <div class="h5 mb-0 font-weight-bold text-gray-800">Moderate</div>
-          <p class="text-muted small mt-1 mb-0">3–4 days/week</p>
-        </div>
-      </div>
-
-      <!-- Member Since -->
-      <div class="col-xl-3 col-md-6 mb-3">
-        <div class="card border-left-warning h-100 py-3 px-3">
-          <div class="d-flex align-items-center mb-2">
-            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
-                 style="width:42px; height:42px; background-color:#fef8e7;">
-              <i class="fas fa-calendar-alt" style="color:#f6c23e; font-size:18px;"></i>
-            </div>
-            <span class="text-xs font-weight-bold text-warning text-uppercase">Member Since</span>
-          </div>
-          <div class="h5 mb-0 font-weight-bold text-gray-800">January 2025</div>
-          <p class="text-muted small mt-1 mb-0">4 months active</p>
-        </div>
-      </div>
-
+      <div class="h5 mb-0 font-weight-bold text-gray-800">Lose Weight</div>
+      <p class="text-muted small mt-1 mb-0">Active plan</p>
     </div>
+  </div>
+
+  <!-- Target Weight -->
+  <div class="col-xl-3 col-md-6 mb-3">
+    <div class="card h-100 py-3 px-3" style="border: 1px solid #e3e6f0;">
+      <div class="d-flex align-items-center mb-2">
+        <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
+             style="width:42px; height:42px; background-color:#e6f4ea;">
+          <i class="fas fa-weight" style="color:#1cc88a; font-size:18px;"></i>
+        </div>
+        <span class="text-xs font-weight-bold text-uppercase" style="color:#858796;">Target Weight</span>
+      </div>
+      <div class="h5 mb-0 font-weight-bold text-gray-800">62 kg</div>
+      <p class="text-muted small mt-1 mb-0">Current: 68 kg</p>
+    </div>
+  </div>
+
+  <!-- Activity Level -->
+  <div class="col-xl-3 col-md-6 mb-3">
+    <div class="card h-100 py-3 px-3" style="border: 1px solid #e3e6f0;">
+      <div class="d-flex align-items-center mb-2">
+        <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
+             style="width:42px; height:42px; background-color:#e0f4fb;">
+          <i class="fas fa-running" style="color:#36b9cc; font-size:18px;"></i>
+        </div>
+        <span class="text-xs font-weight-bold text-uppercase" style="color:#858796;">Activity Level</span>
+      </div>
+      <div class="h5 mb-0 font-weight-bold text-gray-800">Moderate</div>
+      <p class="text-muted small mt-1 mb-0">3–4 days/week</p>
+    </div>
+  </div>
+
+  <!-- Member Since -->
+  <div class="col-xl-3 col-md-6 mb-3">
+    <div class="card h-100 py-3 px-3" style="border: 1px solid #e3e6f0;">
+      <div class="d-flex align-items-center mb-2">
+        <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
+             style="width:42px; height:42px; background-color:#fef8e7;">
+          <i class="fas fa-calendar-alt" style="color:#f6c23e; font-size:18px;"></i>
+        </div>
+        <span class="text-xs font-weight-bold text-uppercase" style="color:#858796;">Member Since</span>
+      </div>
+      <div class="h5 mb-0 font-weight-bold text-gray-800">January 2025</div>
+      <p class="text-muted small mt-1 mb-0">4 months active</p>
+    </div>
+  </div>
+
+</div>
     <!-- End Fitness Snapshot -->
 
   </div>
 </div>
 <!-- End Fitness Snapshot -->
 <!-- End Profile Overview -->
- 
+
   <!-- Section 3: Account Settings -->
   <div class="card shadow mb-4">
     <div class="card-body">
@@ -555,6 +637,44 @@
       reader.readAsDataURL(file);
     }
   });
+
+  function toggleEdit(field) {
+    var display = document.getElementById('display-' + field);
+    var input = document.getElementById('input-' + field);
+    var row = display.closest('.profile-field');
+    var btn = row.querySelector('.edit-btn i');
+
+    if (input.classList.contains('d-none')) {
+      display.classList.add('d-none');
+      input.classList.remove('d-none');
+      input.focus();
+      btn.classList.remove('fa-pencil-alt');
+      btn.classList.add('fa-check');
+      btn.closest('button').style.color = '#1cc88a';
+      row.style.backgroundColor = '#eaf1fb';
+      row.style.borderLeft = '4px solid #4e73df';
+      row.style.paddingLeft = '12px';
+      row.style.borderRadius = '4px';
+      row.style.transition = 'all 0.2s ease';
+    } else {
+      var newValue = (input.tagName === 'SELECT')
+        ? input.options[input.selectedIndex].text
+        : input.value;
+      if (field === 'age') newValue = newValue + ' years';
+      if (field === 'height') newValue = newValue + ' cm';
+      if (field === 'weight') newValue = newValue + ' kg';
+      display.textContent = newValue;
+      input.classList.add('d-none');
+      display.classList.remove('d-none');
+      btn.classList.remove('fa-check');
+      btn.classList.add('fa-pencil-alt');
+      btn.closest('button').style.color = '#4e73df';
+      row.style.backgroundColor = '';
+      row.style.borderLeft = '';
+      row.style.paddingLeft = '';
+      row.style.borderRadius = '';
+    }
+  }
 </script>
 
             </div>
