@@ -345,15 +345,85 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Notification</h1>
-                    <p class="mb-4">Bla bla bla for notification page. This is where you can view all your notifications
-                        related to your health and fitness
-                        activities, such as workout reminders, nutrition tips, and progress updates. Stay informed and
-                        motivated on your fitness journey!
-                    </p>
-
+                    <h1 class="h3 mb-1 text-gray-800">Reminders</h1>
+                    <p class="mb-4 text-muted">Manage your reminders and view recent alerts.</p>
+                
+                    <div class="row">
+                
+                        <!-- LEFT: ADD REMINDER -->
+                        <div class="col-lg-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header">
+                                    <strong>Add Reminder</strong>
+                                </div>
+                                <div class="card-body">
+                
+                                    <form id="reminderForm">
+                                        <div class="form-group mb-3">
+                                            <label>Title</label>
+                                            <input type="text" id="title" class="form-control" placeholder="e.g. Gym workout" required>
+                                        </div>
+                
+                                        <div class="form-group mb-3">
+                                            <label>Date & Time</label>
+                                            <input type="datetime-local" id="date" class="form-control" required>
+                                        </div>
+                
+                                        <div class="form-group mb-3">
+                                            <label>Note</label>
+                                            <textarea id="note" class="form-control" placeholder="Optional note"></textarea>
+                                        </div>
+                
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            + Add Reminder
+                                        </button>
+                                    </form>
+                
+                                </div>
+                            </div>
+                        </div>
+                
+                        <!-- RIGHT: REMINDER LIST -->
+                        <div class="col-lg-8">
+                            <div class="card shadow mb-4">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <strong>Active Reminders</strong>
+                                    <span class="badge bg-primary" id="reminderCount">0</span>
+                                </div>
+                
+                                <div class="card-body">
+                
+                                    <!-- EMPTY STATE -->
+                                    <div id="emptyState" class="text-center text-muted">
+                                        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" width="80" class="mb-3">
+                                        <p>No reminders yet</p>
+                                    </div>
+                
+                                    <!-- LIST -->
+                                    <ul id="reminderList" class="list-group"></ul>
+                
+                                </div>
+                            </div>
+                        </div>
+                
+                    </div>
+                
+                    <!-- RECENT ALERTS -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <strong>Recent Alerts</strong>
+                            <div class="small text-muted">Latest activity updates</div>
+                        </div>
+                
+                        <div class="card-body">
+                            <ul id="alertList" class="list-group">
+                                <li class="list-group-item text-muted">No alerts yet</li>
+                            </ul>
+                        </div>
+                    </div>
+                
                 </div>
                 <!-- /.container-fluid -->
 
@@ -417,6 +487,119 @@
 
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
+
+    <script>
+    let reminders = [];
+    let idCounter = 1;
+    
+    const form = document.getElementById("reminderForm");
+    const list = document.getElementById("reminderList");
+    const alertList = document.getElementById("alertList");
+    const emptyState = document.getElementById("emptyState");
+    const reminderCount = document.getElementById("reminderCount");
+    
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+    
+        const title = document.getElementById("title").value;
+        const date = document.getElementById("date").value;
+        const note = document.getElementById("note").value;
+    
+        const reminder = {
+            id: idCounter++,
+            title,
+            date,
+            note,
+            completed: false
+        };
+    
+        reminders.push(reminder);
+        addAlert(`Reminder "${title}" added`);
+        renderReminders();
+        form.reset();
+    });
+    
+    function renderReminders() {
+        list.innerHTML = "";
+    
+        if (reminders.length === 0) {
+            emptyState.style.display = "block";
+        } else {
+            emptyState.style.display = "none";
+        }
+    
+        reminderCount.textContent = reminders.length;
+    
+        reminders.forEach(r => {
+            const item = document.createElement("li");
+            item.className = "list-group-item d-flex justify-content-between align-items-center";
+    
+            item.innerHTML = `
+                <div>
+                    <strong style="${r.completed ? 'text-decoration: line-through;' : ''}">
+                        ${r.title}
+                    </strong>
+                    <br>
+                    <small class="text-muted">${r.date}</small>
+                    ${r.completed 
+                        ? '<span class="badge bg-success ms-2">Done</span>' 
+                        : '<span class="badge bg-warning text-dark ms-2">Active</span>'}
+                </div>
+    
+                <div>
+                    <button class="btn btn-outline-primary btn-sm me-1" onclick="toggleReminder(${r.id})">
+                        ✔
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm me-1" onclick="editReminder(${r.id})">
+                        ✏️
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteReminder(${r.id})">
+                        ✕
+                    </button>
+                </div>
+            `;
+    
+            list.appendChild(item);
+        });
+    }
+    
+    function deleteReminder(id) {
+        reminders = reminders.filter(r => r.id !== id);
+        addAlert("Reminder deleted");
+        renderReminders();
+    }
+    
+    function toggleReminder(id) {
+        const r = reminders.find(r => r.id === id);
+        r.completed = !r.completed;
+        addAlert(`"${r.title}" marked ${r.completed ? "done" : "active"}`);
+        renderReminders();
+    }
+    
+    function editReminder(id) {
+        const r = reminders.find(r => r.id === id);
+    
+        const newTitle = prompt("Edit reminder title:", r.title);
+        if (newTitle !== null && newTitle.trim() !== "") {
+            r.title = newTitle;
+            addAlert("Reminder updated");
+            renderReminders();
+        }
+    }
+    
+    function addAlert(message) {
+        const item = document.createElement("li");
+        item.className = "list-group-item";
+        item.textContent = message;
+    
+        if (alertList.children[0]?.textContent === "No alerts yet") {
+            alertList.innerHTML = "";
+        }
+    
+        alertList.prepend(item);
+    }
+    </script>
+
 
 </body>
 
