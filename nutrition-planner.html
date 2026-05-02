@@ -507,6 +507,43 @@
           </div>
           <!-- End Section 3 -->
 
+          <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-tint text-primary mr-2"></i>
+                    <div>
+                        <h6 class="m-0 font-weight-bold text-primary">Water Intake</h6>
+                        <small class="text-muted">Track your daily hydration — aim for 8 glasses</small>
+                    </div>
+                </div>
+                <span class="badge badge-info" id="water-badge">0 / 8 glasses</span>
+            </div>
+            <div class="card-body text-center">
+        
+                <div class="water-glasses-grid mb-3" id="waterGrid"></div>
+        
+                <div class="d-flex justify-content-center align-items-center mb-3">
+                    <button class="btn btn-outline-primary mr-3" onclick="adjustWater(-1)">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <div>
+                        <span class="h3 font-weight-bold text-primary" id="waterCount">0</span>
+                        <span class="text-muted"> / 8 glasses</span>
+                    </div>
+                    <button class="btn btn-primary ml-3" onclick="adjustWater(1)">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+        
+                <div class="progress mb-2" style="height: 10px;">
+                    <div class="progress-bar bg-info" id="waterProgressBar" role="progressbar" style="width: 0%; transition: width 0.3s ease;"></div>
+                </div>
+        
+                <p class="text-muted small mb-0" id="waterMsg">Stay hydrated! Start logging your water intake.</p>
+        
+            </div>
+        </div>
+ 
         </div>
         <!-- /.container-fluid -->
 
@@ -670,6 +707,52 @@
     // Allow Enter key to search
     document.getElementById('mealSearchInput').addEventListener('keypress', function (e) {
       if (e.key === 'Enter') searchMeals();
+    });
+
+    let waterGlasses = 0;
+    const waterMax = 8;
+    const waterMessages = [
+        'Stay hydrated! Start logging your water intake.',
+        'Good start! Keep going 💧',
+        'Doing well — almost halfway there!',
+        'Halfway there! Great job 💪',
+        'More than halfway — keep it up!',
+        'Almost there — just a few more glasses!',
+        'So close! One more glass to go!',
+        'Almost at your goal!',
+        '🎉 Goal reached! Great hydration today!'
+    ];
+ 
+    function renderWaterGrid() {
+        const grid = document.getElementById('waterGrid');
+        grid.innerHTML = '';
+        for (let i = 0; i < waterMax; i++) {
+            const glass = document.createElement('span');
+            glass.className = 'water-glass' + (i < waterGlasses ? ' filled' : '');
+            glass.textContent = '💧';
+            glass.title = 'Glass ' + (i + 1);
+            glass.onclick = () => { waterGlasses = i + 1; renderWaterGrid(); updateWaterUI(); };
+            grid.appendChild(glass);
+        }
+    }
+ 
+    function updateWaterUI() {
+        document.getElementById('waterCount').textContent = waterGlasses;
+        document.getElementById('water-badge').textContent = waterGlasses + ' / ' + waterMax + ' glasses';
+        const pct = (waterGlasses / waterMax) * 100;
+        document.getElementById('waterProgressBar').style.width = pct + '%';
+        document.getElementById('waterMsg').textContent = waterMessages[waterGlasses];
+    }
+ 
+    function adjustWater(delta) {
+        waterGlasses = Math.max(0, Math.min(waterMax, waterGlasses + delta));
+        renderWaterGrid();
+        updateWaterUI();
+    }
+ 
+    document.addEventListener('DOMContentLoaded', function () {
+        renderWaterGrid();
+        updateWaterUI();
     });
   </script>
 
