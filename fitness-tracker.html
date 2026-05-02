@@ -314,16 +314,310 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Fitness Tracker</h1>
-                    <p class="mb-4">Bla bla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla
-                        blabla
-                        blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla blabla
-                        blabla blabla blabla blabla.
-                    </p>
-
+                    < <!-- Page Heading -->
+    <h1 class="h3 mb-1 text-gray-800">Fitness Tracker</h1>
+    <p class="mb-4 text-muted">Log your workouts and daily activity. Track every session to stay on top of your goals.</p>
+ 
+    <!-- ========== SECTION 1: LOG ACTIVITY FORM ========== -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex align-items-center">
+            <i class="fas fa-plus-circle text-primary mr-2"></i>
+            <div>
+                <h6 class="m-0 font-weight-bold text-primary">Log Activity</h6>
+                <small class="text-muted">Fill in your workout details below</small>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <!-- Row 1: Activity Type + Duration -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="activityType">
+                            <i class="fas fa-running fa-sm text-gray-500 mr-1"></i> Activity / Workout Type
+                        </label>
+                        <select class="form-control" id="activityType">
+                            <option value="" disabled selected>Select an activity...</option>
+                            <option>🏃 Running</option>
+                            <option>🚴 Cycling</option>
+                            <option>🏊 Swimming</option>
+                            <option>🏋️ Weight Training</option>
+                            <option>🧘 Yoga</option>
+                            <option>🚶 Walking</option>
+                            <option>⚽ Football / Soccer</option>
+                            <option>🏸 Badminton</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
                 </div>
-                <!-- /.container-fluid -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="duration">
+                            <i class="fas fa-clock fa-sm text-gray-500 mr-1"></i> Duration (minutes)
+                        </label>
+                        <input type="number" class="form-control" id="duration" placeholder="e.g. 45" min="1">
+                    </div>
+                </div>
+ 
+                <!-- Row 2: Date + Time -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="activityDate">
+                            <i class="fas fa-calendar-alt fa-sm text-gray-500 mr-1"></i> Date
+                        </label>
+                        <input type="date" class="form-control" id="activityDate">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="activityTime">
+                            <i class="fas fa-stopwatch fa-sm text-gray-500 mr-1"></i> Time
+                        </label>
+                        <input type="time" class="form-control" id="activityTime">
+                    </div>
+                </div>
+ 
+                <!-- Row 3: Steps + Calories -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="steps">
+                            <i class="fas fa-shoe-prints fa-sm text-gray-500 mr-1"></i> Steps
+                        </label>
+                        <input type="number" class="form-control" id="steps" placeholder="e.g. 8000" min="0">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="calories">
+                            <i class="fas fa-fire fa-sm text-gray-500 mr-1"></i> Calories Burned
+                        </label>
+                        <input type="number" class="form-control" id="calories" placeholder="e.g. 320" min="0">
+                    </div>
+                </div>
+ 
+                <!-- Row 4: Notes (full width) -->
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="notes">
+                            <i class="fas fa-sticky-note fa-sm text-gray-500 mr-1"></i> Notes
+                            <span class="text-muted font-weight-normal">(optional)</span>
+                        </label>
+                        <textarea class="form-control" id="notes" rows="2"
+                            placeholder="e.g. Morning run at Danga Bay, felt great today..."></textarea>
+                    </div>
+                </div>
+            </div>
+ 
+            <!-- Submit -->
+            <div class="text-right">
+                <button class="btn btn-outline-primary mr-2" type="button" onclick="clearForm()">
+                    <i class="fas fa-times fa-sm mr-1"></i> Clear
+                </button>
+                <button class="btn btn-primary" type="button" onclick="logActivity()">
+                    <i class="fas fa-plus fa-sm mr-1"></i> Log Activity
+                    <!-- TODO: wire to backend — POST /api/activities -->
+                </button>
+            </div>
+        </div>
+    </div>
+ 
+    <!-- ========== SECTION 2: ACTIVITY HISTORY ========== -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-history text-primary mr-2"></i>
+                <div>
+                    <h6 class="m-0 font-weight-bold text-primary">Activity History</h6>
+                    <small class="text-muted">Your recent logged workouts</small>
+                </div>
+            </div>
+            <span class="badge badge-primary" id="activityCount">5 Records</span>
+        </div>
+        <div class="card-body">
+            <!-- TODO: wire to backend — GET /api/activities -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="activityTable" width="100%" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Date</th>
+                            <th>Activity Type</th>
+                            <th>Duration</th>
+                            <th>Steps</th>
+                            <th>Calories</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activityTableBody">
+                        <!-- Realistic sample data -->
+                        <tr>
+                            <td>02 May 2026</td>
+                            <td><span class="badge badge-info">🏃 Running</span></td>
+                            <td>40 min</td>
+                            <td>5,200</td>
+                            <td>380 kcal</td>
+                            <td class="text-muted small">Morning run around Taman Daya</td>
+                            <td>
+                                <button class="btn btn-outline-primary btn-sm mr-1" onclick="editActivity(this)">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteActivity(this)">
+                                    <i class="fas fa-trash"></i> Delete
+                                    <!-- TODO: wire to backend — DELETE /api/activities/:id -->
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>01 May 2026</td>
+                            <td><span class="badge badge-warning text-dark">🏋️ Weight Training</span></td>
+                            <td>60 min</td>
+                            <td>1,100</td>
+                            <td>450 kcal</td>
+                            <td class="text-muted small">Chest + triceps day, new PR on bench</td>
+                            <td>
+                                <button class="btn btn-outline-primary btn-sm mr-1" onclick="editActivity(this)">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteActivity(this)">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>30 Apr 2026</td>
+                            <td><span class="badge badge-success">🚴 Cycling</span></td>
+                            <td>55 min</td>
+                            <td>0</td>
+                            <td>410 kcal</td>
+                            <td class="text-muted small">Evening ride, JB waterfront route</td>
+                            <td>
+                                <button class="btn btn-outline-primary btn-sm mr-1" onclick="editActivity(this)">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteActivity(this)">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>29 Apr 2026</td>
+                            <td><span class="badge badge-secondary">🧘 Yoga</span></td>
+                            <td>30 min</td>
+                            <td>0</td>
+                            <td>120 kcal</td>
+                            <td class="text-muted small">Recovery day, morning session</td>
+                            <td>
+                                <button class="btn btn-outline-primary btn-sm mr-1" onclick="editActivity(this)">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteActivity(this)">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>28 Apr 2026</td>
+                            <td><span class="badge badge-primary">🏸 Badminton</span></td>
+                            <td>90 min</td>
+                            <td>3,800</td>
+                            <td>520 kcal</td>
+                            <td class="text-muted small">Doubles game with friends at Sri Skudai</td>
+                            <td>
+                                <button class="btn btn-outline-primary btn-sm mr-1" onclick="editActivity(this)">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteActivity(this)">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+ 
+                <!-- Empty state — shown when no records exist -->
+                <div id="emptyState" class="text-center py-5" style="display:none !important;">
+                    <i class="fas fa-dumbbell fa-3x text-gray-300 mb-3"></i>
+                    <p class="text-muted mb-1">No activity logged yet.</p>
+                    <small class="text-muted">Use the form above to log your first workout!</small>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <!-- ========== SECTION 3: QUICK SUMMARY ========== -->
+    <h6 class="font-weight-bold text-gray-700 mb-1">
+        <i class="fas fa-chart-bar mr-1 text-primary"></i> Quick Summary
+    </h6>
+    <p class="text-muted small mb-3">A snapshot of your recent activity — detailed charts are on the Progress page.</p>
+ 
+    <div class="row mb-4">
+        <!-- Total Workouts -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Workouts Logged
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">5</div>
+                            <div class="text-muted small mt-1">All time</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-trophy fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+ 
+        <!-- Today's Steps -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Today's Steps
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">5,200</div>
+                            <div class="text-muted small mt-1">Goal: 10,000 steps</div>
+                            <!-- Simple progress bar -->
+                            <div class="progress mt-2" style="height: 6px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 52%"></div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-shoe-prints fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+ 
+        <!-- Calories Burned Today -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Calories Burned Today
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">380 kcal</div>
+                            <div class="text-muted small mt-1">From 1 session today</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-fire fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+</div>
+<!-- /.container-fluid -->
+ 
 
             </div>
             <!-- End of Main Content -->
@@ -379,12 +673,8 @@
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
     <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+    <script src="js/fitness.js"></script>
 
 </body>
 
