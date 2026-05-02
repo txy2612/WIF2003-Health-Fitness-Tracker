@@ -347,86 +347,227 @@
                 <div class="container-fluid">
                 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-1 text-gray-800">Reminders</h1>
-                    <p class="mb-4 text-muted">Manage your reminders and view recent alerts.</p>
-                
+                    <h1 class="h3 mb-1 text-gray-800">Notifications & Reminders</h1>
+                    <p class="mb-4 text-muted">Manage reminders and stay on track</p>
+                    
                     <div class="row">
-                
-                        <!-- LEFT: ADD REMINDER -->
-                        <div class="col-lg-4">
-                            <div class="card shadow mb-4">
-                                <div class="card-header">
-                                    <strong>Add Reminder</strong>
-                                </div>
-                                <div class="card-body">
-                
-                                    <form id="reminderForm">
-                                        <div class="form-group mb-3">
-                                            <label>Title</label>
-                                            <input type="text" id="title" class="form-control" placeholder="e.g. Gym workout" required>
-                                        </div>
-                
-                                        <div class="form-group mb-3">
-                                            <label>Date & Time</label>
-                                            <input type="datetime-local" id="date" class="form-control" required>
-                                        </div>
-                
-                                        <div class="form-group mb-3">
-                                            <label>Note</label>
-                                            <textarea id="note" class="form-control" placeholder="Optional note"></textarea>
-                                        </div>
-                
-                                        <button type="submit" class="btn btn-primary w-100">
-                                            + Add Reminder
-                                        </button>
-                                    </form>
-                
-                                </div>
-                            </div>
+                    
+                      <!-- ADD REMINDER -->
+                      <div class="col-lg-4">
+                        <div class="card shadow mb-4">
+                          <div class="card-body">
+                    
+                            <h5 class="mb-1">Add Reminder</h5>
+                            <p class="text-muted small mb-3">Create a new reminder</p>
+                    
+                            <form id="reminderForm">
+                    
+                              <!-- TITLE -->
+                              <div class="form-group">
+                                <label>Reminder Title</label>
+                                <input type="text" id="title" class="form-control" required>
+                              </div>
+                    
+                              <!-- CATEGORY (SEARCHABLE DROPDOWN) -->
+                              <div class="form-group">
+                                <label>Category</label>
+                                <input list="categoryList" id="category" class="form-control" placeholder="Select or type">
+                                <datalist id="categoryList">
+                                  <option value="Gym">
+                                  <option value="Swimming">
+                                  <option value="Running">
+                                  <option value="Walking">
+                                  <option value="Yoga">
+                                  <option value="Hiking">
+                                  <option value="Others">
+                                </datalist>
+                              </div>
+                    
+                              <!-- DATE -->
+                              <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="date" class="form-control" required>
+                              </div>
+                    
+                              <!-- TIME -->
+                              <div class="form-group">
+                                <label>Time</label>
+                                <input type="time" id="time" class="form-control" required>
+                              </div>
+                    
+                              <!-- FREQUENCY -->
+                              <div class="form-group">
+                                <label>Frequency</label>
+                                <select id="frequency" class="form-control">
+                                  <option>Once</option>
+                                  <option>Daily</option>
+                                  <option>Weekly</option>
+                                </select>
+                              </div>
+                    
+                              <!-- NOTE -->
+                              <div class="form-group">
+                                <label>Note</label>
+                                <textarea id="note" class="form-control"></textarea>
+                              </div>
+                    
+                              <!-- BUTTON -->
+                              <button class="btn btn-primary btn-sm w-100">
+                                <i class="fas fa-plus mr-1"></i> Add Reminder
+                              </button>
+                    
+                            </form>
+                    
+                          </div>
                         </div>
-                
-                        <!-- RIGHT: REMINDER LIST -->
-                        <div class="col-lg-8">
-                            <div class="card shadow mb-4">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <strong>Active Reminders</strong>
-                                    <span class="badge bg-primary" id="reminderCount">0</span>
-                                </div>
-                
-                                <div class="card-body">
-                
-                                    <!-- EMPTY STATE -->
-                                    <div id="emptyState" class="text-center text-muted">
-                                        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" width="80" class="mb-3">
-                                        <p>No reminders yet</p>
-                                    </div>
-                
-                                    <!-- LIST -->
-                                    <ul id="reminderList" class="list-group"></ul>
-                
-                                </div>
+                      </div>
+                    
+                      <!-- REMINDER LIST -->
+                      <div class="col-lg-8">
+                        <div class="card shadow mb-4">
+                          <div class="card-body">
+                    
+                            <h5 class="mb-1">Active Reminders</h5>
+                            <p class="text-muted small mb-3">Manage your reminders</p>
+                    
+                            <ul id="reminderList" class="list-group"></ul>
+                    
+                            <!-- EMPTY STATE -->
+                            <div id="emptyState" class="text-center text-muted mt-3">
+                              <p>No reminders yet</p>
                             </div>
+                    
+                          </div>
                         </div>
-                
+                      </div>
+                    
                     </div>
-                
-                    <!-- RECENT ALERTS -->
+                    
+                    <!-- ALERTS -->
                     <div class="card shadow mb-4">
-                        <div class="card-header">
-                            <strong>Recent Alerts</strong>
-                            <div class="small text-muted">Latest activity updates</div>
-                        </div>
-                
-                        <div class="card-body">
-                            <ul id="alertList" class="list-group">
-                                <li class="list-group-item text-muted">No alerts yet</li>
-                            </ul>
-                        </div>
+                      <div class="card-body">
+                        <h5 class="mb-1">Recent Alerts</h5>
+                        <p class="text-muted small mb-3">Latest updates</p>
+                    
+                        <ul id="alertList" class="list-group">
+                          <li class="list-group-item text-muted">No alerts yet</li>
+                        </ul>
+                      </div>
                     </div>
                 
                 </div>
                 <!-- /.container-fluid -->
+                
+            <script>
+                let reminders = [];
+                let idCounter = 1;
+                
+                const form = document.getElementById("reminderForm");
+                const list = document.getElementById("reminderList");
+                const alertList = document.getElementById("alertList");
+                const emptyState = document.getElementById("emptyState");
+                
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                
+                    const reminder = {
+                        id: idCounter++,
+                        title: title.value,
+                        category: category.value,
+                        date: date.value,
+                        time: time.value,
+                        frequency: frequency.value,
+                        note: note.value,
+                        active: true
+                    };
+                
+                    reminders.push(reminder);
+                    addAlert(`"${reminder.title}" added`);
+                    renderReminders();
+                    form.reset();
+                });
+                
+                function renderReminders() {
+                    list.innerHTML = "";
+                
+                    emptyState.style.display = reminders.length ? "none" : "block";
+                
+                    reminders.forEach(r => {
+                        const item = document.createElement("li");
+                        item.className = "list-group-item d-flex justify-content-between align-items-center";
+                
+                        item.innerHTML = `
+                        <div>
+                            <strong>${r.title}</strong>
+                            <br>
+                            <small class="text-muted">
+                                ${r.category} • ${r.date} ${r.time} • ${r.frequency}
+                            </small>
+                            <br>
+                            <span class="badge ${r.active ? 'bg-success' : 'bg-secondary'}">
+                                ${r.active ? 'Active' : 'Off'}
+                            </span>
+                        </div>
+                
+                        <div>
+                            <button class="btn btn-outline-primary btn-sm mr-1" onclick="toggleReminder(${r.id})">
+                                <i class="fas fa-power-off"></i>
+                            </button>
+                
+                            <!-- EDIT BUTTON (MATCH PROFILE STYLE) -->
+                            <button class="btn btn-sm mr-1" style="color:#4e73df;" onclick="editReminder(${r.id})">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                
+                            <button class="btn btn-danger btn-sm" onclick="deleteReminder(${r.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        `;
+                
+                        list.appendChild(item);
+                    });
+                }
+                
+                function toggleReminder(id) {
+                    const r = reminders.find(r => r.id === id);
+                    r.active = !r.active;
+                    addAlert(`${r.title} turned ${r.active ? "on" : "off"}`);
+                    renderReminders();
+                }
+                
+                function deleteReminder(id) {
+                    reminders = reminders.filter(r => r.id !== id);
+                    addAlert("Reminder deleted");
+                    renderReminders();
+                }
+                
+                function editReminder(id) {
+                    const r = reminders.find(r => r.id === id);
+                    const newTitle = prompt("Edit title:", r.title);
+                
+                    if (newTitle) {
+                        r.title = newTitle;
+                        addAlert("Reminder updated");
+                        renderReminders();
+                    }
+                }
+                
+                function addAlert(msg) {
+                    if (alertList.children[0]?.textContent === "No alerts yet") {
+                        alertList.innerHTML = "";
+                    }
+                
+                    const item = document.createElement("li");
+                    item.className = "list-group-item";
+                    item.textContent = msg;
+                
+                    alertList.prepend(item);
+                }
 
+            </script>
+
+                
             </div>
             <!-- End of Main Content -->
 
@@ -487,119 +628,6 @@
 
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
-
-    <script>
-    let reminders = [];
-    let idCounter = 1;
-    
-    const form = document.getElementById("reminderForm");
-    const list = document.getElementById("reminderList");
-    const alertList = document.getElementById("alertList");
-    const emptyState = document.getElementById("emptyState");
-    const reminderCount = document.getElementById("reminderCount");
-    
-    form.addEventListener("submit", function (e) {
-        e.preventDefault();
-    
-        const title = document.getElementById("title").value;
-        const date = document.getElementById("date").value;
-        const note = document.getElementById("note").value;
-    
-        const reminder = {
-            id: idCounter++,
-            title,
-            date,
-            note,
-            completed: false
-        };
-    
-        reminders.push(reminder);
-        addAlert(`Reminder "${title}" added`);
-        renderReminders();
-        form.reset();
-    });
-    
-    function renderReminders() {
-        list.innerHTML = "";
-    
-        if (reminders.length === 0) {
-            emptyState.style.display = "block";
-        } else {
-            emptyState.style.display = "none";
-        }
-    
-        reminderCount.textContent = reminders.length;
-    
-        reminders.forEach(r => {
-            const item = document.createElement("li");
-            item.className = "list-group-item d-flex justify-content-between align-items-center";
-    
-            item.innerHTML = `
-                <div>
-                    <strong style="${r.completed ? 'text-decoration: line-through;' : ''}">
-                        ${r.title}
-                    </strong>
-                    <br>
-                    <small class="text-muted">${r.date}</small>
-                    ${r.completed 
-                        ? '<span class="badge bg-success ms-2">Done</span>' 
-                        : '<span class="badge bg-warning text-dark ms-2">Active</span>'}
-                </div>
-    
-                <div>
-                    <button class="btn btn-outline-primary btn-sm me-1" onclick="toggleReminder(${r.id})">
-                        ✔
-                    </button>
-                    <button class="btn btn-outline-primary btn-sm me-1" onclick="editReminder(${r.id})">
-                        ✏️
-                    </button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteReminder(${r.id})">
-                        ✕
-                    </button>
-                </div>
-            `;
-    
-            list.appendChild(item);
-        });
-    }
-    
-    function deleteReminder(id) {
-        reminders = reminders.filter(r => r.id !== id);
-        addAlert("Reminder deleted");
-        renderReminders();
-    }
-    
-    function toggleReminder(id) {
-        const r = reminders.find(r => r.id === id);
-        r.completed = !r.completed;
-        addAlert(`"${r.title}" marked ${r.completed ? "done" : "active"}`);
-        renderReminders();
-    }
-    
-    function editReminder(id) {
-        const r = reminders.find(r => r.id === id);
-    
-        const newTitle = prompt("Edit reminder title:", r.title);
-        if (newTitle !== null && newTitle.trim() !== "") {
-            r.title = newTitle;
-            addAlert("Reminder updated");
-            renderReminders();
-        }
-    }
-    
-    function addAlert(message) {
-        const item = document.createElement("li");
-        item.className = "list-group-item";
-        item.textContent = message;
-    
-        if (alertList.children[0]?.textContent === "No alerts yet") {
-            alertList.innerHTML = "";
-        }
-    
-        alertList.prepend(item);
-    }
-    </script>
-
 
 </body>
 
