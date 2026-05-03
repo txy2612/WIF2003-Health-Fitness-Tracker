@@ -501,17 +501,17 @@
                             <strong>${r.title}</strong>
                             <br>
                             <small class="text-muted">
-                                ${r.category} • ${r.date} ${r.time} • ${r.frequency}
+                                ${r.category} • ${r.date} at ${r.time} • ${r.frequency}
                             </small>
                             <br>
                             <span class="badge ${r.active ? 'bg-success' : 'bg-secondary'}">
-                                ${r.active ? 'Active' : 'Off'}
+                                ${r.active ? 'ON' : 'OFF'}
                             </span>
                         </div>
                 
                         <div>
                             <button class="btn btn-outline-primary btn-sm mr-1" onclick="toggleReminder(${r.id})">
-                                <i class="fas fa-power-off"></i>
+                                <i class="fas ${r.active ? 'fa-toggle-on' : 'fa-toggle-off'}"></i>
                             </button>
                 
                             <!-- EDIT BUTTON (MATCH PROFILE STYLE) -->
@@ -532,7 +532,7 @@
                 function toggleReminder(id) {
                     const r = reminders.find(r => r.id === id);
                     r.active = !r.active;
-                    addAlert(`${r.title} turned ${r.active ? "on" : "off"}`);
+                    addAlert(`${r.title} reminder turned ${r.active ? "ON" : "OFF"}`);
                     renderReminders();
                 }
                 
