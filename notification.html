@@ -196,15 +196,15 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-1 text-gray-800">Notifications</h1>
-                    <p class="mb-4 text-muted">Manage your reminders and stay on track with your daily activities.</p>
+                    <p class="mb-4 text-muted">Manage your reminders and stay on track.</p>
                 
-                    <!-- ========== SECTION 1: ADD REMINDER ========== -->
+                    <!-- ========== ADD REMINDER ========== -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex align-items-center">
                             <i class="fas fa-bell text-primary mr-2"></i>
                             <div>
                                 <h6 class="m-0 font-weight-bold text-primary">Add Reminder</h6>
-                                <small class="text-muted">Create a reminder for workouts, meals, or activities</small>
+                                <small class="text-muted">Create a reminder</small>
                             </div>
                         </div>
                 
@@ -213,19 +213,17 @@
                 
                                 <div class="row">
                 
-                                    <!-- DROPDOWN -->
+                                    <!-- TYPE DROPDOWN -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>
-                                                <i class="fas fa-list fa-sm text-gray-500 mr-1"></i> Reminder Type
-                                            </label>
+                                            <label>Reminder Type</label>
                                             <select class="form-control" id="type">
-                                                <option disabled selected>Select reminder type...</option>
-                                                <option>🏃 Workout</option>
-                                                <option>🍎 Meal</option>
-                                                <option>💧 Water Intake</option>
-                                                <option>🛌 Sleep</option>
-                                                <option>📌 Other</option>
+                                                <option disabled selected>Select type...</option>
+                                                <option>Workout</option>
+                                                <option>Meal</option>
+                                                <option>Water</option>
+                                                <option>Sleep</option>
+                                                <option>Other</option>
                                             </select>
                                         </div>
                                     </div>
@@ -233,30 +231,31 @@
                                     <!-- TITLE -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>
-                                                <i class="fas fa-heading fa-sm text-gray-500 mr-1"></i> Title
-                                            </label>
-                                            <input type="text" id="title" class="form-control" placeholder="e.g. Morning Run" required>
+                                            <label>Title</label>
+                                            <input type="text" id="title" class="form-control" required>
                                         </div>
                                     </div>
                 
                                     <!-- DATE -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>
-                                                <i class="fas fa-calendar-alt fa-sm text-gray-500 mr-1"></i> Date & Time
-                                            </label>
-                                            <input type="datetime-local" id="date" class="form-control" required>
+                                            <label>Date</label>
+                                            <input type="date" id="date" class="form-control" required>
+                                        </div>
+                                    </div>
+                
+                                    <!-- TIME -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Time</label>
+                                            <input type="time" id="time" class="form-control" required>
                                         </div>
                                     </div>
                 
                                     <!-- NOTE -->
                                     <div class="col-12">
                                         <div class="form-group">
-                                            <label>
-                                                <i class="fas fa-sticky-note fa-sm text-gray-500 mr-1"></i> Note
-                                                <span class="text-muted">(optional)</span>
-                                            </label>
+                                            <label>Note (optional)</label>
                                             <textarea id="note" class="form-control" rows="2"></textarea>
                                         </div>
                                     </div>
@@ -273,15 +272,12 @@
                         </div>
                     </div>
                 
-                    <!-- ========== SECTION 2: REMINDER LIST ========== -->
+                    <!-- ========== REMINDER LIST ========== -->
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-list text-primary mr-2"></i>
-                                <div>
-                                    <h6 class="m-0 font-weight-bold text-primary">Reminder List</h6>
-                                    <small class="text-muted">Manage your reminders</small>
-                                </div>
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="m-0 font-weight-bold text-primary">Reminder List</h6>
+                                <small class="text-muted">Manage your reminders</small>
                             </div>
                             <span class="badge badge-primary" id="count">0</span>
                         </div>
@@ -315,11 +311,14 @@
                 form.addEventListener("submit", function (e) {
                     e.preventDefault();
                 
+                    const date = document.getElementById("date").value;
+                    const time = document.getElementById("time").value;
+                
                     const reminder = {
                         id: idCounter++,
                         type: document.getElementById("type").value,
                         title: document.getElementById("title").value,
-                        date: document.getElementById("date").value,
+                        datetime: date + " " + time,
                         note: document.getElementById("note").value,
                         completed: false
                     };
@@ -347,21 +346,23 @@
                         li.innerHTML = `
                             <div>
                                 <strong style="${r.completed ? 'text-decoration: line-through;' : ''}">
-                                    ${r.type} ${r.title}
+                                    ${r.type} - ${r.title}
                                 </strong><br>
-                                <small class="text-muted">${r.date}</small>
+                                <small class="text-muted">${r.datetime}</small>
                                 ${r.completed 
                                     ? '<span class="badge badge-success ml-2">Done</span>' 
-                                    : '<span class="badge badge-warning ml-2">Active</span>'}
+                                    : '<span class="badge badge-secondary ml-2">Active</span>'}
                             </div>
                 
                             <div>
                                 <button class="btn btn-outline-primary btn-sm mr-1" onclick="toggle(${r.id})">
                                     <i class="fas fa-check"></i>
                                 </button>
+                
                                 <button class="btn btn-outline-primary btn-sm mr-1" onclick="edit(${r.id})">
                                     <i class="fas fa-edit"></i>
                                 </button>
+                
                                 <button class="btn btn-danger btn-sm" onclick="removeItem(${r.id})">
                                     <i class="fas fa-trash"></i>
                                 </button>
