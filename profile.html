@@ -9,547 +9,657 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Nutrition Planner</title>
+    <title>Dashboard</title>
 
-    <!-- Custom fonts for this template -->
+    <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template -->
+    <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this page -->
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
 <body id="page-top">
 
     <!-- Page Wrapper -->
-    <div id="wrapper">
-
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">Health & Fitness Tracker </div>
+<div id="wrapper">
+ 
+    <!-- ===================== SIDEBAR ===================== -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+ 
+        <!-- Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard.html">
+            <div class="sidebar-brand-text" style="font-size:1.25rem; font-weight:800; letter-spacing:-0.5px;">
+                Fit<span style="opacity:0.65;">Track</span>
+            </div>
+        </a>
+ 
+        <hr class="sidebar-divider my-0">
+ 
+        <!-- Dashboard -->
+        <li class="nav-item">
+            <!-- ADD class="active" to the <li> that matches the current page -->
+            <a class="nav-link" href="dashboard.html">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
             </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="dashboard.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Interface
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Addons
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="fitness-tracker.html">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Fitness Tracker</span>
-                </a>
-            </li>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="progress-charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Progress Charts</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="nutrition-planner.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Nutrition Planner</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-        </ul>
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <form class="form-inline">
-                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                            <i class="fa fa-bars"></i>
-                        </button>
-                    </form>
-
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
+        </li>
+ 
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">Tracking</div>
+ 
+        <!-- Fitness Tracker -->
+        <li class="nav-item">
+            <a class="nav-link" href="fitness-tracker.html">
+                <i class="fas fa-fw fa-dumbbell"></i>
+                <span>Fitness Tracker</span>
+            </a>
+        </li>
+ 
+        <!-- Nutrition Planner -->
+        <li class="nav-item">
+            <a class="nav-link" href="nutrition-planner.html">
+                <i class="fas fa-fw fa-apple-alt"></i>
+                <span>Nutrition Planner</span>
+            </a>
+        </li>
+ 
+        <!-- Progress Charts -->
+        <li class="nav-item">
+            <a class="nav-link" href="progress-charts.html">
+                <i class="fas fa-fw fa-chart-line"></i>
+                <span>Progress Charts</span>
+            </a>
+        </li>
+ 
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">Account</div>
+ 
+        <!-- Notifications -->
+        <li class="nav-item">
+            <a class="nav-link" href="notification.html">
+                <i class="fas fa-fw fa-bell"></i>
+                <span>Notifications</span>
+            </a>
+        </li>
+ 
+        <!-- Profile -->
+        <li class="nav-item">
+            <a class="nav-link" href="profile.html">
+                <i class="fas fa-fw fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </li>
+ 
+        <hr class="sidebar-divider d-none d-md-block">
+ 
+        <!-- Sidebar Toggler -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+ 
+    </ul>
+    <!-- End of Sidebar -->
+ 
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+ 
+            <!-- ===================== TOPBAR ===================== -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+ 
+                <!-- Sidebar Toggle (mobile) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+ 
+                <!-- Page title (replaces search — cleaner for this app) -->
+                <span class="topbar-page-title d-none d-sm-inline font-weight-bold text-gray-800"
+                      style="font-size:0.95rem; letter-spacing:-0.2px;">
+                    <!-- Filled dynamically per page via JS below, or hardcode per page -->
+                </span>
+ 
+                <!-- Right side -->
+                <ul class="navbar-nav ml-auto">
+ 
+                    <!-- Notifications bell -->
+                    <li class="nav-item dropdown no-arrow mx-1">
+                        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-bell fa-fw"></i>
+                            <span class="badge badge-danger badge-counter">2</span>
+                        </a>
+                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            aria-labelledby="alertsDropdown">
+                            <h6 class="dropdown-header">Notifications</h6>
+                            <a class="dropdown-item d-flex align-items-center" href="notification.html">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-primary">
+                                        <i class="fas fa-dumbbell text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">Today, 7:00 AM</div>
+                                    <span class="font-weight-bold">Workout reminder — Morning Run</span>
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="notification.html">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-success">
+                                        <i class="fas fa-apple-alt text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">Today, 12:30 PM</div>
+                                    <span class="font-weight-bold">Lunch log reminder</span>
+                                </div>
+                            </a>
+                            <a class="dropdown-item text-center small text-gray-500" href="notification.html">
+                                View All Notifications
+                            </a>
                         </div>
-                    </form>
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
+                    </li>
+ 
+                    <div class="topbar-divider d-none d-sm-block"></div>
+ 
+                    <!-- User dropdown -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">My Profile</span>
+                            <img class="img-profile rounded-circle" src="img/undraw_profile.svg" alt="Profile">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="profile.html">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
                             </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
+                            <a class="dropdown-item" href="notification.html">
+                                <i class="fas fa-bell fa-sm fa-fw mr-2 text-gray-400"></i> Notifications
                             </a>
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Alerts Center
-                                </h6>
-                                <a class="dropdown-item text-center small text-gray-500" href="notification.html">Show
-                                    All Alerts</a>
-                            </div>
-                        </li>
-
-                        <!-- Nav Item - Messages -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw"></i>
-                                <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
                             </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="messagesDropdown">
-                                <h6 class="dropdown-header">
-                                    Message Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg" alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                            problem I've been having.</div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg" alt="...">
-                                        <div class="status-indicator"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">I have the photos that you ordered last month, how
-                                            would you like them sent to you?</div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg" alt="...">
-                                        <div class="status-indicator bg-warning"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Last month's report looks great, I am very happy with
-                                            the progress so far, keep up the good work!</div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                            alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                            told me that people say this to all dogs, even if they aren't good...</div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-                            </div>
-                        </li>
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Profile Page</span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
-                            </div>
-                        </li>
-
-                    </ul>
-
-                </nav>
-                <!-- End of Topbar -->
+                        </div>
+                    </li>
+ 
+                </ul>
+            </nav>
+            <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-<div class="container-fluid">
+              <div class="container-fluid">
 
-  <!-- Page Heading -->
-  <h1 class="h3 mb-1 text-gray-800">Profile</h1>
-  <p class="mb-4 text-muted">View your personal information and account details</p>
-
-  <!-- Section 1: Profile Overview -->
-  <div class="card shadow mb-4">
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <div>
+                        <h1 class="h3 mb-1 text-gray-800">Profile</h1>
+                        <p class="mb-0 text-muted">Manage your personal information, goals, and account settings.</p>
+                    </div>
+                </div>
+                
+                <!-- ══════════════════════════════════════════════════════════════════
+                    SECTION 1 — PROFILE OVERVIEW + FITNESS SNAPSHOT
+                ══════════════════════════════════════════════════════════════════ -->
+                <div class="row">
+                
+                    <!-- Left: Profile card -->
+                    <div class="col-lg-5 mb-4">
+                        <div class="card shadow h-100">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    <i class="fas fa-user mr-2"></i>Profile Overview
+                                </h6>
+                                <small class="text-muted">Your personal information</small>
+                            </div>
+                            <div class="card-body p-4">
+                
+                                <!-- Avatar -->
+                                <div class="text-center mb-4">
+                                    <img id="profilePhoto"
+                                        src="img/undraw_profile.svg"
+                                        alt="Profile Photo"
+                                        class="rounded-circle mb-3"
+                                        style="width:100px;height:100px;object-fit:cover;border:3px solid #e3e6f0;">
+                                    <br>
+                                    <label for="photoUpload" class="btn btn-outline-primary btn-sm mb-2" style="cursor:pointer;">
+                                        <i class="fas fa-camera mr-1"></i> Change Photo
+                                    </label>
+                                    <input type="file" id="photoUpload" accept="image/*" style="display:none;">
+                                    <h5 class="font-weight-bold mb-0" id="profileNameDisplay">Ahmad Hafiz</h5>
+                                    <p class="text-muted small">Member since January 2025</p>
+                                </div>
+                
+                                <hr style="border-color:rgba(0,0,0,0.08);">
+                
+                                <!-- Editable fields -->
+                                <div class="profile-field d-flex align-items-center justify-content-between py-3"
+                                    style="border-bottom:1px solid rgba(0,0,0,0.08);">
+                                    <div style="flex:1;">
+                                        <p class="text-muted small mb-1">Name</p>
+                                        <p class="font-weight-bold mb-0 field-display" id="display-name">Ahmad Hafiz</p>
+                                        <input type="text" class="form-control form-control-sm field-input d-none mt-1"
+                                              id="input-name" value="Ahmad Hafiz">
+                                    </div>
+                                    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('name')" style="color:#4e73df;">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </div>
+                
+                                <div class="profile-field d-flex align-items-center justify-content-between py-3"
+                                    style="border-bottom:1px solid rgba(0,0,0,0.08);">
+                                    <div style="flex:1;">
+                                        <p class="text-muted small mb-1">Email</p>
+                                        <p class="font-weight-bold mb-0 field-display" id="display-email">ahmad@email.com</p>
+                                        <input type="email" class="form-control form-control-sm field-input d-none mt-1"
+                                              id="input-email" value="ahmad@email.com">
+                                    </div>
+                                    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('email')" style="color:#4e73df;">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </div>
+                
+                                <div class="profile-field d-flex align-items-center justify-content-between py-3"
+                                    style="border-bottom:1px solid rgba(0,0,0,0.08);">
+                                    <div style="flex:1;">
+                                        <p class="text-muted small mb-1">Age</p>
+                                        <p class="font-weight-bold mb-0 field-display" id="display-age">24 years</p>
+                                        <input type="number" class="form-control form-control-sm field-input d-none mt-1"
+                                              id="input-age" value="24">
+                                    </div>
+                                    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('age')" style="color:#4e73df;">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </div>
+                
+                                <div class="profile-field d-flex align-items-center justify-content-between py-3"
+                                    style="border-bottom:1px solid rgba(0,0,0,0.08);">
+                                    <div style="flex:1;">
+                                        <p class="text-muted small mb-1">Height (cm)</p>
+                                        <p class="font-weight-bold mb-0 field-display" id="display-height">172 cm</p>
+                                        <input type="number" class="form-control form-control-sm field-input d-none mt-1"
+                                              id="input-height" value="172">
+                                    </div>
+                                    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('height')" style="color:#4e73df;">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </div>
+                
+                                <div class="profile-field d-flex align-items-center justify-content-between py-3"
+                                    style="border-bottom:1px solid rgba(0,0,0,0.08);">
+                                    <div style="flex:1;">
+                                        <p class="text-muted small mb-1">Weight (kg)</p>
+                                        <p class="font-weight-bold mb-0 field-display" id="display-weight">68 kg</p>
+                                        <input type="number" class="form-control form-control-sm field-input d-none mt-1"
+                                              id="input-weight" value="68">
+                                    </div>
+                                    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('weight')" style="color:#4e73df;">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </div>
+                
+                                <div class="profile-field d-flex align-items-center justify-content-between py-3"
+                                    style="border-bottom:1px solid rgba(0,0,0,0.08);">
+                                    <div style="flex:1;">
+                                        <p class="text-muted small mb-1">Goal / Plan</p>
+                                        <p class="font-weight-bold mb-0 field-display" id="display-goal">Lose weight</p>
+                                        <select class="form-control form-control-sm field-input d-none mt-1" id="input-goal">
+                                            <option selected>Lose weight</option>
+                                            <option>Maintain weight</option>
+                                            <option>Gain muscle</option>
+                                            <option>Improve fitness</option>
+                                            <option>Increase endurance</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('goal')" style="color:#4e73df;">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </div>
+                
+                                <div class="profile-field d-flex align-items-center justify-content-between py-3"
+                                    style="border-bottom:1px solid rgba(0,0,0,0.08);">
+                                    <div style="flex:1;">
+                                        <p class="text-muted small mb-1">Gender</p>
+                                        <p class="font-weight-bold mb-0 field-display" id="display-gender">Male</p>
+                                        <select class="form-control form-control-sm field-input d-none mt-1" id="input-gender">
+                                            <option selected>Male</option>
+                                            <option>Female</option>
+                                            <option>Prefer not to say</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('gender')" style="color:#4e73df;">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </div>
+                
+                                <div class="profile-field d-flex align-items-center justify-content-between py-3">
+                                    <div style="flex:1;">
+                                        <p class="text-muted small mb-1">Phone</p>
+                                        <p class="font-weight-bold mb-0 field-display" id="display-phone">+60 12-345 6789</p>
+                                        <input type="tel" class="form-control form-control-sm field-input d-none mt-1"
+                                              id="input-phone" value="+60 12-345 6789">
+                                    </div>
+                                    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('phone')" style="color:#4e73df;">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </div>
+                
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- Right: Fitness Snapshot + Account Settings stacked -->
+                    <div class="col-lg-7">
+                
+                        <!-- Fitness Snapshot -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    <i class="fas fa-chart-bar mr-2"></i>Fitness Snapshot
+                                </h6>
+                                <small class="text-muted">A quick summary of your current fitness status</small>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                
+                                    <div class="col-md-6 mb-3">
+                                        <div class="p-3 rounded d-flex align-items-center" style="border:1px solid #e3e6f0; background:#f8f9fc;">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                                style="width:42px;height:42px;background:#e8f0fe;flex-shrink:0;">
+                                                <i class="fas fa-bullseye" style="color:#4e73df;"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-xs font-weight-bold text-uppercase text-muted">Current Goal</div>
+                                                <div class="font-weight-bold text-gray-800" id="snapshot-goal">Lose Weight</div>
+                                                <small class="text-muted">Active plan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="col-md-6 mb-3">
+                                        <div class="p-3 rounded d-flex align-items-center" style="border:1px solid #e3e6f0; background:#f8f9fc;">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                                style="width:42px;height:42px;background:#e6f4ea;flex-shrink:0;">
+                                                <i class="fas fa-weight" style="color:#1cc88a;"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-xs font-weight-bold text-uppercase text-muted">Target Weight</div>
+                                                <div class="font-weight-bold text-gray-800" id="snapshot-target-weight">62 kg</div>
+                                                <small class="text-muted">Current: <span id="snapshot-current-weight">68 kg</span></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="col-md-6 mb-3">
+                                        <div class="p-3 rounded d-flex align-items-center" style="border:1px solid #e3e6f0; background:#f8f9fc;">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                                style="width:42px;height:42px;background:#e0f4fb;flex-shrink:0;">
+                                                <i class="fas fa-running" style="color:#36b9cc;"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-xs font-weight-bold text-uppercase text-muted">Activity Level</div>
+                                                <div class="font-weight-bold text-gray-800">Moderate</div>
+                                                <small class="text-muted">3–4 days/week</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="col-md-6 mb-3">
+                                        <div class="p-3 rounded d-flex align-items-center" style="border:1px solid #e3e6f0; background:#f8f9fc;">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                                style="width:42px;height:42px;background:#fef8e7;flex-shrink:0;">
+                                                <i class="fas fa-calendar-alt" style="color:#f6c23e;"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-xs font-weight-bold text-uppercase text-muted">Member Since</div>
+                                                <div class="font-weight-bold text-gray-800">January 2025</div>
+                                                <small class="text-muted">4 months active</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                </div>
+                            </div>
+                        </div>
+                
+                        <!-- Account Settings -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    <i class="fas fa-cog mr-2"></i>Account Settings
+                                </h6>
+                                <small class="text-muted">Manage your account security</small>
+                            </div>
+                            <div class="card-body">
+                                <button class="btn btn-primary btn-sm mr-2 mb-2"
+                                        type="button"
+                                        data-toggle="collapse"
+                                        data-target="#changePasswordSection">
+                                    <i class="fas fa-key mr-1"></i> Change Password
+                                </button>
+                                <button class="btn btn-danger btn-sm mb-2"
+                                        type="button"
+                                        data-toggle="modal"
+                                        data-target="#deleteAccountModal">
+                                    <i class="fas fa-trash mr-1"></i> Delete Account
+                                </button>
+                
+                                <div class="collapse mt-3" id="changePasswordSection">
+                                    <div class="card card-body bg-light">
+                                        <h6 class="mb-3">Change Password</h6>
+                                        <div class="form-group">
+                                            <label for="currentPassword">Current Password</label>
+                                            <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="newPassword">New Password</label>
+                                            <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="confirmPassword">Confirm New Password</label>
+                                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-primary btn-sm mr-2">Save Password</button>
+                                            <button type="button" class="btn btn-outline-primary btn-sm"
+                                                    data-toggle="collapse" data-target="#changePasswordSection">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                    </div>
+                </div>
+                
+                <!-- ══════════════════════════════════════════════════════════════════
+                    SECTION 2 — GOAL SETTINGS (full width)
+                ══════════════════════════════════════════════════════════════════ -->
+                <div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex align-items-center justify-content-between">
+        <div>
+            <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-bullseye mr-2"></i>Goal Settings
+            </h6>
+            <small class="text-muted">Set your daily targets — used across Dashboard and Progress Charts</small>
+        </div>
+        <span class="badge badge-success px-3 py-2" id="goalsSavedBadge" style="display:none;">
+            <i class="fas fa-check mr-1"></i> Saved
+        </span>
+    </div>
     <div class="card-body">
-      <h5 class="mb-1">Profile Overview</h5>
-      <p class="text-muted small mb-3">Your personal information (read-only)</p>
-
-      <div class="row align-items-start">
-
-        <!-- Profile Photo -->
-        <div class="col-auto text-center mb-3">
-          <img id="profilePhoto"
-               src="img/undraw_profile.svg"
-               alt="Profile Photo"
-               class="rounded-circle mb-2"
-               style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #e3e6f0;">
-          <br>
-          <label for="photoUpload" class="btn btn-outline-primary btn-sm mt-1" style="cursor: pointer;">
-            Change Photo
-          </label>
-          <input type="file" id="photoUpload" accept="image/*" style="display: none;">
-        </div>
-
-        <!-- Profile Info -->
-        <div class="col" style="padding-left: 2rem;">
-  <div class="row">
-    <div class="col-md-6 mb-3">
-      <p class="mb-1 text-muted">Name</p>
-      <p class="mb-0 font-weight-bold h5">Ahmad Hafiz</p>
-    </div>
-    <div class="col-md-6 mb-3">
-      <p class="mb-1 text-muted">Email</p>
-      <p class="mb-0 font-weight-bold h5">ahmad@email.com</p>
-    </div>
-    <div class="col-md-6 mb-3">
-      <p class="mb-1 text-muted">Age</p>
-      <p class="mb-0 font-weight-bold h5">24 years</p>
-    </div>
-    <div class="col-md-6 mb-3">
-      <p class="mb-1 text-muted">Height</p>
-      <p class="mb-0 font-weight-bold h5">172 cm</p>
-    </div>
-    <div class="col-md-6 mb-3">
-      <p class="mb-1 text-muted">Weight</p>
-      <p class="mb-0 font-weight-bold h5">68 kg</p>
-    </div>
-    <div class="col-md-6 mb-3">
-      <p class="mb-1 text-muted">Goal / Plan</p>
-      <p class="mb-0 font-weight-bold h5">Lose weight</p>
-    </div>
-  </div>
-
-          <div class="mt-3">
-            <a href="edit-profile.html" class="btn btn-outline-primary btn-sm">
-              <i class="fas fa-edit mr-1"></i> Edit Profile
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- Section 2: Fitness / Account Snapshot -->
-  <div class="card shadow mb-4">
-    <div class="card-body">
-      <h5 class="mb-1">Fitness Snapshot</h5>
-      <p class="text-muted small mb-3">A quick summary of your current fitness status</p>
-
-      <div class="row">
-        <div class="col-xl-3 col-md-6 mb-3">
-          <div class="card border-left-primary h-100 py-2">
-            <div class="card-body">
-              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Current Goal</div>
-              <div class="h6 mb-0 font-weight-bold text-gray-800">Lose Weight</div>
+ 
+        <div class="row">
+ 
+            <!-- Step Goal -->
+            <div class="col-md-4 mb-4">
+                <div class="p-3 rounded h-100" style="border:1px solid #e3e6f0; background:#f8f9fc;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
+                             style="width:40px;height:40px;background:#eaeffc;flex-shrink:0;">
+                            <i class="fas fa-shoe-prints" style="color:#4e73df;"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-weight-bold text-uppercase text-muted">Daily Step Goal</div>
+                            <small class="text-muted">Shown on Dashboard progress bar</small>
+                        </div>
+                    </div>
+                    <div class="form-group mb-1">
+                        <label class="small font-weight-bold" for="goalSteps">Steps per day</label>
+                        <input type="number" class="form-control" id="goalSteps"
+                               placeholder="e.g. 10000" min="1000" max="50000" step="500">
+                    </div>
+                    <small class="text-muted">Recommended: 8,000 – 10,000 steps</small>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-3">
-          <div class="card border-left-success h-100 py-2">
-            <div class="card-body">
-              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Target Weight</div>
-              <div class="h6 mb-0 font-weight-bold text-gray-800">62 kg</div>
+ 
+            <!-- Calorie Goal -->
+            <div class="col-md-4 mb-4">
+                <div class="p-3 rounded h-100" style="border:1px solid #e3e6f0; background:#f8f9fc;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
+                             style="width:40px;height:40px;background:#fff3e0;flex-shrink:0;">
+                            <i class="fas fa-fire" style="color:#f6c23e;"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-weight-bold text-uppercase text-muted">Daily Calorie Goal</div>
+                            <small class="text-muted">Used in Nutrition Planner</small>
+                        </div>
+                    </div>
+                    <div class="form-group mb-1">
+                        <label class="small font-weight-bold" for="goalCalories">Calories per day (kcal)</label>
+                        <input type="number" class="form-control" id="goalCalories"
+                               placeholder="e.g. 2000" min="1000" max="5000" step="50">
+                    </div>
+                    <small class="text-muted">Suggested: <span id="goalCalHint" class="font-weight-bold text-primary">1,500 – 1,800 kcal</span></small>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-3">
-          <div class="card border-left-info h-100 py-2">
-            <div class="card-body">
-              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Activity Level</div>
-              <div class="h6 mb-0 font-weight-bold text-gray-800">Moderate</div>
+ 
+            <!-- Weight Goal -->
+            <div class="col-md-4 mb-4">
+                <div class="p-3 rounded h-100" style="border:1px solid #e3e6f0; background:#f8f9fc;">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
+                             style="width:40px;height:40px;background:#e6f4ea;flex-shrink:0;">
+                            <i class="fas fa-weight" style="color:#1cc88a;"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-weight-bold text-uppercase text-muted">Target Weight</div>
+                            <small class="text-muted">Tracked on Progress Charts</small>
+                        </div>
+                    </div>
+                    <div class="form-group mb-1">
+                        <label class="small font-weight-bold" for="goalWeight">Target weight (kg)</label>
+                        <input type="number" class="form-control" id="goalWeight"
+                               placeholder="e.g. 62" min="30" max="200" step="0.5">
+                    </div>
+                    <small class="text-muted">Current: <span id="currentWeightHint" class="font-weight-bold">68 kg</span></small>
+                </div>
             </div>
-          </div>
+ 
         </div>
-        <div class="col-xl-3 col-md-6 mb-3">
-          <div class="card border-left-warning h-100 py-2">
-            <div class="card-body">
-              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Member Since</div>
-              <div class="h6 mb-0 font-weight-bold text-gray-800">January 2025</div>
+ 
+        <!-- Goals preview strip — shown after saving -->
+        <div class="alert alert-light border mb-3 py-2" id="currentGoalsPreview" style="display:none;">
+            <div class="d-flex align-items-center mb-1">
+                <i class="fas fa-check-circle text-success mr-2"></i>
+                <small class="font-weight-bold text-muted text-uppercase">Active Goals</small>
             </div>
-          </div>
+            <div class="row text-center mt-1">
+                <div class="col-4 border-right">
+                    <div class="text-xs text-muted font-weight-bold text-uppercase">Steps</div>
+                    <div class="font-weight-bold text-primary" id="previewSteps">—</div>
+                </div>
+                <div class="col-4 border-right">
+                    <div class="text-xs text-muted font-weight-bold text-uppercase">Calories</div>
+                    <div class="font-weight-bold" style="color:#f6c23e;" id="previewCalories">—</div>
+                </div>
+                <div class="col-4">
+                    <div class="text-xs text-muted font-weight-bold text-uppercase">Target Weight</div>
+                    <div class="font-weight-bold text-success" id="previewWeight">—</div>
+                </div>
+            </div>
         </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Section 3: Account Settings -->
-  <div class="card shadow mb-4">
-    <div class="card-body">
-      <h5 class="mb-1">Account Settings</h5>
-      <p class="text-muted small mb-3">Manage your account security and preferences</p>
-
-      <!-- Change Password (collapsible inline section) -->
-      <button class="btn btn-primary btn-sm mb-2 mr-2"
-              type="button"
-              data-toggle="collapse"
-              data-target="#changePasswordSection"
-              aria-expanded="false"
-              aria-controls="changePasswordSection">
-        <i class="fas fa-key mr-1"></i> Change Password
-      </button>
-
-      <button class="btn btn-danger btn-sm mb-2"
-              type="button"
-              data-toggle="modal"
-              data-target="#deleteAccountModal">
-        <i class="fas fa-trash mr-1"></i> Delete Account
-      </button>
-
-      <!-- Change Password Collapse Section -->
-      <div class="collapse mt-3" id="changePasswordSection">
-        <div class="card card-body bg-light">
-          <h6 class="mb-3">Change Password</h6>
-          <div class="form-group">
-            <label for="currentPassword">Current Password</label>
-            <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password">
-          </div>
-          <div class="form-group">
-            <label for="newPassword">New Password</label>
-            <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
-          </div>
-          <div class="form-group">
-            <label for="confirmPassword">Confirm New Password</label>
-            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
-          </div>
-          <button type="button" class="btn btn-primary btn-sm mr-2">Save Password</button>
-          <button type="button"
-                  class="btn btn-outline-primary btn-sm"
-                  data-toggle="collapse"
-                  data-target="#changePasswordSection">
-            Cancel
-          </button>
+ 
+        <div class="d-flex align-items-center flex-wrap">
+            <button class="btn btn-primary mr-2 mb-2" onclick="saveGoalSettings()">
+                <i class="fas fa-save mr-1"></i> Save Goals
+            </button>
+            <button class="btn btn-outline-primary mr-3 mb-2" onclick="clearGoalSettings()">
+                <i class="fas fa-times mr-1"></i> Clear
+            </button>
+            <small class="text-muted mb-2" id="goalLastSaved"></small>
         </div>
-      </div>
-
+ 
     </div>
-  </div>
 
-</div>
-<!-- /.container-fluid -->
+              </div>
+              <!-- /.container-fluid -->
 
-<!-- Delete Account Confirmation Modal -->
-<div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Delete Account</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete your account? This action <strong>cannot be undone</strong> and all your data will be permanently removed.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger btn-sm">Yes, delete my account</button>
-      </div>
-    </div>
-  </div>
-</div>
+              <!-- Delete Account Confirmation Modal -->
+              <div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="deleteModalLabel">Delete Account</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Are you sure you want to delete your account? This action <strong>cannot be undone</strong> and all your data will be permanently removed.</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+                      <button type="button" class="btn btn-danger btn-sm">Yes, delete my account</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-<!-- Photo Upload Script -->
-<script>
-  document.getElementById('photoUpload').addEventListener('change', function(e) {
-    var file = e.target.files[0];
-    if (file) {
-      var reader = new FileReader();
-      reader.onload = function(ev) {
-        document.getElementById('profilePhoto').src = ev.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-</script>
 
             </div>
             <!-- End of Main Content -->
 
+            </div>
+    
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; FitTrack 2026</span>
                     </div>
                 </div>
             </footer>
-            <!-- End of Footer -->
-
+    
         </div>
         <!-- End of Content Wrapper -->
-
+    
     </div>
     <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
+    
+    <!-- Scroll to Top -->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title">Ready to leave?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">
+                    Select "Logout" below if you are ready to end your current session.
+                </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     <a class="btn btn-primary" href="login.html">Logout</a>
@@ -558,23 +668,18 @@
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
-
-</body>
-
-</html>
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="js/sb-admin-2.min.js"></script>
+ 
+<script>
+    // Auto-set topbar page title from sidebar active item
+    document.addEventListener('DOMContentLoaded', function () {
+        const activeLink = document.querySelector('.nav-item.active .nav-link span');
+        const titleEl = document.querySelector('.topbar-page-title');
+        if (activeLink && titleEl) {
+            titleEl.textContent = activeLink.textContent.trim();
+        }
+    });
+</script>

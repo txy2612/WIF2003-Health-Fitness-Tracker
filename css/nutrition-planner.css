@@ -1,0 +1,155 @@
+
+/* ---- Meal Cards ---- */
+.meal-card img {
+    height: 160px;
+    object-fit: cover;
+    width: 100%;
+}
+.meal-card .badge {
+    font-size: 0.75rem;
+}
+
+/* Heart favourite button – white default, blue when active */
+.fav-heart-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.92);
+    border: none;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    transition: transform 0.15s, color 0.2s, background 0.2s;
+    z-index: 10;
+    color: #d1d3e2;   /* white/outline look */
+    font-size: 1rem;
+}
+.fav-heart-btn.active {
+    color: #4e73df;   /* blue when favourited */
+}
+.fav-heart-btn:hover {
+    transform: scale(1.15);
+}
+
+/* ---- Macro pills ---- */
+.macro-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin: 2px;
+}
+.macro-protein { background: #e8f5e9; color: #2e7d32; }
+.macro-carbs   { background: #fff3e0; color: #e65100; }
+.macro-fat     { background: #fce4ec; color: #c62828; }
+
+/* ---- Favourites ---- */
+.fav-meal-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* ---- Calorie result box ---- */
+.calorie-result-box {
+    background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+    color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+.calorie-result-box h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+/* ---- Empty state ---- */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #b7b9cc;
+}
+.empty-state i { font-size: 3rem; margin-bottom: 12px; }
+
+/* ---- Calorie calculator collapsible header ---- */
+.calc-toggle-header {
+    cursor: pointer;
+    user-select: none;
+}
+.calc-toggle-header:hover {
+    background-color: #f8f9fc;
+}
+
+/* ---- Today's Plan slots ---- */
+.plan-slot-header {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 6px 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+.plan-breakfast-hdr { background: #fff8e1; color: #f57c00; }
+.plan-lunch-hdr     { background: #e3f2fd; color: #1565c0; }
+.plan-dinner-hdr    { background: #ede7f6; color: #4527a0; }
+
+/* ---- Water tracker ---- */
+.water-glasses-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+.water-glass {
+    font-size: 1.8rem;
+    cursor: pointer;
+    opacity: 0.25;
+    transition: opacity 0.2s, transform 0.15s;
+    user-select: none;
+}
+.water-glass.filled {
+    opacity: 1;
+}
+.water-glass:hover {
+    transform: scale(1.2);
+}
+
+/* ---- Toast notification ---- */
+#npToast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #1cc88a;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 9999;
+    pointer-events: none;
+}
+#npToast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ---- Modal image ---- */
+#modalMealImg {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+#calorie-result { display: none; }
