@@ -1,718 +1,946 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Dashboard</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack — Your Health, Tracked.</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+        :root {
+            --black:   #0d0d0d;
+            --white:   #fafaf8;
+            --gray-1:  #f4f4f1;
+            --gray-2:  #e8e8e3;
+            --gray-3:  #b0b0a8;
+            --gray-4:  #6b6b63;
+            --accent:  #2563eb;
+            --accent-light: #eff4ff;
+            --green:   #16a34a;
+            --radius:  12px;
+            --shadow:  0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+        }
+ 
+        html { scroll-behavior: smooth; }
+ 
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+ 
+        /* ── NAV ─────────────────────────────────────────────────────── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 6vw;
+            height: 64px;
+            background: rgba(250,250,248,0.88);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-2);
+        }
+ 
+        .nav-brand {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.35rem;
+            color: var(--black);
+            text-decoration: none;
+            letter-spacing: -0.01em;
+        }
+ 
+        .nav-brand span { color: var(--accent); }
+ 
+        .nav-links { display: flex; align-items: center; gap: 2rem; }
+ 
+        .nav-links a {
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--gray-4);
+            transition: color 0.2s;
+        }
+ 
+        .nav-links a:hover { color: var(--black); }
+ 
+        .btn-nav {
+            background: var(--black);
+            color: var(--white) !important;
+            padding: 0.45rem 1.1rem;
+            border-radius: 6px;
+            font-size: 0.875rem !important;
+            transition: background 0.2s !important;
+        }
+ 
+        .btn-nav:hover { background: var(--accent) !important; color: var(--white) !important; }
+ 
+        /* ── HERO ────────────────────────────────────────────────────── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 6vw 80px;
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        /* Subtle dot grid background */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, var(--gray-2) 1px, transparent 1px);
+            background-size: 28px 28px;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+ 
+        /* Soft glow blob */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 20%; left: 50%;
+            transform: translateX(-50%);
+            width: 600px; height: 400px;
+            background: radial-gradient(ellipse, rgba(37,99,235,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+ 
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.3rem 0.85rem;
+            border-radius: 99px;
+            border: 1px solid rgba(37,99,235,0.15);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            position: relative; z-index: 1;
+            opacity: 0; animation: fadeUp 0.6s 0.1s forwards;
+        }
+ 
+        .hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.8rem, 6vw, 5rem);
+            line-height: 1.08;
+            letter-spacing: -0.03em;
+            color: var(--black);
+            max-width: 720px;
+            position: relative; z-index: 1;
+            opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+        }
+ 
+        .hero h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+ 
+        .hero-sub {
+            margin-top: 1.25rem;
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--gray-4);
+            max-width: 480px;
+            line-height: 1.7;
+            position: relative; z-index: 1;
+            opacity: 0; animation: fadeUp 0.7s 0.35s forwards;
+        }
+ 
+        .hero-cta {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 2.25rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative; z-index: 1;
+            opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
+        }
+ 
+        .btn-primary {
+            background: var(--black);
+            color: var(--white);
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.15s;
+            border: none; cursor: pointer;
+        }
+ 
+        .btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+ 
+        .btn-secondary {
+            background: transparent;
+            color: var(--black);
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            border: 1.5px solid var(--gray-2);
+            transition: border-color 0.2s, transform 0.15s;
+            cursor: pointer;
+        }
+ 
+        .btn-secondary:hover { border-color: var(--black); transform: translateY(-1px); }
+ 
+        .hero-stats {
+            display: flex;
+            gap: 2.5rem;
+            margin-top: 3rem;
+            position: relative; z-index: 1;
+            opacity: 0; animation: fadeUp 0.7s 0.65s forwards;
+        }
+ 
+        .stat { text-align: center; }
+        .stat-num {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem;
+            color: var(--black);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--gray-3);
+            font-weight: 500;
+            margin-top: 0.2rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+ 
+        .stat-divider {
+            width: 1px;
+            background: var(--gray-2);
+            align-self: stretch;
+        }
+ 
+        /* ── SCREENSHOT MOCKUP ───────────────────────────────────────── */
+        .mockup-section {
+            padding: 0 6vw 100px;
+            display: flex;
+            justify-content: center;
+            opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+        }
+ 
+        .mockup-wrap {
+            position: relative;
+            max-width: 1000px;
+            width: 100%;
+        }
+ 
+        .mockup-browser {
+            background: var(--white);
+            border: 1px solid var(--gray-2);
+            border-radius: 14px;
+            box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0,0,0,0.03);
+            overflow: hidden;
+        }
+ 
+        .browser-bar {
+            background: var(--gray-1);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--gray-2);
+        }
+ 
+        .browser-dots { display: flex; gap: 6px; }
+        .browser-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+        }
+        .dot-red   { background: #ff5f57; }
+        .dot-amber { background: #febc2e; }
+        .dot-green { background: #28c840; }
+ 
+        .browser-url {
+            flex: 1;
+            background: var(--white);
+            border: 1px solid var(--gray-2);
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            color: var(--gray-4);
+            max-width: 300px;
+        }
+ 
+        /* Simulated dashboard inside browser */
+        .mock-dashboard {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: 400px;
+            background: #f0f2f5;
+        }
+ 
+        .mock-sidebar {
+            background: #4e73df;
+            padding: 20px 0;
+        }
+ 
+        .mock-sidebar-brand {
+            color: white;
+            font-family: 'DM Serif Display', serif;
+            font-size: 1rem;
+            padding: 0 16px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            margin-bottom: 12px;
+        }
+ 
+        .mock-nav-item {
+            padding: 8px 16px;
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.65);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+ 
+        .mock-nav-item.active {
+            color: white;
+            background: rgba(255,255,255,0.12);
+        }
+ 
+        .mock-nav-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            flex-shrink: 0;
+        }
+ 
+        .mock-content { padding: 20px; }
+ 
+        .mock-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+ 
+        .mock-card {
+            background: white;
+            border-radius: 8px;
+            padding: 14px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+ 
+        .mock-card-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-3);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+ 
+        .mock-card-val {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.4rem;
+            color: var(--black);
+            line-height: 1;
+        }
+ 
+        .mock-card-sub { font-size: 0.6rem; color: var(--gray-3); margin-top: 2px; }
+ 
+        .mock-bar-row {
+            background: white;
+            border-radius: 8px;
+            padding: 14px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+ 
+        .mock-bar-label { font-size: 0.65rem; color: var(--gray-3); margin-bottom: 8px; font-weight: 600; }
+ 
+        .mock-bars { display: flex; align-items: flex-end; gap: 6px; height: 60px; }
+ 
+        .mock-bar {
+            flex: 1;
+            background: linear-gradient(to top, #4e73df, #6e93ff);
+            border-radius: 3px 3px 0 0;
+            opacity: 0.85;
+        }
+ 
+        /* ── FEATURES ────────────────────────────────────────────────── */
+        .features {
+            padding: 100px 6vw;
+            background: var(--gray-1);
+            border-top: 1px solid var(--gray-2);
+            border-bottom: 1px solid var(--gray-2);
+        }
+ 
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+ 
+        .section-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            color: var(--black);
+            max-width: 480px;
+            margin-bottom: 3.5rem;
+        }
+ 
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+ 
+        .feature-card {
+            background: var(--white);
+            border: 1px solid var(--gray-2);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+ 
+        .feature-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+ 
+        .feature-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            background: var(--accent-light);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+ 
+        .feature-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+            color: var(--black);
+        }
+ 
+        .feature-desc {
+            font-size: 0.875rem;
+            color: var(--gray-4);
+            line-height: 1.65;
+            font-weight: 300;
+        }
+ 
+        /* ── SCREENSHOTS STRIP ───────────────────────────────────────── */
+        .screens-section {
+            padding: 100px 6vw;
+        }
+ 
+        .screens-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-top: 3rem;
+        }
+ 
+        .screen-card {
+            border: 1px solid var(--gray-2);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+ 
+        .screen-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+        }
+ 
+        .screen-header {
+            background: #4e73df;
+            padding: 10px 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+ 
+        .screen-title-text { color: rgba(255,255,255,0.9); font-size: 0.72rem; font-weight: 600; }
+ 
+        .screen-body { background: #f0f2f5; padding: 14px; }
+ 
+        /* Mini fitness tracker preview */
+        .mini-table { width: 100%; border-collapse: collapse; }
+        .mini-table th {
+            font-size: 0.58rem;
+            text-transform: uppercase;
+            color: var(--gray-3);
+            padding: 4px 6px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-2);
+            background: white;
+        }
+        .mini-table td {
+            font-size: 0.65rem;
+            padding: 5px 6px;
+            color: var(--gray-4);
+            background: white;
+            border-bottom: 1px solid #f4f4f1;
+        }
+        .mini-badge {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 99px;
+            font-size: 0.55rem;
+            font-weight: 600;
+        }
+        .badge-blue { background: #dbeafe; color: #1d4ed8; }
+        .badge-green { background: #dcfce7; color: #15803d; }
+        .badge-yellow { background: #fef9c3; color: #854d0e; }
+ 
+        /* Mini nutrition preview */
+        .mini-meal-row {
+            display: flex; justify-content: space-between; align-items: center;
+            background: white; border-radius: 6px; padding: 6px 10px;
+            margin-bottom: 5px; font-size: 0.65rem;
+        }
+        .mini-meal-name { color: var(--black); font-weight: 500; }
+        .mini-meal-cal { color: var(--accent); font-weight: 600; }
+ 
+        /* Mini progress preview */
+        .mini-chart-bars { display: flex; align-items: flex-end; gap: 4px; height: 60px; margin-top: 8px; }
+        .mini-chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, #4e73df88, #4e73df);
+            border-radius: 3px 3px 0 0;
+        }
+        .mini-chart-label { display: flex; justify-content: space-between; margin-top: 4px; }
+        .mini-chart-label span { font-size: 0.55rem; color: var(--gray-3); }
+ 
+        .screen-caption {
+            padding: 12px 14px;
+            background: white;
+            border-top: 1px solid var(--gray-2);
+        }
+        .screen-caption strong { font-size: 0.8rem; display: block; color: var(--black); }
+        .screen-caption span { font-size: 0.72rem; color: var(--gray-3); }
+ 
+        /* ── CTA SECTION ─────────────────────────────────────────────── */
+        .cta-section {
+            padding: 100px 6vw;
+            text-align: center;
+            background: var(--black);
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px; height: 400px;
+            background: radial-gradient(ellipse, rgba(37,99,235,0.25) 0%, transparent 70%);
+            pointer-events: none;
+        }
+ 
+        .cta-section h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            color: var(--white);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            max-width: 560px;
+            margin: 0 auto 1rem;
+            position: relative; z-index: 1;
+        }
+ 
+        .cta-section h2 em { color: #93b8ff; font-style: italic; }
+ 
+        .cta-sub {
+            color: rgba(250,250,248,0.5);
+            font-size: 1rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            position: relative; z-index: 1;
+        }
+ 
+        .cta-buttons {
+            display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;
+            position: relative; z-index: 1;
+        }
+ 
+        .btn-white {
+            background: var(--white);
+            color: var(--black);
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.15s;
+        }
+ 
+        .btn-white:hover { background: var(--gray-1); transform: translateY(-1px); }
+ 
+        .btn-ghost {
+            background: transparent;
+            color: rgba(250,250,248,0.7);
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            border: 1.5px solid rgba(255,255,255,0.18);
+            transition: border-color 0.2s, color 0.2s;
+        }
+ 
+        .btn-ghost:hover { border-color: rgba(255,255,255,0.5); color: var(--white); }
+ 
+        /* ── FOOTER ──────────────────────────────────────────────────── */
+        footer {
+            padding: 1.5rem 6vw;
+            border-top: 1px solid var(--gray-2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--white);
+        }
+ 
+        footer .brand {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1rem;
+            color: var(--black);
+        }
+ 
+        footer .brand span { color: var(--accent); }
+ 
+        footer p {
+            font-size: 0.8rem;
+            color: var(--gray-3);
+        }
+ 
+        /* ── ANIMATIONS ──────────────────────────────────────────────── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+ 
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+ 
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+ 
+        /* ── RESPONSIVE ──────────────────────────────────────────────── */
+        @media (max-width: 768px) {
+            .nav-links a:not(.btn-nav) { display: none; }
+            .hero-stats { gap: 1.25rem; }
+            .screens-grid { grid-template-columns: 1fr; }
+            .mock-dashboard { grid-template-columns: 1fr; }
+            .mock-sidebar { display: none; }
+        }
+    </style>
 </head>
-
-<body id="page-top">
-
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
-            </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Interface
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Addons
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-            <!-- Sidebar Message -->
-            <div class="sidebar-card d-none d-lg-flex">
-                <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
-                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
-            </div>
-
-        </ul>
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
-                            </a>
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Alerts Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                            </div>
-                        </li>
-
-                        <!-- Nav Item - Messages -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw"></i>
-                                <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="messagesDropdown">
-                                <h6 class="dropdown-header">
-                                    Message Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                            problem I've been having.</div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="...">
-                                        <div class="status-indicator"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">I have the photos that you ordered last month, how
-                                            would you like them sent to you?</div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="...">
-                                        <div class="status-indicator bg-warning"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Last month's report looks great, I am very happy with
-                                            the progress so far, keep up the good work!</div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                            alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                            told me that people say this to all dogs, even if they aren't good...</div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-                            </div>
-                        </li>
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
-                            </div>
-                        </li>
-
-                    </ul>
-
-                </nav>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-
-                        <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center">
-                            <div class="btn-group mr-sm-2 mb-2 mb-sm-0" rolwith tee="group" aria-label="Range selector">
-                                <button type="button" class="btn btn-outline-primary active" id="dayBtn">Day</button>
-                                <button type="button" class="btn btn-outline-primary" id="weekBtn">Week</button>
-                                <button type="button" class="btn btn-outline-primary" id="customBtn">Custom Range</button>
-                            </div>
-
-                            <div id="customRangeInputs" class="d-none d-sm-flex flex-column flex-sm-row align-items-stretch align-items-sm-center">
-                                <input type="date" class="form-control mb-2 mb-sm-0 mr-sm-2" id="startDate">
-                                <input type="date" class="form-control mb-2 mb-sm-0 mr-sm-2" id="endDate">
-                                <button class="btn btn-primary" id="applyRangeBtn">Apply</button>
-                            </div>
-                        </div>
-                        
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-                    </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- Workout Sessions Card -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Workouts This Week </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">4 Sessions</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dumbbell fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Steps Today Card -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1"> Steps Today </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">7,820</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-walking text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Calories Burned Card -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Calories Burned
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">540 kcal</div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-fire text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Goal Progress -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Goal Progress </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">65%</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-bullseye fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Content Row -->
-
-                    <div class="row">
-
-                        <!-- Area Chart -->
-                        <div class="col-xl-8 col-lg-7">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Steps Today</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="myAreaChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Direct
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Social
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Referral
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- Content Column -->
-                        <div class="col-lg-6 mb-4">
-
-
-                            <!-- Color System -->
-                            <div class="row">
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-primary text-white shadow">
-                                        <div class="card-body">
-                                            Primary
-                                            <div class="text-white-50 small">#4e73df</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-success text-white shadow">
-                                        <div class="card-body">
-                                            Success
-                                            <div class="text-white-50 small">#1cc88a</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-info text-white shadow">
-                                        <div class="card-body">
-                                            Info
-                                            <div class="text-white-50 small">#36b9cc</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-warning text-white shadow">
-                                        <div class="card-body">
-                                            Warning
-                                            <div class="text-white-50 small">#f6c23e</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-danger text-white shadow">
-                                        <div class="card-body">
-                                            Danger
-                                            <div class="text-white-50 small">#e74a3b</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-secondary text-white shadow">
-                                        <div class="card-body">
-                                            Secondary
-                                            <div class="text-white-50 small">#858796</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-light text-black shadow">
-                                        <div class="card-body">
-                                            Light
-                                            <div class="text-black-50 small">#f8f9fc</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card bg-dark text-white shadow">
-                                        <div class="card-body">
-                                            Dark
-                                            <div class="text-white-50 small">#5a5c69</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-lg-6 mb-4">
-
-                            
-
-                            <!-- Approach -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                                </div>
-                                <div class="card-body">
-                                    <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                                        CSS bloat and poor page performance. Custom CSS classes are used to create
-                                        custom components and custom utility classes.</p>
-                                    <p class="mb-0">Before working with this theme, you should become familiar with the
-                                        Bootstrap framework, especially the utility classes.</p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
+<body>
+ 
+<!-- ── NAV ───────────────────────────────────────────────────────────────── -->
+<nav>
+    <a class="nav-brand" href="#">Fit<span>Track</span></a>
+    <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#screens">Preview</a>
+        <a href="login.html" class="btn-nav">Sign In</a>
     </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
+</nav>
+ 
+<!-- ── HERO ──────────────────────────────────────────────────────────────── -->
+<section class="hero">
+    <div class="hero-tag">✦ Your personal health companion</div>
+    <h1>Track fitness.<br><em>Feel the difference.</em></h1>
+    <p class="hero-sub">Log workouts, monitor nutrition, and watch your progress — all in one clean, focused dashboard.</p>
+    <div class="hero-cta">
+        <a href="register.html" class="btn-primary">Get Started Free</a>
+        <a href="login.html" class="btn-secondary">Sign In</a>
+    </div>
+    <div class="hero-stats">
+        <div class="stat">
+            <div class="stat-num">6</div>
+            <div class="stat-label">Core Modules</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+            <div class="stat-num">100%</div>
+            <div class="stat-label">Free to Use</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+            <div class="stat-num">∞</div>
+            <div class="stat-label">Logs & History</div>
+        </div>
+    </div>
+</section>
+ 
+<!-- ── MOCKUP ─────────────────────────────────────────────────────────────── -->
+<div class="mockup-section">
+    <div class="mockup-wrap reveal">
+        <div class="mockup-browser">
+            <div class="browser-bar">
+                <div class="browser-dots">
+                    <div class="browser-dot dot-red"></div>
+                    <div class="browser-dot dot-amber"></div>
+                    <div class="browser-dot dot-green"></div>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                <div class="browser-url">fittrack.app/dashboard</div>
+            </div>
+            <div class="mock-dashboard">
+                <div class="mock-sidebar">
+                    <div class="mock-sidebar-brand">FitTrack</div>
+                    <div class="mock-nav-item active"><div class="mock-nav-dot"></div> Dashboard</div>
+                    <div class="mock-nav-item"><div class="mock-nav-dot"></div> Fitness Tracker</div>
+                    <div class="mock-nav-item"><div class="mock-nav-dot"></div> Nutrition Planner</div>
+                    <div class="mock-nav-item"><div class="mock-nav-dot"></div> Progress Charts</div>
+                    <div class="mock-nav-item"><div class="mock-nav-dot"></div> Notifications</div>
+                </div>
+                <div class="mock-content">
+                    <div style="font-size:0.7rem; font-weight:600; color:var(--gray-4); margin-bottom:10px;">Good morning 👋 — Sunday, 3 May 2026</div>
+                    <div class="mock-cards">
+                        <div class="mock-card">
+                            <div class="mock-card-label">Steps Today</div>
+                            <div class="mock-card-val">5,200</div>
+                            <div class="mock-card-sub">Goal: 10,000</div>
+                        </div>
+                        <div class="mock-card">
+                            <div class="mock-card-label">Calories Burned</div>
+                            <div class="mock-card-val">380</div>
+                            <div class="mock-card-sub">kcal today</div>
+                        </div>
+                        <div class="mock-card">
+                            <div class="mock-card-label">Water Intake</div>
+                            <div class="mock-card-val">5/8</div>
+                            <div class="mock-card-sub">glasses</div>
+                        </div>
+                    </div>
+                    <div class="mock-bar-row">
+                        <div class="mock-bar-label">Weekly Workouts</div>
+                        <div class="mock-bars">
+                            <div class="mock-bar" style="height:35%"></div>
+                            <div class="mock-bar" style="height:60%"></div>
+                            <div class="mock-bar" style="height:45%"></div>
+                            <div class="mock-bar" style="height:80%"></div>
+                            <div class="mock-bar" style="height:55%"></div>
+                            <div class="mock-bar" style="height:90%"></div>
+                            <div class="mock-bar" style="height:40%"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
-    <script src="js/demo/chart-pie-demo.js"></script>
-
+</div>
+ 
+<!-- ── FEATURES ───────────────────────────────────────────────────────────── -->
+<section class="features" id="features">
+    <div class="section-label">What's inside</div>
+    <div class="section-title">Everything you need, nothing you don't.</div>
+    <div class="features-grid">
+        <div class="feature-card reveal">
+            <div class="feature-icon">🏋️</div>
+            <div class="feature-title">Fitness Tracker</div>
+            <div class="feature-desc">Log workouts and daily steps. Calories auto-calculated using the MET formula — no manual entry needed.</div>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">🥗</div>
+            <div class="feature-title">Nutrition Planner</div>
+            <div class="feature-desc">Search meals, log your daily intake by slot, calculate your calorie goal, and save your favourites.</div>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">📈</div>
+            <div class="feature-title">Progress Charts</div>
+            <div class="feature-desc">Visualise your workouts, steps, and weight over time. See trends at a glance with clean, readable charts.</div>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">💧</div>
+            <div class="feature-title">Water Intake</div>
+            <div class="feature-desc">Track daily hydration with a simple glass-by-glass counter. Small habit, big difference.</div>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">🔔</div>
+            <div class="feature-title">Notifications</div>
+            <div class="feature-desc">Set reminders for workouts and meals so you never miss a session or a healthy choice.</div>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">👤</div>
+            <div class="feature-title">Profile & Goals</div>
+            <div class="feature-desc">Set your step goal, calorie target, and weight goal. Your progress adapts to what you're working towards.</div>
+        </div>
+    </div>
+</section>
+ 
+<!-- ── SCREENS ────────────────────────────────────────────────────────────── -->
+<section class="screens-section" id="screens">
+    <div class="section-label">App Preview</div>
+    <div class="section-title">A closer look at every page.</div>
+    <div class="screens-grid">
+ 
+        <!-- Fitness Tracker screen -->
+        <div class="screen-card reveal">
+            <div class="screen-header">
+                <div class="browser-dots" style="gap:5px;">
+                    <div class="browser-dot dot-red"></div>
+                    <div class="browser-dot dot-amber"></div>
+                    <div class="browser-dot dot-green"></div>
+                </div>
+                <div class="screen-title-text">Fitness Tracker</div>
+            </div>
+            <div class="screen-body">
+                <table class="mini-table">
+                    <tr>
+                        <th>Date</th><th>Activity</th><th>Duration</th><th>Calories</th>
+                    </tr>
+                    <tr>
+                        <td>02 May</td>
+                        <td><span class="mini-badge badge-blue">🏃 Running</span></td>
+                        <td>40 min</td>
+                        <td>373 kcal</td>
+                    </tr>
+                    <tr>
+                        <td>01 May</td>
+                        <td><span class="mini-badge badge-yellow">🏋️ Weights</span></td>
+                        <td>60 min</td>
+                        <td>315 kcal</td>
+                    </tr>
+                    <tr>
+                        <td>30 Apr</td>
+                        <td><span class="mini-badge badge-green">🚴 Cycling</span></td>
+                        <td>55 min</td>
+                        <td>385 kcal</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="screen-caption">
+                <strong>Fitness Tracker</strong>
+                <span>Log workouts &amp; steps with auto-calculated calories</span>
+            </div>
+        </div>
+ 
+        <!-- Nutrition Planner screen -->
+        <div class="screen-card reveal">
+            <div class="screen-header">
+                <div class="browser-dots" style="gap:5px;">
+                    <div class="browser-dot dot-red"></div>
+                    <div class="browser-dot dot-amber"></div>
+                    <div class="browser-dot dot-green"></div>
+                </div>
+                <div class="screen-title-text">Nutrition Planner</div>
+            </div>
+            <div class="screen-body">
+                <div style="font-size:0.6rem; font-weight:600; color:var(--gray-3); text-transform:uppercase; margin-bottom:6px;">Today's Meal Log</div>
+                <div class="mini-meal-row">
+                    <span class="mini-meal-name">🌅 Oatmeal with Banana</span>
+                    <span class="mini-meal-cal">380 kcal</span>
+                </div>
+                <div class="mini-meal-row">
+                    <span class="mini-meal-name">☀️ Grilled Chicken Rice</span>
+                    <span class="mini-meal-cal">490 kcal</span>
+                </div>
+                <div class="mini-meal-row">
+                    <span class="mini-meal-name">🌙 Mixed Veggie Bowl</span>
+                    <span class="mini-meal-cal">210 kcal</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:0.62rem; color:var(--gray-4);">
+                    <span>Total today</span>
+                    <span style="font-weight:600; color:var(--accent);">1,080 / 2,000 kcal</span>
+                </div>
+            </div>
+            <div class="screen-caption">
+                <strong>Nutrition Planner</strong>
+                <span>Track meals by slot, search foods, save favourites</span>
+            </div>
+        </div>
+ 
+        <!-- Progress Charts screen -->
+        <div class="screen-card reveal">
+            <div class="screen-header">
+                <div class="browser-dots" style="gap:5px;">
+                    <div class="browser-dot dot-red"></div>
+                    <div class="browser-dot dot-amber"></div>
+                    <div class="browser-dot dot-green"></div>
+                </div>
+                <div class="screen-title-text">Progress Charts</div>
+            </div>
+            <div class="screen-body">
+                <div style="font-size:0.6rem; font-weight:600; color:var(--gray-3); text-transform:uppercase; margin-bottom:4px;">Workouts This Week</div>
+                <div class="mini-chart-bars">
+                    <div class="mini-chart-bar" style="height:40%"></div>
+                    <div class="mini-chart-bar" style="height:65%"></div>
+                    <div class="mini-chart-bar" style="height:50%"></div>
+                    <div class="mini-chart-bar" style="height:85%"></div>
+                    <div class="mini-chart-bar" style="height:60%"></div>
+                    <div class="mini-chart-bar" style="height:95%"></div>
+                    <div class="mini-chart-bar" style="height:45%"></div>
+                </div>
+                <div class="mini-chart-label">
+                    <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                </div>
+                <div style="margin-top:10px; background:white; border-radius:6px; padding:8px;">
+                    <div style="font-size:0.6rem; color:var(--gray-3); margin-bottom:4px; font-weight:600; text-transform:uppercase;">Steps — 7 Days</div>
+                    <div style="height:4px; background:var(--gray-2); border-radius:99px; overflow:hidden;">
+                        <div style="height:100%; width:72%; background:linear-gradient(to right,#4e73df,#6e93ff); border-radius:99px;"></div>
+                    </div>
+                    <div style="font-size:0.6rem; color:var(--gray-3); margin-top:3px;">Avg 7,200 / 10,000 steps</div>
+                </div>
+            </div>
+            <div class="screen-caption">
+                <strong>Progress Charts</strong>
+                <span>Weekly trends for workouts, steps &amp; weight</span>
+            </div>
+        </div>
+ 
+    </div>
+</section>
+ 
+<!-- ── CTA ────────────────────────────────────────────────────────────────── -->
+<section class="cta-section">
+    <h2>Ready to start <em>tracking</em> what matters?</h2>
+    <p class="cta-sub">Free to use. No credit card. Just results.</p>
+    <div class="cta-buttons">
+        <a href="register.html" class="btn-white">Create Free Account</a>
+        <a href="login.html" class="btn-ghost">Already have an account</a>
+    </div>
+</section>
+ 
+<!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+<footer>
+    <div class="brand">Fit<span>Track</span></div>
+    <p>© 2026 FitTrack. Built for WIF2003.</p>
+</footer>
+ 
+<script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => entry.target.classList.add('visible'), i * 80);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+</script>
+ 
 </body>
-
 </html>
