@@ -158,6 +158,15 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="field-group">
+                    <label class="field-label" for="regHeight">Height (cm)</label>
+                    <div class="field-input-wrap">
+                        <i class="fas fa-ruler-vertical"></i>
+                        <input type="number" class="field-input" id="regHeight"
+                            placeholder="e.g. 170" min="100" max="250">
+                    </div>
+                </div>
  
                 <div class="field-group">
                     <label class="field-label" for="regGender">Gender</label>
@@ -165,9 +174,9 @@
                         <i class="fas fa-venus-mars"></i>
                         <select class="field-select" id="regGender">
                             <option value="" disabled selected>Select gender...</option>
-                            <option>Male</option>
-                            <option>Female</option>
-                            <option>Prefer not to say</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Prefer not to say</option>
                         </select>
                     </div>
                 </div>
@@ -178,11 +187,11 @@
                         <i class="fas fa-bullseye"></i>
                         <select class="field-select" id="regGoal">
                             <option value="" disabled selected>Select your goal...</option>
-                            <option>Lose weight</option>
-                            <option>Maintain weight</option>
-                            <option>Gain muscle</option>
-                            <option>Improve fitness</option>
-                            <option>Increase endurance</option>
+                            <option value="lose">Lose weight</option>
+                            <option value="maintain">Maintain weight</option>
+                            <option value="gain">Gain muscle</option>
+                            <option value="maintain">Improve fitness</option>
+                            <option value="maintain">Increase endurance</option>
                         </select>
                     </div>
                 </div>

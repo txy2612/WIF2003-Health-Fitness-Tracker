@@ -80,12 +80,25 @@
                 return;
             }
             document.getElementById('err-terms').style.display = 'none';
- 
+
+            // Save to fittrack_profile — same key used by fitness-tracker.js, 
+            // profile.js and nutrition calculator
+            const profile = {
+                name:   document.getElementById('regName').value.trim(),
+                email:  document.getElementById('regEmail').value.trim(),
+                age:    document.getElementById('regAge').value,
+                gender: document.getElementById('regGender').value,
+                weight: document.getElementById('regWeight').value,
+                height: document.getElementById('regHeight').value,
+                goal:   document.getElementById('regGoal').value
+                // phone not collected on sign up, user adds it later in profile
+            };
+            localStorage.setItem('fittrack_profile', JSON.stringify(profile));
+
             const name = document.getElementById('regName').value.trim();
             document.getElementById('successName').textContent = name;
- 
             setStep(3);
-            // TODO: wire to backend — POST /api/auth/register
+            // TODO: Phase 2 — POST /api/auth/register with profile data
         }
  
         function showErr(field, show) {
