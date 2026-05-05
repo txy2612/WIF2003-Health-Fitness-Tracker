@@ -304,7 +304,7 @@ function removeFavourite(id) {
 
 // ---- Water Intake (teammate implementation) ----
 const today = new Date().toISOString().split('T')[0];
-let waterGlasses = parseInt(localStorage.getItem('np_water_' + today) || '0', 10); // Update water today so it doesn't load yesterday's data
+let waterGlasses = parseInt(localStorage.getItem('np_water_' + today) || '0', 10); // Update water today so it doesn't load yesterday's data -> Start fresh at 0 everyday
 const waterMax = 8;
 const waterMessages = [
   'Stay hydrated! Start logging your water intake.',
@@ -329,7 +329,6 @@ function renderWaterGrid() {
     glass.onclick = () => {
     waterGlasses = i + 1;
     const today = new Date().toISOString().split('T')[0];
-    localStorage.setItem('np_water', waterGlasses);           // keep for today's UI
     localStorage.setItem('np_water_' + today, waterGlasses);  // add dated key
     renderWaterGrid();
     updateWaterUI();
