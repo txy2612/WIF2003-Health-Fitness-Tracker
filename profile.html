@@ -678,7 +678,13 @@
       baseCalories = Math.round(bmr * 1.1);
     }
 
+    // Save all to localStorage
     localStorage.setItem('baseCalories', baseCalories);
+    localStorage.setItem('userGender', gender);
+    localStorage.setItem('userAge', age);
+    localStorage.setItem('userWeight', weight);
+    localStorage.setItem('userHeight', height);
+    localStorage.setItem('userGoal', goal);
 
     var calorieEl = document.getElementById('calorie-target');
     var modeEl    = document.getElementById('goal-mode');
@@ -693,10 +699,15 @@
     }
     if (noteEl) noteEl.textContent = 'Based on your gender, age, weight, height and goal';
 
-    console.log('Base calories:', baseCalories, 'kcal');
-    console.log('Saved to localStorage:', localStorage.getItem('baseCalories'));
+    console.log('Saved to localStorage:', {
+      baseCalories: baseCalories,
+      userGender: gender,
+      userAge: age,
+      userWeight: weight,
+      userHeight: height,
+      userGoal: goal
+    });
   }
-
   function toggleEdit(field) {
     var display = document.getElementById('display-' + field);
     var input   = document.getElementById('input-' + field);
