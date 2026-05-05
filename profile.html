@@ -419,24 +419,39 @@
   </div>
 
   <!-- Goal / Plan -->
-  <div class="profile-field d-flex align-items-center justify-content-between py-3"
-       style="border-bottom: 1px solid rgba(0,0,0,0.08);">
-    <div style="flex:1;">
-      <p class="text-muted small mb-1">Goal / Plan</p>
-      <p class="font-weight-bold h5 mb-0 field-display" id="display-goal">Lose weight</p>
-      <select class="form-control border-0 border-bottom rounded-0 px-0 font-weight-bold h5 mb-0 field-input d-none"
-              id="input-goal" style="background:transparent; font-size:1.25rem;">
-        <option selected>Lose weight</option>
-        <option>Maintain weight</option>
-        <option>Gain muscle</option>
-        <option>Improve fitness</option>
-        <option>Increase endurance</option>
-      </select>
-    </div>
-    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('goal')" style="color:#4e73df;">
-      <i class="fas fa-pencil-alt"></i>
-    </button>
+<div class="profile-field d-flex align-items-center justify-content-between py-3"
+     style="border-bottom: 1px solid rgba(0,0,0,0.08);">
+  <div style="flex:1;">
+    <p class="text-muted small mb-1">Goal / Plan</p>
+    <p class="font-weight-bold h5 mb-0 field-display" id="display-goal">Lose weight</p>
+    <small class="text-muted" id="goal-mode">Calorie deficit mode</small>
+    <select class="form-control border-0 border-bottom rounded-0 px-0 font-weight-bold h5 mb-0 field-input d-none"
+            id="input-goal" style="background:transparent; font-size:1.25rem;"
+            onchange="updateGoalMode()">
+      <option selected>Lose weight</option>
+      <option>Maintain weight</option>
+      <option>Gain muscle</option>
+      <option>Improve fitness</option>
+      <option>Increase endurance</option>
+    </select>
   </div>
+  <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('goal')" style="color:#4e73df;">
+    <i class="fas fa-pencil-alt"></i>
+  </button>
+</div>
+
+<!-- Daily Calorie Target -->
+<div class="profile-field d-flex align-items-center justify-content-between py-3"
+     style="border-bottom: 1px solid rgba(0,0,0,0.08);">
+  <div style="flex:1;">
+    <p class="text-muted small mb-1">Daily Calorie Target</p>
+    <div class="d-flex align-items-center">
+      <span class="font-weight-bold h5 mb-0 mr-2" id="calorie-target">1,800 kcal</span>
+      <span class="badge badge-light text-muted" style="font-size:11px;">auto-calculated</span>
+    </div>
+    <small class="text-muted" id="calorie-note">Based on your goal and current stats</small>
+  </div>
+</div>
 
   <!-- Gender -->
   <div class="profile-field d-flex align-items-center justify-content-between py-3"
@@ -638,11 +653,55 @@
     }
   });
 
+  function calculateBaseCalories() {
+    var gender = document.getElementById('display-gender').textContent.trim();
+    var age    = parseInt(document.getElementById('display-age').textContent.trim());
+    var weight = parseFloat(document.getElementById('display-weight').textContent.trim());
+    var height = parseFloat(document.getElementById('display-height').textContent.trim());
+    var goal   = document.getElementById('display-goal').textContent.trim();
+
+    var bmr = 0;
+    if (gender === 'Female') {
+      bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+    } else {
+      bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+    }
+
+    var baseCalories = 0;
+    if (goal === 'Lose weight') {
+      baseCalories = Math.round(bmr * 0.85);
+    } else if (goal === 'Gain muscle') {
+      baseCalories = Math.round(bmr * 1.15);
+    } else if (goal === 'Maintain weight') {
+      baseCalories = Math.round(bmr);
+    } else {
+      baseCalories = Math.round(bmr * 1.1);
+    }
+
+    localStorage.setItem('baseCalories', baseCalories);
+
+    var calorieEl = document.getElementById('calorie-target');
+    var modeEl    = document.getElementById('goal-mode');
+    var noteEl    = document.getElementById('calorie-note');
+
+    if (calorieEl) calorieEl.textContent = baseCalories.toLocaleString() + ' kcal';
+    if (modeEl) {
+      if (goal === 'Lose weight')          modeEl.textContent = 'Calorie deficit mode';
+      else if (goal === 'Gain muscle')     modeEl.textContent = 'Higher calorie target';
+      else if (goal === 'Maintain weight') modeEl.textContent = 'Balanced';
+      else                                 modeEl.textContent = 'Active fitness mode';
+    }
+    if (noteEl) noteEl.textContent = 'Based on your gender, age, weight, height and goal';
+
+    console.log('Base calories:', baseCalories, 'kcal');
+    console.log('Saved to localStorage:', localStorage.getItem('baseCalories'));
+  }
+
   function toggleEdit(field) {
     var display = document.getElementById('display-' + field);
-    var input = document.getElementById('input-' + field);
-    var row = display.closest('.profile-field');
-    var btn = row.querySelector('.edit-btn i');
+    var input   = document.getElementById('input-' + field);
+    var row     = display.closest('.profile-field');
+    var btn     = row.querySelector('.edit-btn i');
 
     if (input.classList.contains('d-none')) {
       display.classList.add('d-none');
@@ -652,15 +711,15 @@
       btn.classList.add('fa-check');
       btn.closest('button').style.color = '#1cc88a';
       row.style.backgroundColor = '#eaf1fb';
-      row.style.borderLeft = '4px solid #4e73df';
-      row.style.paddingLeft = '12px';
-      row.style.borderRadius = '4px';
-      row.style.transition = 'all 0.2s ease';
+      row.style.borderLeft      = '4px solid #4e73df';
+      row.style.paddingLeft     = '12px';
+      row.style.borderRadius    = '4px';
+      row.style.transition      = 'all 0.2s ease';
     } else {
       var newValue = (input.tagName === 'SELECT')
         ? input.options[input.selectedIndex].text
         : input.value;
-      if (field === 'age') newValue = newValue + ' years';
+      if (field === 'age')    newValue = newValue + ' years';
       if (field === 'height') newValue = newValue + ' cm';
       if (field === 'weight') newValue = newValue + ' kg';
       display.textContent = newValue;
@@ -670,11 +729,20 @@
       btn.classList.add('fa-pencil-alt');
       btn.closest('button').style.color = '#4e73df';
       row.style.backgroundColor = '';
-      row.style.borderLeft = '';
-      row.style.paddingLeft = '';
-      row.style.borderRadius = '';
+      row.style.borderLeft      = '';
+      row.style.paddingLeft     = '';
+      row.style.borderRadius    = '';
+      calculateBaseCalories();
     }
   }
+
+  function updateGoalMode() {
+    calculateBaseCalories();
+  }
+
+  window.onload = function() {
+    calculateBaseCalories();
+  };
 </script>
 
             </div>
