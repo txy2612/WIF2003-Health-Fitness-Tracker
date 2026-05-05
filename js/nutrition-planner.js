@@ -58,12 +58,13 @@ const GOAL_LABELS = {
 
 // ---- State (backed by localStorage) ----
 let favourites  = JSON.parse(localStorage.getItem('np_favourites')  || '[]');
-let todayPlan   = JSON.parse(localStorage.getItem('np_todayPlan')   || '{"breakfast":[],"lunch":[],"dinner":[]}');
+const todayKey = 'np_todayPlan_' + new Date().toISOString().split('T')[0];
+let todayPlan  = JSON.parse(localStorage.getItem(todayKey) || '{"breakfast":[],"lunch":[],"dinner":[]}');
 let calcResult  = JSON.parse(localStorage.getItem('np_calcResult')  || 'null');
 
 
 function saveFavourites() { localStorage.setItem('np_favourites', JSON.stringify(favourites)); }
-function savePlan()       { localStorage.setItem('np_todayPlan',  JSON.stringify(todayPlan));  }
+function savePlan() { localStorage.setItem(todayKey, JSON.stringify(todayPlan)); }
 function saveCalcResult(r){ localStorage.setItem('np_calcResult', JSON.stringify(r));           }
 
 // ---- Helpers ----
