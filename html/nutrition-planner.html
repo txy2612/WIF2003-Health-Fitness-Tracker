@@ -260,16 +260,25 @@
                   <div class="col-lg-6">
 
                     <div class="form-group">
-                      <label for="goalType">
-                        <i class="fas fa-bullseye mr-1 text-muted"></i> Goal
-                      </label>
-                      <select class="form-control" id="goalType">
-                        <option value="" disabled selected>Select your goal…</option>
-                        <option value="lose">Lose Weight</option>
-                        <option value="maintain">Maintain Weight</option>
-                        <option value="gain">Gain Muscle</option>
-                      </select>
+                    <label><i class="fas fa-ruler-vertical mr-1 text-muted"></i> Height (cm)</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="calcHeight" placeholder="e.g. 165">
+                        <div class="input-group-append">
+                            <span class="input-group-text">cm</span>
+                        </div>
                     </div>
+                </div>
+
+                    <!-- Weight (editable inline) -->
+                  <div class="form-group">
+                      <label><i class="fas fa-weight mr-1 text-muted"></i> Weight (kg)</label>
+                      <div class="input-group">
+                          <input type="number" class="form-control" id="calcWeight" placeholder="e.g. 55">
+                          <div class="input-group-append">
+                              <span class="input-group-text">kg</span>
+                          </div>
+                      </div>
+                  </div>
 
                     <div class="form-group">
                       <label for="activityLevel">
@@ -283,14 +292,6 @@
                         <option value="1.725">Very Active (6–7 days/week)</option>
                         <option value="1.9">Extra Active (physical job or 2× training)</option>
                       </select>
-                    </div>
-
-                    <div class="form-group">
-                      <label for="weightKg">
-                        <i class="fas fa-weight mr-1 text-muted"></i> Weight (kg)
-                        <span class="text-muted small">— optional</span>
-                      </label>
-                      <input type="number" class="form-control" id="weightKg" placeholder="e.g. 70">
                     </div>
 
                     <button class="btn btn-primary btn-block" onclick="calculateCalories()">
@@ -316,6 +317,7 @@
                               style="font-size:0.9rem; opacity:0.85;">YOUR DAILY CALORIE GOAL</p>
                             <h2 id="calorie-output">—</h2>
                             <p class="mb-0" style="opacity:0.85;">kcal / day</p>
+                            <p class="text-muted small text-center mt-2" id="calc-note"></p>
                           </div>
                           <div id="macro-breakdown" class="text-center">
                             <p class="text-muted small mb-1 font-weight-bold">Estimated Macros</p>

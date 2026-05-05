@@ -50,6 +50,12 @@ const MEALS = [
   }
 ];
 
+const GOAL_LABELS = {
+    'lose':     'Lose weight',
+    'maintain': 'Maintain weight',
+    'gain':     'Gain muscle'
+};
+
 // ---- State (backed by localStorage) ----
 let favourites  = JSON.parse(localStorage.getItem('np_favourites')  || '[]');
 let todayPlan   = JSON.parse(localStorage.getItem('np_todayPlan')   || '{"breakfast":[],"lunch":[],"dinner":[]}');
@@ -297,7 +303,8 @@ function removeFavourite(id) {
 }
 
 // ---- Water Intake (teammate implementation) ----
-let waterGlasses = parseInt(localStorage.getItem('np_water') || '0', 10);
+const today = new Date().toISOString().split('T')[0];
+let waterGlasses = parseInt(localStorage.getItem('np_water_' + today) || '0', 10); // Update water today so it doesn't load yesterday's data
 const waterMax = 8;
 const waterMessages = [
   'Stay hydrated! Start logging your water intake.',
@@ -320,11 +327,13 @@ function renderWaterGrid() {
     glass.textContent = '💧';
     glass.title = 'Glass ' + (i + 1);
     glass.onclick = () => {
-      waterGlasses = i + 1;
-      localStorage.setItem('np_water', waterGlasses);
-      renderWaterGrid();
-      updateWaterUI();
-    };
+    waterGlasses = i + 1;
+    const today = new Date().toISOString().split('T')[0];
+    localStorage.setItem('np_water', waterGlasses);           // keep for today's UI
+    localStorage.setItem('np_water_' + today, waterGlasses);  // add dated key
+    renderWaterGrid();
+    updateWaterUI();
+};
     grid.appendChild(glass);
   }
 }
@@ -338,7 +347,8 @@ function updateWaterUI() {
 
 function adjustWater(delta) {
   waterGlasses = Math.max(0, Math.min(waterMax, waterGlasses + delta));
-  localStorage.setItem('np_water', waterGlasses);
+  const today = new Date().toISOString().split('T')[0];
+  localStorage.setItem('np_water_' + today, waterGlasses);
   renderWaterGrid();
   updateWaterUI();
 }
@@ -353,39 +363,94 @@ function toggleCalc() {
   chevron.className     = isHidden ? 'fas fa-chevron-up text-muted' : 'fas fa-chevron-down text-muted';
 }
 
+// Load profile data into calculator preview on page load
+function loadProfileIntoCalc() {
+    const profile = JSON.parse(localStorage.getItem('fittrack_profile') || '{}');
+    const previewEl = document.getElementById('profileDataText');
+
+    // Pre-fill height/weight inputs from profile
+    if (profile.height) document.getElementById('calcHeight').value = profile.height;
+    if (profile.weight) document.getElementById('calcWeight').value = profile.weight;
+
+    if (!previewEl) return;
+
+    // Preview text — age, gender, goal only (height/weight have their own inputs)
+    const parts = [];
+    if (profile.age)    parts.push(`Age: ${profile.age}`);
+    if (profile.gender) parts.push(`Gender: ${capitalize(profile.gender)}`);
+    if (profile.goal)   parts.push(`Goal: ${GOAL_LABELS[profile.goal] || profile.goal}`);
+
+    previewEl.textContent = parts.length
+        ? parts.join(' · ')
+        : 'No profile data found. Update your profile for accurate results.';
+}
+
+
+document.getElementById('calcHeight').addEventListener('blur', function() {
+    if (!this.value) return;
+    const profile = JSON.parse(localStorage.getItem('fittrack_profile') || '{}');
+    profile.height = this.value;
+    localStorage.setItem('fittrack_profile', JSON.stringify(profile));
+});
+
+document.getElementById('calcWeight').addEventListener('blur', function() {
+    if (!this.value) return;
+    const profile = JSON.parse(localStorage.getItem('fittrack_profile') || '{}');
+    profile.weight = this.value;
+    localStorage.setItem('fittrack_profile', JSON.stringify(profile));
+});
+
 function calculateCalories() {
-  const goal        = document.getElementById('goalType').value;
-  const activityVal = document.getElementById('activityLevel').value;
-  const weight      = parseFloat(document.getElementById('weightKg').value) || 70;
+    const profile     = JSON.parse(localStorage.getItem('fittrack_profile') || '{}');
+    const activityVal = document.getElementById('activityLevel').value;
 
-  if (!goal || !activityVal) {
-    showToast('Please select a goal and activity level first.');
-    return;
-  }
+    if (!activityVal) {
+        showToast('Please select your activity level.');
+        return;
+    }
 
-  const activity = parseFloat(activityVal);
-  const bmr = 10 * weight + 500; // simplified weight-only formula
-  let tdee = Math.round(bmr * activity);
+    // Reads from input box,  fallback to profile values if input is empty
+    const weight = parseFloat(document.getElementById('calcWeight').value) || parseFloat(profile.weight) || 70;
+    const height = parseFloat(document.getElementById('calcHeight').value) || parseFloat(profile.height) || 170;
+    const age    = parseFloat(profile.age)    || 25;
+    const gender = profile.gender             || 'male';
+    const goal   = profile.goal               || 'maintain';
 
-  let adjustment = 0, goalLabel = '';
-  if (goal === 'lose') {
-    adjustment = -400;
-    goalLabel  = '🔻 Calorie deficit for weight loss (-400 kcal from TDEE)';
-  } else if (goal === 'gain') {
-    adjustment = +350;
-    goalLabel  = '💪 Calorie surplus for muscle gain (+350 kcal from TDEE)';
-  } else {
-    goalLabel  = '⚖️ Maintenance — matching your daily energy expenditure';
-  }
+    // Warn user if profile is incomplete
+    if (!profile.weight || !profile.height || !profile.age) {
+        showToast('Some profile data is missing — using defaults. Update your profile for accurate results.');
+    }
 
-  const target  = tdee + adjustment;
-  const protein = Math.round((target * 0.30) / 4);
-  const carbs   = Math.round((target * 0.45) / 4);
-  const fat     = Math.round((target * 0.25) / 9);
+    // Mifflin-St Jeor BMR (same formula as fitness-tracker.js)
+    const bmrBase = (10 * weight) + (6.25 * height) - (5 * age);
+    const bmr     = gender === 'female' ? bmrBase - 161 : bmrBase + 5;
 
-  const result = { target, protein, carbs, fat, goalLabel, goal, activity: activityVal };
-  saveCalcResult(result);
-  displayCalcResult(result);
+    const activity = parseFloat(activityVal);
+    let tdee = Math.round(bmr * activity);
+
+    let adjustment = 0, goalLabel = '';
+    if (goal === 'lose') {
+        adjustment = -500;
+        goalLabel  = '🔻 Calorie deficit for weight loss (-500 kcal from TDEE)';
+    } else if (goal === 'gain') {
+        adjustment = +300;
+        goalLabel  = '💪 Calorie surplus for muscle gain (+300 kcal from TDEE)';
+    } else {
+        goalLabel  = '⚖️ Maintenance — matching your daily energy expenditure';
+    }
+
+    const target  = tdee + adjustment;
+    const protein = Math.round((target * 0.30) / 4);
+    const carbs   = Math.round((target * 0.45) / 4);
+    const fat     = Math.round((target * 0.25) / 9);
+
+    const result = { target, protein, carbs, fat, goalLabel, goal, activity: activityVal };
+    const updatedProfile = { ...profile, activityLevel: activityVal };
+    localStorage.setItem('fittrack_profile', JSON.stringify(updatedProfile));
+
+    saveCalcResult(result);
+    displayCalcResult(result);
+    showToast('✓ Height & weight saved to your profile automatically.');
 }
 
 function displayCalcResult(r) {
@@ -416,10 +481,10 @@ document.addEventListener('DOMContentLoaded', function () {
   renderTodayPlan();
   renderWaterGrid();
   updateWaterUI();
+  loadProfileIntoCalc();
 
   // Restore previous calc result + dropdown selections from localStorage
   if (calcResult) {
-    if (calcResult.goal)     document.getElementById('goalType').value      = calcResult.goal;
     if (calcResult.activity) document.getElementById('activityLevel').value = calcResult.activity;
     displayCalcResult(calcResult);
   }
