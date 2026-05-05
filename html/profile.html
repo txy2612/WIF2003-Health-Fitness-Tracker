@@ -232,25 +232,11 @@
                                     </label>
                                     <input type="file" id="photoUpload" accept="image/*" style="display:none;">
                                     <h5 class="font-weight-bold mb-0" id="profileNameDisplay">Ahmad Hafiz</h5>
-                                    <p class="text-muted small">Member since January 2025</p>
                                 </div>
                 
                                 <hr style="border-color:rgba(0,0,0,0.08);">
                 
                                 <!-- Editable fields -->
-                                <div class="profile-field d-flex align-items-center justify-content-between py-3"
-                                    style="border-bottom:1px solid rgba(0,0,0,0.08);">
-                                    <div style="flex:1;">
-                                        <p class="text-muted small mb-1">Name</p>
-                                        <p class="font-weight-bold mb-0 field-display" id="display-name">Ahmad Hafiz</p>
-                                        <input type="text" class="form-control form-control-sm field-input d-none mt-1"
-                                              id="input-name" value="Ahmad Hafiz">
-                                    </div>
-                                    <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('name')" style="color:#4e73df;">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
-                                </div>
-                
                                 <div class="profile-field d-flex align-items-center justify-content-between py-3"
                                     style="border-bottom:1px solid rgba(0,0,0,0.08);">
                                     <div style="flex:1;">
@@ -309,11 +295,12 @@
                                         <p class="text-muted small mb-1">Goal / Plan</p>
                                         <p class="font-weight-bold mb-0 field-display" id="display-goal">Lose weight</p>
                                         <select class="form-control form-control-sm field-input d-none mt-1" id="input-goal">
-                                            <option selected>Lose weight</option>
-                                            <option>Maintain weight</option>
-                                            <option>Gain muscle</option>
-                                            <option>Improve fitness</option>
-                                            <option>Increase endurance</option>
+                                            <option value="" disabled selected>Select goal...</option>
+                                            <option value="lose">Lose weight</option>
+                                            <option value="maintain">Maintain weight</option>
+                                            <option value="gain">Gain muscle</option>
+                                            <option value="maintain">Improve fitness</option>
+                                            <option value="maintain">Increase endurance</option>
                                         </select>
                                     </div>
                                     <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('goal')" style="color:#4e73df;">
@@ -327,9 +314,10 @@
                                         <p class="text-muted small mb-1">Gender</p>
                                         <p class="font-weight-bold mb-0 field-display" id="display-gender">Male</p>
                                         <select class="form-control form-control-sm field-input d-none mt-1" id="input-gender">
-                                            <option selected>Male</option>
-                                            <option>Female</option>
-                                            <option>Prefer not to say</option>
+                                            <option value="" disabled selected>Select gender...</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Prefer not to say</option>
                                         </select>
                                     </div>
                                     <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('gender')" style="color:#4e73df;">
@@ -353,131 +341,9 @@
                         </div>
                     </div>
                 
-                    <!-- Right: Fitness Snapshot + Account Settings stacked -->
+                    <!-- Right:  + Account Settings stacked -->
                     <div class="col-lg-7">
-                
-                        <!-- Fitness Snapshot -->
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">
-                                    <i class="fas fa-chart-bar mr-2"></i>Fitness Snapshot
-                                </h6>
-                                <small class="text-muted">A quick summary of your current fitness status</small>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                
-                                    <div class="col-md-6 mb-3">
-                                        <div class="p-3 rounded d-flex align-items-center" style="border:1px solid #e3e6f0; background:#f8f9fc;">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
-                                                style="width:42px;height:42px;background:#e8f0fe;flex-shrink:0;">
-                                                <i class="fas fa-bullseye" style="color:#4e73df;"></i>
-                                            </div>
-                                            <div>
-                                                <div class="text-xs font-weight-bold text-uppercase text-muted">Current Goal</div>
-                                                <div class="font-weight-bold text-gray-800" id="snapshot-goal">Lose Weight</div>
-                                                <small class="text-muted">Active plan</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                
-                                    <div class="col-md-6 mb-3">
-                                        <div class="p-3 rounded d-flex align-items-center" style="border:1px solid #e3e6f0; background:#f8f9fc;">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
-                                                style="width:42px;height:42px;background:#e6f4ea;flex-shrink:0;">
-                                                <i class="fas fa-weight" style="color:#1cc88a;"></i>
-                                            </div>
-                                            <div>
-                                                <div class="text-xs font-weight-bold text-uppercase text-muted">Target Weight</div>
-                                                <div class="font-weight-bold text-gray-800" id="snapshot-target-weight">62 kg</div>
-                                                <small class="text-muted">Current: <span id="snapshot-current-weight">68 kg</span></small>
-                                            </div>
-                                        </div>
-                                    </div>
-                
-                                    <div class="col-md-6 mb-3">
-                                        <div class="p-3 rounded d-flex align-items-center" style="border:1px solid #e3e6f0; background:#f8f9fc;">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
-                                                style="width:42px;height:42px;background:#e0f4fb;flex-shrink:0;">
-                                                <i class="fas fa-running" style="color:#36b9cc;"></i>
-                                            </div>
-                                            <div>
-                                                <div class="text-xs font-weight-bold text-uppercase text-muted">Activity Level</div>
-                                                <div class="font-weight-bold text-gray-800">Moderate</div>
-                                                <small class="text-muted">3–4 days/week</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                
-                                    <div class="col-md-6 mb-3">
-                                        <div class="p-3 rounded d-flex align-items-center" style="border:1px solid #e3e6f0; background:#f8f9fc;">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3"
-                                                style="width:42px;height:42px;background:#fef8e7;flex-shrink:0;">
-                                                <i class="fas fa-calendar-alt" style="color:#f6c23e;"></i>
-                                            </div>
-                                            <div>
-                                                <div class="text-xs font-weight-bold text-uppercase text-muted">Member Since</div>
-                                                <div class="font-weight-bold text-gray-800">January 2025</div>
-                                                <small class="text-muted">4 months active</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                
-                                </div>
-                            </div>
-                        </div>
-                
-                        <!-- Account Settings -->
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">
-                                    <i class="fas fa-cog mr-2"></i>Account Settings
-                                </h6>
-                                <small class="text-muted">Manage your account security</small>
-                            </div>
-                            <div class="card-body">
-                                <button class="btn btn-primary btn-sm mr-2 mb-2"
-                                        type="button"
-                                        data-toggle="collapse"
-                                        data-target="#changePasswordSection">
-                                    <i class="fas fa-key mr-1"></i> Change Password
-                                </button>
-                                <button class="btn btn-danger btn-sm mb-2"
-                                        type="button"
-                                        data-toggle="modal"
-                                        data-target="#deleteAccountModal">
-                                    <i class="fas fa-trash mr-1"></i> Delete Account
-                                </button>
-                
-                                <div class="collapse mt-3" id="changePasswordSection">
-                                    <div class="card card-body bg-light">
-                                        <h6 class="mb-3">Change Password</h6>
-                                        <div class="form-group">
-                                            <label for="currentPassword">Current Password</label>
-                                            <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="newPassword">New Password</label>
-                                            <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <label for="confirmPassword">Confirm New Password</label>
-                                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
-                                        </div>
-                                        <div>
-                                            <button type="button" class="btn btn-primary btn-sm mr-2">Save Password</button>
-                                            <button type="button" class="btn btn-outline-primary btn-sm"
-                                                    data-toggle="collapse" data-target="#changePasswordSection">Cancel</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                
-                    </div>
-                </div>
-                
-                <!-- ══════════════════════════════════════════════════════════════════
+                        <!-- ══════════════════════════════════════════════════════════════════
                     SECTION 2 — GOAL SETTINGS (full width)
                 ══════════════════════════════════════════════════════════════════ -->
                 <div class="card shadow mb-4">
@@ -599,6 +465,58 @@
     </div>
 
               </div>
+                    
+                
+                        <!-- Account Settings -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    <i class="fas fa-cog mr-2"></i>Account Settings
+                                </h6>
+                                <small class="text-muted">Manage your account security</small>
+                            </div>
+                            <div class="card-body">
+                                <button class="btn btn-primary btn-sm mr-2 mb-2"
+                                        type="button"
+                                        data-toggle="collapse"
+                                        data-target="#changePasswordSection">
+                                    <i class="fas fa-key mr-1"></i> Change Password
+                                </button>
+                                <button class="btn btn-danger btn-sm mb-2"
+                                        type="button"
+                                        data-toggle="modal"
+                                        data-target="#deleteAccountModal">
+                                    <i class="fas fa-trash mr-1"></i> Delete Account
+                                </button>
+                
+                                <div class="collapse mt-3" id="changePasswordSection">
+                                    <div class="card card-body bg-light">
+                                        <h6 class="mb-3">Change Password</h6>
+                                        <div class="form-group">
+                                            <label for="currentPassword">Current Password</label>
+                                            <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="newPassword">New Password</label>
+                                            <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="confirmPassword">Confirm New Password</label>
+                                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-primary btn-sm mr-2">Save Password</button>
+                                            <button type="button" class="btn btn-outline-primary btn-sm"
+                                                    data-toggle="collapse" data-target="#changePasswordSection">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                    </div>
+                </div>
+                
               <!-- /.container-fluid -->
 
               <!-- Delete Account Confirmation Modal -->
