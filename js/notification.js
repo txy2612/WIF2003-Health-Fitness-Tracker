@@ -91,3 +91,32 @@ function edit(id) {
         render();
     }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const list = document.getElementById("insightsList");
+
+    const insights = [
+        getStepWeekInsight(),
+        getWorkoutComparisonInsight(),
+        getWorkoutStreakInsight(),
+        getHydrationWeekInsight()
+    ];
+
+    const filtered = insights.filter(i => i !== null);
+
+    if (filtered.length === 0) {
+        list.innerHTML = `
+            <li class="list-group-item text-muted">
+                No insights yet — start logging data!
+            </li>
+        `;
+        return;
+    }
+
+    filtered.forEach(text => {
+        const li = document.createElement("li");
+        li.className = "list-group-item";
+        li.textContent = text;
+        list.appendChild(li);
+    });
+});
