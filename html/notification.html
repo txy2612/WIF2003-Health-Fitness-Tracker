@@ -53,9 +53,15 @@
 
             <!-- Fitness Tracker -->
             <li class="nav-item">
+<<<<<<< HEAD
                 <a class="nav-link" href="fitness-tracker.html">
                     <i class="fas fa-fw fa-dumbbell"></i>
                     <span>Fitness Tracker</span>
+=======
+                <a class="nav-link collapsed" href="fitness-tracker.html">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Log Workout</span>
+>>>>>>> 69c6f63 (fix profile, sidebar and profile drop down)
                 </a>
             </li>
 
@@ -169,8 +175,13 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<<<<<<< HEAD
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">My Profile</span>
                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg" alt="Profile">
+=======
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Profile Page</span>
+                                <img class="img-profile rounded-circle" id="topbarProfilePic" src="img/undraw_profile.svg" alt="Profile">
+>>>>>>> 69c6f63 (fix profile, sidebar and profile drop down)
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
@@ -398,6 +409,17 @@
     <script src="../js/insights.js"></script>
     <script src="../js/notification.js"></script>
 
+<script>
+(function() {
+    try {
+        var profile = JSON.parse(localStorage.getItem("fittrack_profile")) || {};
+        if (profile.photo) {
+            var el = document.getElementById("topbarProfilePic");
+            if (el) el.src = profile.photo;
+        }
+    } catch(e) {}
+})();
+</script>
 </body>
 
 </html>

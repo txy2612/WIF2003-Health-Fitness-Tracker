@@ -81,7 +81,172 @@
 <body id="page-top">
 
     <!-- Page Wrapper -->
+<<<<<<< HEAD
     <div id="wrapper">
+=======
+<div id="wrapper">
+ 
+    <!-- ===================== SIDEBAR ===================== -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+ 
+        <!-- Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard.html">
+            <div class="sidebar-brand-text" style="font-size:1.25rem; font-weight:800; letter-spacing:-0.5px;">
+                Fit<span style="opacity:0.65;">Track</span>
+            </div>
+        </a>
+ 
+        <hr class="sidebar-divider my-0">
+ 
+        <!-- Dashboard -->
+        <li class="nav-item">
+            <!-- ADD class="active" to the <li> that matches the current page -->
+            <a class="nav-link" href="dashboard.html">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+ 
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">Tracking</div>
+ 
+        <!-- Log Workout -->
+        <li class="nav-item">
+            <a class="nav-link" href="fitness-tracker.html">
+                <i class="fas fa-fw fa-dumbbell"></i>
+                <span>Log Workout</span>
+            </a>
+        </li>
+ 
+        <!-- Nutrition Planner -->
+        <li class="nav-item">
+            <a class="nav-link" href="nutrition-planner.html">
+                <i class="fas fa-fw fa-apple-alt"></i>
+                <span>Nutrition Planner</span>
+            </a>
+        </li>
+ 
+        <!-- Progress Charts -->
+        <li class="nav-item">
+            <a class="nav-link" href="progress-charts.html">
+                <i class="fas fa-fw fa-chart-line"></i>
+                <span>Progress Charts</span>
+            </a>
+        </li>
+ 
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">Account</div>
+ 
+        <!-- Notifications -->
+        <li class="nav-item">
+            <a class="nav-link" href="notification.html">
+                <i class="fas fa-fw fa-bell"></i>
+                <span>Notifications</span>
+            </a>
+        </li>
+ 
+        <!-- Profile -->
+        <li class="nav-item">
+            <a class="nav-link" href="profile.html">
+                <i class="fas fa-fw fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </li>
+ 
+        <hr class="sidebar-divider d-none d-md-block">
+ 
+        <!-- Sidebar Toggler -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+ 
+    </ul>
+    <!-- End of Sidebar -->
+ 
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+ 
+            <!-- ===================== TOPBAR ===================== -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+ 
+                <!-- Sidebar Toggle (mobile) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+ 
+                <!-- Page title (replaces search — cleaner for this app) -->
+                <span class="topbar-page-title d-none d-sm-inline font-weight-bold text-gray-800"
+                      style="font-size:0.95rem; letter-spacing:-0.2px;">
+                    <!-- Filled dynamically per page via JS below, or hardcode per page -->
+                </span>
+ 
+                <!-- Right side -->
+                <ul class="navbar-nav ml-auto">
+ 
+                    <!-- Notifications bell -->
+                    <li class="nav-item dropdown no-arrow mx-1">
+                        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-bell fa-fw"></i>
+                            <span class="badge badge-danger badge-counter">2</span>
+                        </a>
+                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            aria-labelledby="alertsDropdown">
+                            <h6 class="dropdown-header">Notifications</h6>
+                            <a class="dropdown-item d-flex align-items-center" href="notification.html">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-primary">
+                                        <i class="fas fa-dumbbell text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">Today, 7:00 AM</div>
+                                    <span class="font-weight-bold">Workout reminder — Morning Run</span>
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="notification.html">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-success">
+                                        <i class="fas fa-apple-alt text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">Today, 12:30 PM</div>
+                                    <span class="font-weight-bold">Lunch log reminder</span>
+                                </div>
+                            </a>
+                            <a class="dropdown-item text-center small text-gray-500" href="notification.html">
+                                View All Notifications
+                            </a>
+                        </div>
+                    </li>
+ 
+                    <div class="topbar-divider d-none d-sm-block"></div>
+ 
+                    <!-- User dropdown -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">My Profile</span>
+                            <img class="img-profile rounded-circle" id="topbarProfilePic" src="img/undraw_profile.svg" alt="Profile">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="profile.html">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
+                            </a>
+                        </div>
+                    </li>
+ 
+                </ul>
+            </nav>
+            <!-- End of Topbar -->
+>>>>>>> 69c6f63 (fix profile, sidebar and profile drop down)
 
         <!-- ===================== SIDEBAR ===================== -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -582,6 +747,7 @@
             </div>
         </div>
 
+<<<<<<< HEAD
         <script src="../vendor/jquery/jquery.min.js"></script>
         <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -914,3 +1080,31 @@
 </body>
 
 </html>
+=======
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="../js/sb-admin-2.min.js"></script>
+ 
+<script>
+    // Auto-set topbar page title from sidebar active item
+    document.addEventListener('DOMContentLoaded', function () {
+        const activeLink = document.querySelector('.nav-item.active .nav-link span');
+        const titleEl = document.querySelector('.topbar-page-title');
+        if (activeLink && titleEl) {
+            titleEl.textContent = activeLink.textContent.trim();
+        }
+    });
+</script>
+<script>
+(function() {
+    try {
+        var profile = JSON.parse(localStorage.getItem('fittrack_profile')) || {};
+        if (profile.photo) {
+            var el = document.getElementById('topbarProfilePic');
+            if (el) el.src = profile.photo;
+        }
+    } catch(e) {}
+})();
+</script>
+>>>>>>> 69c6f63 (fix profile, sidebar and profile drop down)

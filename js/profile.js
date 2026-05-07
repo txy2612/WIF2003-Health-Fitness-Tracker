@@ -5,7 +5,22 @@ document.getElementById('photoUpload').addEventListener('change', function(e) {
     if (file) {
         var reader = new FileReader();
         reader.onload = function(ev) {
-            document.getElementById('profilePhoto').src = ev.target.result;
+            var dataUrl = ev.target.result;
+
+            // Replace the SVG avatar with the uploaded photo
+            var avatarDiv = document.getElementById('profileAvatar');
+            if (avatarDiv) {
+                avatarDiv.innerHTML = '<img src="' + dataUrl + '" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+            }
+
+            // Update topbar profile pic on this page
+            var topbar = document.getElementById('topbarProfilePic');
+            if (topbar) topbar.src = dataUrl;
+
+            // Persist photo so all other pages can load it
+            var profile = getProfile();
+            profile.photo = dataUrl;
+            localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
         };
         reader.readAsDataURL(file);
     }
@@ -93,6 +108,16 @@ function toggleEdit(field) {
 
 function restoreProfile() {
     const profile = getProfile();
+
+    // Restore profile photo
+    if (profile.photo) {
+        var avatarDiv = document.getElementById('profileAvatar');
+        if (avatarDiv) {
+            avatarDiv.innerHTML = '<img src="' + profile.photo + '" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+        }
+        var topbar = document.getElementById('topbarProfilePic');
+        if (topbar) topbar.src = profile.photo;
+    }
 
     // name display at top
     const nameEl = document.getElementById('profileNameDisplay');
