@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Update topbar on this page immediately (layout.js only runs once on load)
                 var topbar = document.getElementById('topbarProfilePic');
-                if (topbar) topbar.src = dataUrl;
+                if (topbar) topbar.innerHTML = '<img src="' + dataUrl + '" alt="Profile" style="width:100%;height:100%;object-fit:cover;">';
 
                 // Persist to localStorage so all other pages pick it up via layout.js
                 var profile = getProfile();

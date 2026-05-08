@@ -135,8 +135,12 @@ const TOPBAR_HTML = `
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">My Profile</span>
-                    <img class="img-profile rounded-circle" id="topbarProfilePic"
-                         src="img/undraw_profile.svg" alt="Profile">
+                    <div id="topbarProfilePic" class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:32px;height:32px;background:#e8f0fe;overflow:hidden;flex-shrink:0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#4e73df" width="20" height="20">
+                            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                        </svg>
+                    </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                     aria-labelledby="userDropdown">
@@ -226,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const profile = JSON.parse(localStorage.getItem('fittrack_profile')) || {};
         if (profile.photo) {
             const pic = document.getElementById('topbarProfilePic');
-            if (pic) pic.src = profile.photo;
+            if (pic) pic.innerHTML = `<img src="${profile.photo}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
         }
     } catch (e) {}
 });
