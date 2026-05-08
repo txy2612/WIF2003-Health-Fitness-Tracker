@@ -1,51 +1,25 @@
-// ── PROFILE PHOTO ─────────────────────────────────────────────────────────────
+// ── CONSTANTS ─────────────────────────────────────────────────────────────────
 
-document.getElementById('photoUpload').addEventListener('change', function(e) {
-    var file = e.target.files[0];
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(ev) {
-            var dataUrl = ev.target.result;
+const PROFILE_KEY    = 'fittrack_profile';
+const GOAL_KEY       = 'fittrack_goals';
+const PROFILE_FIELDS = ['name', 'email', 'age', 'gender', 'weight', 'height', 'goal', 'phone'];
 
-            // Replace the SVG avatar with the uploaded photo
-            var avatarDiv = document.getElementById('profileAvatar');
-            if (avatarDiv) {
-                avatarDiv.innerHTML = '<img src="' + dataUrl + '" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
-            }
-
-            // Update topbar profile pic on this page
-            var topbar = document.getElementById('topbarProfilePic');
-            if (topbar) topbar.src = dataUrl;
-
-            // Persist photo so all other pages can load it
-            var profile = getProfile();
-            profile.photo = dataUrl;
-            localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-// ── PROFILE LOCALSTORAGE ──────────────────────────────────────────────────────
-
-const PROFILE_KEY = 'fittrack_profile';
-const GOAL_KEY = 'fittrack_goals';
-
-// Fields that map directly to profile (raw values, no units)
-const PROFILE_FIELDS = ['name', 'email','age', 'gender', 'weight', 'height', 'goal', 'phone'];
+// ── LOCALSTORAGE HELPERS ──────────────────────────────────────────────────────
 
 function getProfile() {
-    try {
-        return JSON.parse(localStorage.getItem(PROFILE_KEY)) || {};
-    } catch (e) {
-        return {};
-    }
+    try { return JSON.parse(localStorage.getItem(PROFILE_KEY)) || {}; }
+    catch (e) { return {}; }
 }
 
 function saveProfileField(field, rawValue) {
     const profile = getProfile();
     profile[field] = rawValue;
     localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+}
+
+function getGoals() {
+    try { return JSON.parse(localStorage.getItem(GOAL_KEY)) || {}; }
+    catch (e) { return {}; }
 }
 
 // ── TOGGLE EDIT ───────────────────────────────────────────────────────────────
@@ -70,18 +44,15 @@ function toggleEdit(field) {
         row.style.borderRadius    = '4px';
         row.style.transition      = 'all 0.2s ease';
     } else {
-        // Confirm edit — get raw value before adding units
-        const rawValue = (input.tagName === 'SELECT')
-            ? input.value  // ← raw option value (e.g. "female", "lose")
-            : input.value;
+        // Confirm edit
+        const rawValue = (input.tagName === 'SELECT') ? input.value : input.value;
 
-        // Display value with units
         var displayValue = (input.tagName === 'SELECT')
             ? input.options[input.selectedIndex].text
             : input.value;
-        if (field === 'age')    displayValue = displayValue + ' years';
-        if (field === 'height') displayValue = displayValue + ' cm';
-        if (field === 'weight') displayValue = displayValue + ' kg';
+        if (field === 'age')    displayValue += ' years';
+        if (field === 'height') displayValue += ' cm';
+        if (field === 'weight') displayValue += ' kg';
 
         display.textContent = displayValue;
         input.classList.add('d-none');
@@ -94,38 +65,32 @@ function toggleEdit(field) {
         row.style.paddingLeft     = '';
         row.style.borderRadius    = '';
 
-        // Save raw value to localStorage
-        if (PROFILE_FIELDS.includes(field)) {
-            saveProfileField(field, rawValue);
-        }
-
-        // Update calorie hint if goal changed
+        if (PROFILE_FIELDS.includes(field)) saveProfileField(field, rawValue);
         if (field === 'goal') updateCalHint();
     }
 }
 
-// ── RESTORE PROFILE FROM LOCALSTORAGE ON PAGE LOAD ────────────────────────────
+// ── RESTORE PROFILE ON PAGE LOAD ─────────────────────────────────────────────
 
 function restoreProfile() {
     const profile = getProfile();
 
-    // Restore profile photo
+    // Restore avatar image in the profile card
     if (profile.photo) {
         var avatarDiv = document.getElementById('profileAvatar');
         if (avatarDiv) {
             avatarDiv.innerHTML = '<img src="' + profile.photo + '" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
         }
-        var topbar = document.getElementById('topbarProfilePic');
-        if (topbar) topbar.src = profile.photo;
+        // NOTE: topbarProfilePic is already restored by layout.js on page load — no need to repeat it here
     }
 
-    // name display at top
+    // Name display
     const nameEl = document.getElementById('profileNameDisplay');
     if (nameEl && profile.name) nameEl.textContent = profile.name;
 
+    // Restore all editable fields
     PROFILE_FIELDS.forEach(field => {
         if (!profile[field]) return;
-
         const input   = document.getElementById('input-'   + field);
         const display = document.getElementById('display-' + field);
         if (!input || !display) return;
@@ -135,22 +100,15 @@ function restoreProfile() {
         let displayValue = (input.tagName === 'SELECT')
             ? input.options[[...input.options].findIndex(o => o.value === profile[field])]?.text || profile[field]
             : profile[field];
-        if (field === 'age')    displayValue = displayValue + ' years';
-        if (field === 'height') displayValue = displayValue + ' cm';
-        if (field === 'weight') displayValue = displayValue + ' kg';
+        if (field === 'age')    displayValue += ' years';
+        if (field === 'height') displayValue += ' cm';
+        if (field === 'weight') displayValue += ' kg';
 
         display.textContent = displayValue;
     });
 
     const weightHint = document.getElementById('currentWeightHint');
     if (weightHint && profile.weight) weightHint.textContent = profile.weight + ' kg';
-
-
-}
-
-function getGoals() {
-    try { return JSON.parse(localStorage.getItem(GOAL_KEY)) || {}; }
-    catch (e) { return {}; }
 }
 
 // ── GOAL CALORIE HINT ─────────────────────────────────────────────────────────
@@ -160,31 +118,17 @@ function updateCalHint() {
     const hintEl  = document.getElementById('goalCalHint');
     if (!hintEl) return;
 
-    // Use saved goal from profile if available
     const goal = profile.goal || document.getElementById('display-goal')?.textContent?.toLowerCase() || '';
-
     if (goal.includes('lose'))      hintEl.textContent = '1,500 – 1,800 kcal';
     else if (goal.includes('gain')) hintEl.textContent = '2,500 – 3,000 kcal';
     else                            hintEl.textContent = '2,000 – 2,200 kcal';
 }
 
-// ── GOAL SETTINGS — localStorage bridge ──────────────────────────────────────
-
-document.addEventListener('DOMContentLoaded', function () {
-    restoreProfile();   // Restore profile fields on page load
-    loadGoalSettings();
-    updateCalHint();
-
-    const goalSelect = document.getElementById('input-goal');
-    if (goalSelect) {
-        goalSelect.addEventListener('change', updateCalHint);
-    }
-});
+// ── GOAL SETTINGS ─────────────────────────────────────────────────────────────
 
 function loadGoalSettings() {
     const saved = localStorage.getItem(GOAL_KEY);
     if (!saved) return;
-
     try {
         const goals = JSON.parse(saved);
         if (goals.steps)    document.getElementById('goalSteps').value    = goals.steps;
@@ -217,8 +161,6 @@ function saveGoalSettings() {
     badge.style.display = 'inline-block';
     document.getElementById('goalLastSaved').textContent = 'Last saved: ' + now;
     setTimeout(() => badge.style.display = 'none', 3000);
-
-    // TODO: Phase 2 — POST /api/user/goals { steps, calories, weight }
 }
 
 function clearGoalSettings() {
@@ -239,3 +181,47 @@ function showPreview(goals) {
     document.getElementById('previewCalories').textContent = goals.calories ? parseInt(goals.calories).toLocaleString() + ' kcal'  : '—';
     document.getElementById('previewWeight').textContent   = goals.weight   ? goals.weight + ' kg' : '—';
 }
+
+// ── INIT (DOMContentLoaded) ───────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    restoreProfile();
+    loadGoalSettings();
+    updateCalHint();
+
+    // Goal select change → update calorie hint
+    const goalSelect = document.getElementById('input-goal');
+    if (goalSelect) goalSelect.addEventListener('change', updateCalHint);
+
+    // Photo upload — kept inside DOMContentLoaded so all elements are guaranteed present
+    const photoUpload = document.getElementById('photoUpload');
+    if (photoUpload) {
+        photoUpload.addEventListener('change', function (e) {
+            var file = e.target.files[0];
+            if (!file) return;
+
+            var reader = new FileReader();
+            reader.onload = function (ev) {
+                var dataUrl = ev.target.result;
+
+                // Update avatar in profile card
+                var avatarDiv = document.getElementById('profileAvatar');
+                if (avatarDiv) {
+                    avatarDiv.innerHTML = '<img src="' + dataUrl + '" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+                }
+
+                // Update topbar on this page immediately (layout.js only runs once on load)
+                var topbar = document.getElementById('topbarProfilePic');
+                if (topbar) topbar.src = dataUrl;
+
+                // Persist to localStorage so all other pages pick it up via layout.js
+                var profile = getProfile();
+                profile.photo = dataUrl;
+                localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+});

@@ -9,426 +9,227 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Dashboard</title>
+    <title>Fitness Tracker</title>
 
-    <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
-    <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
 <body id="page-top">
 
-    <!-- Page Wrapper -->
-<div id="wrapper">
- 
-    <!-- ===================== SIDEBAR ===================== -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
- 
-        <!-- Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard.html">
-            <div class="sidebar-brand-text" style="font-size:1.25rem; font-weight:800; letter-spacing:-0.5px;">
-                Fit<span style="opacity:0.65;">Track</span>
-            </div>
-        </a>
- 
-        <hr class="sidebar-divider my-0">
- 
-        <!-- Dashboard -->
-        <li class="nav-item">
-            <!-- ADD class="active" to the <li> that matches the current page -->
-            <a class="nav-link" href="dashboard.html">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
- 
-        <hr class="sidebar-divider">
-        <div class="sidebar-heading">Tracking</div>
- 
-        <!-- Fitness Tracker -->
-        <li class="nav-item">
-            <a class="nav-link" href="fitness-tracker.html">
-                <i class="fas fa-fw fa-dumbbell"></i>
-                <span>Log Workout</span>
-            </a>
-        </li>
- 
-        <!-- Nutrition Planner -->
-        <li class="nav-item">
-            <a class="nav-link" href="nutrition-planner.html">
-                <i class="fas fa-fw fa-apple-alt"></i>
-                <span>Nutrition Planner</span>
-            </a>
-        </li>
- 
-        <!-- Progress Charts -->
-        <li class="nav-item">
-            <a class="nav-link" href="progress-charts.html">
-                <i class="fas fa-fw fa-chart-line"></i>
-                <span>Progress Charts</span>
-            </a>
-        </li>
- 
-        <hr class="sidebar-divider">
-        <div class="sidebar-heading">Account</div>
- 
-        <!-- Notifications -->
-        <li class="nav-item">
-            <a class="nav-link" href="notification.html">
-                <i class="fas fa-fw fa-bell"></i>
-                <span>Notifications</span>
-            </a>
-        </li>
- 
-        <!-- Profile -->
-        <li class="nav-item">
-            <a class="nav-link" href="profile.html">
-                <i class="fas fa-fw fa-user"></i>
-                <span>Profile</span>
-            </a>
-        </li>
- 
-        <hr class="sidebar-divider d-none d-md-block">
- 
-        <!-- Sidebar Toggler -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
- 
-    </ul>
-    <!-- End of Sidebar -->
- 
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-        <div id="content">
- 
-            <!-- ===================== TOPBAR ===================== -->
-            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
- 
-                <!-- Sidebar Toggle (mobile) -->
-                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                    <i class="fa fa-bars"></i>
-                </button>
- 
-                <!-- Page title (replaces search — cleaner for this app) -->
-                <span class="topbar-page-title d-none d-sm-inline font-weight-bold text-gray-800"
-                      style="font-size:0.95rem; letter-spacing:-0.2px;">
-                    <!-- Filled dynamically per page via JS below, or hardcode per page -->
-                </span>
- 
-                <!-- Right side -->
-                <ul class="navbar-nav ml-auto">
- 
-                    <!-- Notifications bell -->
-                    <li class="nav-item dropdown no-arrow mx-1">
-                        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-bell fa-fw"></i>
-                            <span class="badge badge-danger badge-counter">2</span>
-                        </a>
-                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                            aria-labelledby="alertsDropdown">
-                            <h6 class="dropdown-header">Notifications</h6>
-                            <a class="dropdown-item d-flex align-items-center" href="notification.html">
-                                <div class="mr-3">
-                                    <div class="icon-circle bg-primary">
-                                        <i class="fas fa-dumbbell text-white"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="small text-gray-500">Today, 7:00 AM</div>
-                                    <span class="font-weight-bold">Workout reminder — Morning Run</span>
-                                </div>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="notification.html">
-                                <div class="mr-3">
-                                    <div class="icon-circle bg-success">
-                                        <i class="fas fa-apple-alt text-white"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="small text-gray-500">Today, 12:30 PM</div>
-                                    <span class="font-weight-bold">Lunch log reminder</span>
-                                </div>
-                            </a>
-                            <a class="dropdown-item text-center small text-gray-500" href="notification.html">
-                                View All Notifications
-                            </a>
-                        </div>
-                    </li>
- 
-                    <div class="topbar-divider d-none d-sm-block"></div>
- 
-                    <!-- User dropdown -->
-                    <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">My Profile</span>
-                            <img class="img-profile rounded-circle" id="topbarProfilePic" src="img/undraw_profile.svg" alt="Profile">
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                            aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="profile.html">
-                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
-                            </a>
-                        </div>
-                    </li>
- 
-                </ul>
-            </nav>
-            <!-- End of Topbar -->
- 
-            
-            <div class="container-fluid">
- 
-                <!-- Page Heading -->
-                <h1 class="h3 mb-1 text-gray-800">Fitness Tracker</h1>
-                <p class="mb-4 text-muted">Log your workouts and daily activity. Track every session to stay on top of your goals.</p>
-            
-                <!-- ========== SECTION 1: LOG ACTIVITY FORM ========== -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3 d-flex align-items-center">
-                        <i class="fas fa-plus-circle text-primary mr-2"></i>
-                        <div>
-                            <h6 class="m-0 font-weight-bold text-primary">Log Activity</h6>
-                            <small class="text-muted">Log a workout session or your daily steps</small>
-                        </div>
-                    </div>
-                    <div class="card-body">
-            
-                        <!-- Tabs -->
-                        <ul class="nav nav-tabs mb-4" id="logTabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="workout-tab" data-toggle="tab" href="#tab-workout" role="tab">
-                                    <i class="fas fa-dumbbell mr-1"></i> Log Workout
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="steps-tab" data-toggle="tab" href="#tab-steps" role="tab">
-                                    <i class="fas fa-shoe-prints mr-1"></i> Log Steps
-                                </a>
-                            </li>
-                        </ul>
-            
-                        <div class="tab-content" id="logTabContent">
-            
-                            <!-- ── TAB 1: LOG WORKOUT ── -->
-                            <div class="tab-pane fade show active" id="tab-workout" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="activityType">
-                                                <i class="fas fa-running fa-sm text-gray-500 mr-1"></i> Activity / Workout Type
-                                            </label>
-                                            <select class="form-control" id="activityType">
-                                                <option value="" disabled selected>Select an activity...</option>
-                                                <option>🏃 Running</option>
-                                                <option>🚴 Cycling</option>
-                                                <option>🏊 Swimming</option>
-                                                <option>🏋️ Weight Training</option>
-                                                <option>🧘 Yoga</option>
-                                                <option>🚶 Walking</option>
-                                                <option>⚽ Football / Soccer</option>
-                                                <option>🏸 Badminton</option>
-                                                <option>Other</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="duration">
-                                                <i class="fas fa-clock fa-sm text-gray-500 mr-1"></i> Duration (minutes)
-                                            </label>
-                                            <input type="number" class="form-control" id="duration" placeholder="e.g. 45" min="1">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="activityDate">
-                                                <i class="fas fa-calendar-alt fa-sm text-gray-500 mr-1"></i> Date
-                                            </label>
-                                            <input type="date" class="form-control" id="activityDate">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>
-                                                <i class="fas fa-fire fa-sm text-gray-500 mr-1"></i> Calories Burned
-                                            </label>
-                                            <!-- Display only — not an input field -->
-                                            <div class="p-2 rounded d-flex align-items-center justify-content-between" style="background:#f0f4ff; border:1px solid #d0d8f0; min-height:38px;">
-                                                <span class="font-weight-bold text-primary" id="workoutCalDisplay">—</span>
-                                                <small class="text-muted">kcal · MET formula</small>
-                                            </div>
-                                            <small class="text-muted">Auto-calculated from activity + duration</small>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <label for="notes">
-                                                <i class="fas fa-sticky-note fa-sm text-gray-500 mr-1"></i> Notes
-                                                <span class="text-muted font-weight-normal">(optional)</span>
-                                            </label>
-                                            <textarea class="form-control" id="notes" rows="2"
-                                                placeholder="e.g. Morning run at Danga Bay, felt great today..."></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <button class="btn btn-outline-primary mr-2" type="button" onclick="clearWorkoutForm()">
-                                        <i class="fas fa-times fa-sm mr-1"></i> Clear
-                                    </button>
-                                    <button class="btn btn-primary" type="button" onclick="logWorkout()">
-                                        <i class="fas fa-plus fa-sm mr-1"></i> Log Workout
-                                        <!-- TODO: wire to backend — POST /api/activities -->
-                                    </button>
-                                </div>
-                            </div>
-            
-                            <!-- ── TAB 2: LOG STEPS ── -->
-                            <div class="tab-pane fade" id="tab-steps" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="stepsCount">
-                                                <i class="fas fa-shoe-prints fa-sm text-gray-500 mr-1"></i> Steps Taken
-                                            </label>
-                                            <input type="number" class="form-control" id="stepsCount" placeholder="e.g. 8000" min="0">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="stepsDate">
-                                                <i class="fas fa-calendar-alt fa-sm text-gray-500 mr-1"></i> Date
-                                            </label>
-                                            <input type="date" class="form-control" id="stepsDate">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>
-                                                <i class="fas fa-fire fa-sm text-gray-500 mr-1"></i> Estimated Calories
-                                            </label>
-                                            <div class="p-2 rounded d-flex align-items-center justify-content-between" style="background:#f0f4ff; border:1px solid #d0d8f0; min-height:38px;">
-                                                <span class="font-weight-bold text-primary" id="stepsCalDisplay">—</span>
-                                                <small class="text-muted">kcal · 0.04 kcal/step</small>
-                                            </div>
-                                            <small class="text-muted">Auto-calculated from steps count</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <button class="btn btn-outline-primary mr-2" type="button" onclick="clearStepsForm()">
-                                        <i class="fas fa-times fa-sm mr-1"></i> Clear
-                                    </button>
-                                    <button class="btn btn-primary" type="button" onclick="logSteps()">
-                                        <i class="fas fa-plus fa-sm mr-1"></i> Log Steps
-                                        <!-- TODO: wire to backend — POST /api/activities -->
-                                    </button>
-                                </div>
-                            </div>
-            
-                        </div>
-                    </div>
-                </div>
-            
-                <!-- ========== SECTION 2: ACTIVITY HISTORY ========== -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-history text-primary mr-2"></i>
+    <div id="wrapper">
+
+        <!-- SIDEBAR (injected by layout.js) -->
+        <div id="sidebar-placeholder"></div>
+
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+
+                <!-- TOPBAR (injected by layout.js) -->
+                <div id="topbar-placeholder"></div>
+
+                <div class="container-fluid">
+
+                    <h1 class="h3 mb-1 text-gray-800">Fitness Tracker</h1>
+                    <p class="mb-4 text-muted">Log your workouts and daily activity. Track every session to stay on top of your goals.</p>
+
+                    <!-- Log Activity Form -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex align-items-center">
+                            <i class="fas fa-plus-circle text-primary mr-2"></i>
                             <div>
-                                <h6 class="m-0 font-weight-bold text-primary">Activity History</h6>
-                                <small class="text-muted">Your recent logged workouts</small>
+                                <h6 class="m-0 font-weight-bold text-primary">Log Activity</h6>
+                                <small class="text-muted">Log a workout session or your daily steps</small>
                             </div>
                         </div>
-                        <span class="badge badge-primary" id="activityCount">5 Records</span>
-                    </div>
-                    <div class="card-body">
-                        <!-- TODO: wire to backend — GET /api/activities -->
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover" id="activityTable" width="100%" cellspacing="0">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Activity Type</th>
-                                        <th>Duration</th>
-                                        <th>Steps</th>
-                                        <th>Calories</th>
-                                        <th>Notes</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="activityTableBody">
-                                    <!-- populated by restoreLogs() in fitness-tracker.js -->
-                                </tbody>
-                            </table>
-            
-                            <!-- Empty state — shown when no records exist -->
-                            <div id="emptyState" class="text-center py-5" style="display:none !important;">
-                                <i class="fas fa-dumbbell fa-3x text-gray-300 mb-3"></i>
-                                <p class="text-muted mb-1">No activity logged yet.</p>
-                                <small class="text-muted">Use the form above to log your first workout!</small>
+                        <div class="card-body">
+
+                            <ul class="nav nav-tabs mb-4" id="logTabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="workout-tab" data-toggle="tab" href="#tab-workout" role="tab">
+                                        <i class="fas fa-dumbbell mr-1"></i> Log Workout
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="steps-tab" data-toggle="tab" href="#tab-steps" role="tab">
+                                        <i class="fas fa-shoe-prints mr-1"></i> Log Steps
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="logTabContent">
+
+                                <!-- TAB 1: LOG WORKOUT -->
+                                <div class="tab-pane fade show active" id="tab-workout" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="activityType">
+                                                    <i class="fas fa-running fa-sm text-gray-500 mr-1"></i> Activity / Workout Type
+                                                </label>
+                                                <select class="form-control" id="activityType">
+                                                    <option value="" disabled selected>Select an activity...</option>
+                                                    <option>🏃 Running</option>
+                                                    <option>🚴 Cycling</option>
+                                                    <option>🏊 Swimming</option>
+                                                    <option>🏋️ Weight Training</option>
+                                                    <option>🧘 Yoga</option>
+                                                    <option>🚶 Walking</option>
+                                                    <option>⚽ Football / Soccer</option>
+                                                    <option>🏸 Badminton</option>
+                                                    <option>Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="duration">
+                                                    <i class="fas fa-clock fa-sm text-gray-500 mr-1"></i> Duration (minutes)
+                                                </label>
+                                                <input type="number" class="form-control" id="duration" placeholder="e.g. 45" min="1">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="activityDate">
+                                                    <i class="fas fa-calendar-alt fa-sm text-gray-500 mr-1"></i> Date
+                                                </label>
+                                                <input type="date" class="form-control" id="activityDate">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label><i class="fas fa-fire fa-sm text-gray-500 mr-1"></i> Calories Burned</label>
+                                                <div class="p-2 rounded d-flex align-items-center justify-content-between" style="background:#f0f4ff; border:1px solid #d0d8f0; min-height:38px;">
+                                                    <span class="font-weight-bold text-primary" id="workoutCalDisplay">—</span>
+                                                    <small class="text-muted">kcal · MET formula</small>
+                                                </div>
+                                                <small class="text-muted">Auto-calculated from activity + duration</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="notes">
+                                                    <i class="fas fa-sticky-note fa-sm text-gray-500 mr-1"></i> Notes
+                                                    <span class="text-muted font-weight-normal">(optional)</span>
+                                                </label>
+                                                <textarea class="form-control" id="notes" rows="2"
+                                                    placeholder="e.g. Morning run at Danga Bay, felt great today..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <button class="btn btn-outline-primary mr-2" type="button" onclick="clearWorkoutForm()">
+                                            <i class="fas fa-times fa-sm mr-1"></i> Clear
+                                        </button>
+                                        <button class="btn btn-primary" type="button" onclick="logWorkout()">
+                                            <i class="fas fa-plus fa-sm mr-1"></i> Log Workout
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- TAB 2: LOG STEPS -->
+                                <div class="tab-pane fade" id="tab-steps" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="stepsCount">
+                                                    <i class="fas fa-shoe-prints fa-sm text-gray-500 mr-1"></i> Steps Taken
+                                                </label>
+                                                <input type="number" class="form-control" id="stepsCount" placeholder="e.g. 8000" min="0">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="stepsDate">
+                                                    <i class="fas fa-calendar-alt fa-sm text-gray-500 mr-1"></i> Date
+                                                </label>
+                                                <input type="date" class="form-control" id="stepsDate">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label><i class="fas fa-fire fa-sm text-gray-500 mr-1"></i> Estimated Calories</label>
+                                                <div class="p-2 rounded d-flex align-items-center justify-content-between" style="background:#f0f4ff; border:1px solid #d0d8f0; min-height:38px;">
+                                                    <span class="font-weight-bold text-primary" id="stepsCalDisplay">—</span>
+                                                    <small class="text-muted">kcal · 0.04 kcal/step</small>
+                                                </div>
+                                                <small class="text-muted">Auto-calculated from steps count</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <button class="btn btn-outline-primary mr-2" type="button" onclick="clearStepsForm()">
+                                            <i class="fas fa-times fa-sm mr-1"></i> Clear
+                                        </button>
+                                        <button class="btn btn-primary" type="button" onclick="logSteps()">
+                                            <i class="fas fa-plus fa-sm mr-1"></i> Log Steps
+                                        </button>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
-                </div>
-            
-               
-            <!-- End of Main Content -->
-             
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; FitTrack 2026</span>
+
+                    <!-- Activity History -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-history text-primary mr-2"></i>
+                                <div>
+                                    <h6 class="m-0 font-weight-bold text-primary">Activity History</h6>
+                                    <small class="text-muted">Your recent logged workouts</small>
+                                </div>
+                            </div>
+                            <span class="badge badge-primary" id="activityCount">5 Records</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" id="activityTable" width="100%" cellspacing="0">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Activity Type</th>
+                                            <th>Duration</th>
+                                            <th>Steps</th>
+                                            <th>Calories</th>
+                                            <th>Notes</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="activityTableBody">
+                                        <!-- populated by restoreLogs() in fitness.js -->
+                                    </tbody>
+                                </table>
+
+                                <div id="emptyState" class="text-center py-5" style="display:none !important;">
+                                    <i class="fas fa-dumbbell fa-3x text-gray-300 mb-3"></i>
+                                    <p class="text-muted mb-1">No activity logged yet.</p>
+                                    <small class="text-muted">Use the form above to log your first workout!</small>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
-            </footer>
-    
-        </div>
-        <!-- End of Content Wrapper -->
-    
-    </div>
-    <!-- End of Page Wrapper -->
-    
-    <!-- Scroll to Top -->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-    
-    <!-- Logout Modal -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ready to leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Select "Logout" below if you are ready to end your current session.
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
+                <!-- End Main Content -->
+
             </div>
+
+            <!-- FOOTER (injected by layout.js) -->
+            <div id="footer-placeholder"></div>
+
         </div>
     </div>
 
-    <!-- Delete Activity Modal -->
+    <!-- SCROLL TO TOP + LOGOUT MODAL (injected by layout.js) -->
+    <div id="extras-placeholder"></div>
+
+    <!-- Page-specific modal (NOT shared, so stays here) -->
     <div class="modal fade" id="deleteModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
@@ -439,39 +240,20 @@
                     <button class="btn btn-danger btn-sm mr-2" id="confirmDeleteBtn">
                         <i class="fas fa-trash mr-1"></i> Delete
                     </button>
-                    <button class="btn btn-outline-secondary btn-sm" data-dismiss="modal">
-                        Cancel
-                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
 
-<script src="../vendor/jquery/jquery.min.js"></script>
-<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
-<script src="../js/sb-admin-2.min.js"></script>
-<script src="../js/fitness.js"></script>
- 
-<script>
-    // Auto-set topbar page title from sidebar active item
-    document.addEventListener('DOMContentLoaded', function () {
-        const activeLink = document.querySelector('.nav-item.active .nav-link span');
-        const titleEl = document.querySelector('.topbar-page-title');
-        if (activeLink && titleEl) {
-            titleEl.textContent = activeLink.textContent.trim();
-        }
-    });
-</script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../js/sb-admin-2.min.js"></script>
 
-<script>
-(function() {
-    try {
-        var profile = JSON.parse(localStorage.getItem('fittrack_profile')) || {};
-        if (profile.photo) {
-            var el = document.getElementById('topbarProfilePic');
-            if (el) el.src = profile.photo;
-        }
-    } catch(e) {}
-})();
-</script>
+    <!-- layout.js before page scripts -->
+    <script src="../js/layout.js"></script>
+    <script src="../js/fitness.js"></script>
+
+</body>
+</html>

@@ -9,213 +9,40 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Dashboard</title>
+    <title>Notifications</title>
 
-    <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
-    <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
 <body id="page-top">
 
-    <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <!-- ===================== SIDEBAR ===================== -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <!-- SIDEBAR (injected by layout.js) -->
+        <div id="sidebar-placeholder"></div>
 
-            <!-- Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard.html">
-                <div class="sidebar-brand-text" style="font-size:1.25rem; font-weight:800; letter-spacing:-0.5px;">
-                    Fit<span style="opacity:0.65;">Track</span>
-                </div>
-            </a>
-
-            <hr class="sidebar-divider my-0">
-
-            <!-- Dashboard -->
-            <li class="nav-item">
-                <!-- ADD class="active" to the <li> that matches the current page -->
-                <a class="nav-link" href="dashboard.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-
-            <hr class="sidebar-divider">
-            <div class="sidebar-heading">Tracking</div>
-
-            <!-- Fitness Tracker -->
-            <li class="nav-item">
-<<<<<<< HEAD
-                <a class="nav-link" href="fitness-tracker.html">
-                    <i class="fas fa-fw fa-dumbbell"></i>
-                    <span>Fitness Tracker</span>
-=======
-                <a class="nav-link collapsed" href="fitness-tracker.html">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Log Workout</span>
->>>>>>> 69c6f63 (fix profile, sidebar and profile drop down)
-                </a>
-            </li>
-
-            <!-- Nutrition Planner -->
-            <li class="nav-item">
-                <a class="nav-link" href="nutrition-planner.html">
-                    <i class="fas fa-fw fa-apple-alt"></i>
-                    <span>Nutrition Planner</span>
-                </a>
-            </li>
-
-            <!-- Progress Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="progress-charts.html">
-                    <i class="fas fa-fw fa-chart-line"></i>
-                    <span>Progress Charts</span>
-                </a>
-            </li>
-
-            <hr class="sidebar-divider">
-            <div class="sidebar-heading">Account</div>
-
-            <!-- Notifications -->
-            <li class="nav-item">
-                <a class="nav-link" href="notification.html">
-                    <i class="fas fa-fw fa-bell"></i>
-                    <span>Notifications</span>
-                </a>
-            </li>
-
-            <!-- Profile -->
-            <li class="nav-item">
-                <a class="nav-link" href="profile.html">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Profile</span>
-                </a>
-            </li>
-
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-        </ul>
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
 
-                <!-- ===================== TOPBAR ===================== -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (mobile) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                    <!-- Page title (replaces search — cleaner for this app) -->
-                    <span class="topbar-page-title d-none d-sm-inline font-weight-bold text-gray-800"
-                        style="font-size:0.95rem; letter-spacing:-0.2px;">
-                        <!-- Filled dynamically per page via JS below, or hardcode per page -->
-                    </span>
-
-                    <!-- Right side -->
-                    <ul class="navbar-nav ml-auto">
-
-                        <!-- Notifications bell -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <span class="badge badge-danger badge-counter">2</span>
-                            </a>
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">Notifications</h6>
-                                <a class="dropdown-item d-flex align-items-center" href="notification.html">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-dumbbell text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">Today, 7:00 AM</div>
-                                        <span class="font-weight-bold">Workout reminder — Morning Run</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="notification.html">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-apple-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">Today, 12:30 PM</div>
-                                        <span class="font-weight-bold">Lunch log reminder</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="notification.html">
-                                    View All Notifications
-                                </a>
-                            </div>
-                        </li>
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- User dropdown -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-<<<<<<< HEAD
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">My Profile</span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg" alt="Profile">
-=======
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Profile Page</span>
-                                <img class="img-profile rounded-circle" id="topbarProfilePic" src="img/undraw_profile.svg" alt="Profile">
->>>>>>> 69c6f63 (fix profile, sidebar and profile drop down)
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="profile.html">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
-                                </a>
-                                <a class="dropdown-item" href="notification.html">
-                                    <i class="fas fa-bell fa-sm fa-fw mr-2 text-gray-400"></i> Notifications
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
-                                </a>
-                            </div>
-                        </li>
-
-                    </ul>
-                </nav>
-                <!-- End of Topbar -->
+                <!-- TOPBAR (injected by layout.js) -->
+                <div id="topbar-placeholder"></div>
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
                     <h1 class="h3 mb-1 text-gray-800">Notifications</h1>
                     <p class="mb-4 text-muted">Manage your reminders and stay on track.</p>
 
-                    <!-- ===== ROW: ADD + LIST SIDE BY SIDE ===== -->
+                    <!-- ADD + LIST side by side -->
                     <div class="row justify-content-center">
 
                         <!-- ADD REMINDER -->
                         <div class="col-lg-5 mb-4">
                             <div class="card shadow h-100">
-
                                 <div class="card-header py-3 d-flex align-items-center">
                                     <i class="fas fa-bell text-primary mr-2"></i>
                                     <div>
@@ -223,18 +50,14 @@
                                         <small class="text-muted">Create a reminder</small>
                                     </div>
                                 </div>
-
                                 <div class="card-body">
                                     <form id="reminderForm">
-
                                         <div class="row">
 
-                                            <!-- REMINDER TYPE -->
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>
-                                                        <i class="fas fa-list fa-sm text-gray-500 mr-1"></i> Reminder
-                                                        Type
+                                                        <i class="fas fa-list fa-sm text-gray-500 mr-1"></i> Reminder Type
                                                     </label>
                                                     <select class="form-control" id="type">
                                                         <option disabled selected>Select reminder type...</option>
@@ -251,7 +74,6 @@
                                                 </div>
                                             </div>
 
-                                            <!-- DATE -->
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Date</label>
@@ -259,7 +81,6 @@
                                                 </div>
                                             </div>
 
-                                            <!-- TIME -->
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Time</label>
@@ -267,7 +88,6 @@
                                                 </div>
                                             </div>
 
-                                            <!-- NOTE -->
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label>Note (optional)</label>
@@ -276,23 +96,19 @@
                                             </div>
 
                                         </div>
-
                                         <div class="text-right">
                                             <button class="btn btn-primary" type="submit">
                                                 <i class="fas fa-plus mr-1"></i> Add Reminder
                                             </button>
                                         </div>
-
                                     </form>
                                 </div>
-
                             </div>
                         </div>
 
                         <!-- REMINDER LIST -->
                         <div class="col-lg-5 mb-4">
                             <div class="card shadow h-100">
-
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                     <div>
                                         <h6 class="m-0 font-weight-bold text-primary">Reminder List</h6>
@@ -300,30 +116,22 @@
                                     </div>
                                     <span class="badge badge-primary" id="count">0</span>
                                 </div>
-
                                 <div class="card-body">
-
-                                    <!-- EMPTY STATE -->
                                     <div id="emptyState" class="text-center py-4">
                                         <i class="fas fa-bell-slash fa-2x text-gray-300 mb-2"></i>
                                         <p class="text-muted mb-0">No reminders yet</p>
                                     </div>
-
-                                    <!-- LIST -->
                                     <ul id="reminderList" class="list-group"></ul>
-
                                 </div>
-
                             </div>
                         </div>
 
                     </div>
 
-                    <!-- ===== FEEDBACK / INSIGHTS ===== -->
+                    <!-- Feedback / Insights -->
                     <div class="row justify-content-center">
                         <div class="col-lg-10">
                             <div class="card shadow mb-4">
-
                                 <div class="card-header py-3 d-flex align-items-center">
                                     <i class="fas fa-lightbulb text-primary mr-2"></i>
                                     <div>
@@ -331,95 +139,36 @@
                                         <small class="text-muted">Smart suggestions based on your activity</small>
                                     </div>
                                 </div>
-
                                 <div>
-                                    <ul class="list-group" id="insightsList">
-                                    </ul>
+                                    <ul class="list-group" id="insightsList"></ul>
                                 </div>
-
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <!-- /.container-fluid -->
-
+                <!-- End Page Content -->
 
             </div>
-            <!-- End of Main Content -->
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; FitTrack 2026</span>
-                    </div>
-                </div>
-            </footer>
+
+            <!-- FOOTER (injected by layout.js) -->
+            <div id="footer-placeholder"></div>
 
         </div>
-
     </div>
-    <!-- End of Content Wrapper -->
 
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top -->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal -->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ready to leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Select "Logout" below if you are ready to end your current session.
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- SCROLL TO TOP + LOGOUT MODAL (injected by layout.js) -->
+    <div id="extras-placeholder"></div>
 
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="../js/sb-admin-2.min.js"></script>
 
-    <script>
-        // Auto-set topbar page title from sidebar active item
-        document.addEventListener('DOMContentLoaded', function () {
-            const activeLink = document.querySelector('.nav-item.active .nav-link span');
-            const titleEl = document.querySelector('.topbar-page-title');
-            if (activeLink && titleEl) {
-                titleEl.textContent = activeLink.textContent.trim();
-            }
-        });
-    </script>
-
+    <!-- layout.js before page scripts -->
+    <script src="../js/layout.js"></script>
     <script src="../js/insights.js"></script>
     <script src="../js/notification.js"></script>
 
-<script>
-(function() {
-    try {
-        var profile = JSON.parse(localStorage.getItem("fittrack_profile")) || {};
-        if (profile.photo) {
-            var el = document.getElementById("topbarProfilePic");
-            if (el) el.src = profile.photo;
-        }
-    } catch(e) {}
-})();
-</script>
 </body>
-
 </html>
