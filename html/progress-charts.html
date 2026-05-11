@@ -6,15 +6,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
     <title>Progress Charts</title>
 
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../css/progress-charts.css" rel="stylesheet">
 
 </head>
 
@@ -22,13 +19,11 @@
 
     <div id="wrapper">
 
-        <!-- SIDEBAR (injected by layout.js) -->
         <div id="sidebar-placeholder"></div>
 
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
 
-                <!-- TOPBAR (injected by layout.js) -->
                 <div id="topbar-placeholder"></div>
 
                 <div class="container-fluid pb-5">
@@ -36,67 +31,74 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <div>
-                            <h1 class="h3 mb-0 text-gray-800">
+                            <h1 class="h3 mb-0 text-gray-800 font-weight-bold">
                                 <i class="fas fa-chart-line text-primary mr-2"></i>Progress Charts
                             </h1>
-                            <p class="mb-0 text-muted small">Track and visualise your fitness performance over time.</p>
+                            <p class="mb-0 text-muted small mt-1">Track and visualise your fitness performance over time.</p>
                         </div>
                     </div>
 
-                    <!-- Main Chart Card -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                    <!-- Main Card -->
+                    <div class="card shadow mb-4" style="border-radius:12px; overflow:hidden;">
+
+                        <!-- Card Header -->
+                        <div class="card-header py-3 d-flex align-items-center justify-content-between" style="background:#fff; border-bottom:1px solid #f0f1f5;">
                             <div>
-                                <h6 class="m-0 font-weight-bold text-primary">Performance Overview</h6>
+                                <h6 class="m-0 font-weight-bold text-primary" style="font-size:1rem;">Performance Overview</h6>
                                 <small class="text-muted">Navigate between periods to explore your activity data.</small>
                             </div>
                         </div>
 
-                        <div class="card-body">
+                        <div class="card-body" style="background:#f8f9fc;">
 
                             <!-- Tabs -->
-                            <ul class="nav nav-tabs mb-4" id="progressTabs" role="tablist">
+                            <ul class="nav mb-4" id="progressTabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#weeklyPanel" role="tab">
-                                        <i class="fas fa-calendar-week fa-sm mr-1 text-primary"></i> Weekly
+                                        <i class="fas fa-calendar-week fa-sm mr-1"></i> Weekly
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#monthlyPanel" role="tab">
-                                        <i class="fas fa-calendar fa-sm mr-1 text-success"></i> Monthly
+                                        <i class="fas fa-calendar fa-sm mr-1"></i> Monthly
                                     </a>
                                 </li>
                             </ul>
 
                             <div class="tab-content">
 
-                                <!-- WEEKLY TAB -->
+                                <!-- ══════════════ WEEKLY TAB ══════════════ -->
                                 <div class="tab-pane fade show active" id="weeklyPanel" role="tabpanel">
 
-                                    <div class="d-flex align-items-center justify-content-between mb-4">
-                                        <button class="btn btn-outline-primary btn-sm" onclick="changeWeek(-1)">
-                                            <i class="fas fa-chevron-left mr-1"></i> Prev Week
+                                    <!-- Navigation strip -->
+                                    <div class="period-nav">
+                                        <button class="btn btn-outline-primary btn-sm px-3" onclick="changeWeek(-1)">
+                                            <i class="fas fa-chevron-left mr-1"></i> Prev
                                         </button>
-                                        <h6 class="font-weight-bold text-gray-700 mb-0" id="weeklyRangeLabel">—</h6>
-                                        <button class="btn btn-outline-primary btn-sm" id="weekNextBtn" onclick="changeWeek(1)">
-                                            Next Week <i class="fas fa-chevron-right ml-1"></i>
+                                        <h6 id="weeklyRangeLabel">—</h6>
+                                        <button class="btn btn-outline-primary btn-sm px-3" id="weekNextBtn" onclick="changeWeek(1)">
+                                            Next <i class="fas fa-chevron-right ml-1"></i>
                                         </button>
                                     </div>
 
+                                    <!-- Charts row -->
                                     <div class="row mb-4">
 
                                         <div class="col-xl-6 mb-4">
-                                            <div class="card shadow h-100">
-                                                <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                                                    <h6 class="m-0 font-weight-bold text-primary">
-                                                        <i class="fas fa-shoe-prints mr-1"></i> Steps Per Day
-                                                    </h6>
-                                                    <small class="text-muted" id="weeklyStepsPeak">—</small>
+                                            <div class="card shadow-sm h-100" style="border-radius:10px; border:none;">
+                                                <div class="chart-card-header">
+                                                    <div class="title">
+                                                        <div class="icon-wrap" style="background:#eaeffc;">
+                                                            <i class="fas fa-shoe-prints" style="color:#4e73df;"></i>
+                                                        </div>
+                                                        Steps Per Day
+                                                    </div>
+                                                    <span class="badge badge-pill" style="background:#eaeffc; color:#4e73df; font-size:0.78rem;" id="weeklyStepsPeak">—</span>
                                                 </div>
                                                 <div class="card-body">
-                                                    <div id="weeklyStepsEmpty" class="text-center py-4 d-none">
-                                                        <i class="fas fa-shoe-prints fa-2x text-gray-300 mb-2"></i>
-                                                        <p class="text-muted small mb-0">No steps logged this week.</p>
+                                                    <div id="weeklyStepsEmpty" class="empty-state-chart d-none">
+                                                        <i class="fas fa-shoe-prints"></i>
+                                                        <p>No steps logged this week.</p>
                                                     </div>
                                                     <div style="height:240px;">
                                                         <canvas id="weeklyStepsChart"></canvas>
@@ -106,18 +108,21 @@
                                         </div>
 
                                         <div class="col-xl-6 mb-4">
-                                            <div class="card shadow h-100">
-                                                <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">
-                                                        <i class="fas fa-dumbbell mr-1"></i> Workout Sessions Per Day
-                                                    </h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div id="weeklySessionsEmpty" class="text-center py-4 d-none">
-                                                        <i class="fas fa-dumbbell fa-2x text-gray-300 mb-2"></i>
-                                                        <p class="text-muted small mb-0">No workouts logged this week.</p>
+                                            <div class="card shadow-sm h-100" style="border-radius:10px; border:none;">
+                                                <div class="chart-card-header">
+                                                    <div class="title">
+                                                        <div class="icon-wrap" style="background:#e0f5ee;">
+                                                            <i class="fas fa-dumbbell" style="color:#1cc88a;"></i>
+                                                        </div>
+                                                        Workout Sessions Per Day
                                                     </div>
-                                                    <div style="height:240px;">
+                                                </div>
+                                                <div class="card-body d-flex flex-column">
+                                                    <div id="weeklySessionsEmpty" class="empty-state-chart d-none">
+                                                        <i class="fas fa-dumbbell"></i>
+                                                        <p>No workouts logged this week.</p>
+                                                    </div>
+                                                    <div style="flex:1; min-height:0;">
                                                         <canvas id="weeklySessionsChart"></canvas>
                                                     </div>
                                                 </div>
@@ -126,77 +131,124 @@
 
                                     </div>
 
-                                    <div class="row">
+                                    <!-- Stats row -->
+                                    <div class="row mb-4">
 
-                                        <div class="col-xl-6 mb-4">
-                                            <div class="card shadow h-100">
-                                                <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">
-                                                        <i class="fas fa-chart-bar mr-1"></i> This Week
-                                                    </h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="mb-3">
-                                                        <div class="text-xs font-weight-bold text-uppercase text-muted mb-1">Avg Steps / Day</div>
-                                                        <div class="h5 font-weight-bold text-gray-800 mb-1" id="wAvgSteps">—</div>
-                                                        <small style="color:#5a5c69;" id="wAvgStepsVsLast">—</small>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="mb-3">
-                                                        <div class="text-xs font-weight-bold text-uppercase text-muted mb-1">Total Sessions</div>
-                                                        <div class="h5 font-weight-bold text-gray-800 mb-1" id="wSessions">—</div>
-                                                        <small style="color:#5a5c69;" id="wSessionsVsLast">—</small>
-                                                    </div>
-                                                    <hr>
-                                                    <div>
-                                                        <div class="text-xs font-weight-bold text-uppercase text-muted mb-1">Active Days</div>
-                                                        <div class="h5 font-weight-bold text-gray-800 mb-1" id="wActiveDays">—</div>
-                                                        <small style="color:#5a5c69;">out of 7 days</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xl-6 mb-4">
-                                            <div class="card shadow h-100">
-                                                <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">
-                                                        <i class="fas fa-fire mr-1"></i> Consistency
-                                                    </h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="mb-3">
-                                                        <div class="text-xs font-weight-bold text-uppercase text-muted mb-1">Workout Streak</div>
-                                                        <div class="h5 font-weight-bold text-gray-800 mb-1" id="wStreak">—</div>
-                                                        <small style="color:#5a5c69;" id="wStreakLongest">—</small>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="mb-3">
-                                                        <div class="text-small font-weight-bold text-uppercase text-muted mb-1">Weekly Habit</div>
-                                                        <div class="font-weight-bold text-gray-800" id="wHabitStability">—</div>
-                                                    </div>
-                                                    <hr>
-                                                    <div>
-                                                        <div class="text-xs font-weight-bold text-uppercase text-muted mb-1">Step Goal Hit</div>
-                                                        <div class="h5 font-weight-bold text-gray-800 mb-1" id="wStepGoalDays">—</div>
-                                                        <small style="color:#34353b;" class="text-muted">days hit goal this week</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
+                                        <!-- This Week -->
                                         <div class="col-xl-4 mb-4">
-                                            <div class="card shadow h-100">
-                                                <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">
-                                                        <i class="fas fa-list mr-1"></i> Session Breakdown
-                                                    </h6>
+                                            <div class="card shadow-sm h-100" style="border-radius:10px; border:none;">
+                                                <div class="chart-card-header">
+                                                    <div class="title">
+                                                        <div class="icon-wrap" style="background:#eaeffc;">
+                                                            <i class="fas fa-chart-bar" style="color:#4e73df;"></i>
+                                                        </div>
+                                                        This Week
+                                                    </div>
+                                                </div>
+                                                <div class="card-body px-4 py-2">
+
+                                                    <div class="stat-row">
+                                                        <div class="stat-icon" style="background:#eaeffc;">
+                                                            <i class="fas fa-shoe-prints" style="color:#4e73df;"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="stat-label">Avg Steps / Day</div>
+                                                            <div class="stat-value" id="wAvgSteps">—</div>
+                                                            <div class="stat-sub" id="wAvgStepsVsLast">—</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="stat-row">
+                                                        <div class="stat-icon" style="background:#e0f5ee;">
+                                                            <i class="fas fa-dumbbell" style="color:#1cc88a;"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="stat-label">Total Sessions</div>
+                                                            <div class="stat-value" id="wSessions">—</div>
+                                                            <div class="stat-sub" id="wSessionsVsLast">—</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="stat-row">
+                                                        <div class="stat-icon" style="background:#fff3e0;">
+                                                            <i class="fas fa-calendar-check" style="color:#f6c23e;"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="stat-label">Active Days</div>
+                                                            <div class="stat-value" id="wActiveDays">—</div>
+                                                            <div class="stat-sub">out of 7 days</div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Consistency -->
+                                        <div class="col-xl-4 mb-4">
+                                            <div class="card shadow-sm h-100" style="border-radius:10px; border:none;">
+                                                <div class="chart-card-header">
+                                                    <div class="title">
+                                                        <div class="icon-wrap" style="background:#fde8e6;">
+                                                            <i class="fas fa-fire" style="color:#e74a3b;"></i>
+                                                        </div>
+                                                        Consistency
+                                                    </div>
+                                                </div>
+                                                <div class="card-body px-4 py-2">
+
+                                                    <div class="stat-row">
+                                                        <div class="stat-icon" style="background:#fde8e6;">
+                                                            <i class="fas fa-fire" style="color:#e74a3b;"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="stat-label">Workout Streak</div>
+                                                            <div class="stat-value" id="wStreak">—</div>
+                                                            <div class="stat-sub" id="wStreakLongest">—</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="stat-row">
+                                                        <div class="stat-icon" style="background:#e8f5e9;">
+                                                            <i class="fas fa-sync-alt" style="color:#1cc88a;"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="stat-label">Weekly Habit</div>
+                                                            <div class="stat-value" style="font-size:0.9rem; line-height:1.3;" id="wHabitStability">—</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="stat-row">
+                                                        <div class="stat-icon" style="background:#eaeffc;">
+                                                            <i class="fas fa-bullseye" style="color:#4e73df;"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="stat-label">Step Goal Hit</div>
+                                                            <div class="stat-value" id="wStepGoalDays">—</div>
+                                                            <div class="stat-sub">days hit goal this week</div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Session Breakdown -->
+                                        <div class="col-xl-4 mb-4">
+                                            <div class="card shadow-sm h-100" style="border-radius:10px; border:none;">
+                                                <div class="chart-card-header">
+                                                    <div class="title">
+                                                        <div class="icon-wrap" style="background:#f3e8ff;">
+                                                            <i class="fas fa-list" style="color:#6f42c1;"></i>
+                                                        </div>
+                                                        Session Breakdown
+                                                    </div>
                                                 </div>
                                                 <div class="card-body">
                                                     <div id="wSessionBreakdown">
                                                         <p class="text-muted small mb-0">No sessions logged this week.</p>
                                                     </div>
-                                                    <hr>
+                                                    <hr class="my-2">
                                                     <div style="height:160px;">
                                                         <canvas id="weeklyPieChart"></canvas>
                                                     </div>
@@ -209,105 +261,188 @@
 
                                     </div>
 
+
+
                                 </div>
                                 <!-- End Weekly Panel -->
 
-                                <!-- MONTHLY TAB -->
+                                <!-- ══════════════ MONTHLY TAB ══════════════ -->
                                 <div class="tab-pane fade" id="monthlyPanel" role="tabpanel">
 
-                                    <div class="d-flex align-items-center justify-content-between mb-4">
-                                        <button class="btn btn-outline-primary btn-sm" onclick="changeMonth(-1)">
-                                            <i class="fas fa-chevron-left mr-1"></i> Prev Month
+                                    <!-- Navigation strip -->
+                                    <div class="period-nav">
+                                        <button class="btn btn-outline-primary btn-sm px-3" onclick="changeMonth(-1)">
+                                            <i class="fas fa-chevron-left mr-1"></i> Prev
                                         </button>
-                                        <h6 class="font-weight-bold text-gray-700 mb-0" id="monthlyRangeLabel">—</h6>
-                                        <button class="btn btn-outline-primary btn-sm" id="monthNextBtn" onclick="changeMonth(1)">
-                                            Next Month <i class="fas fa-chevron-right ml-1"></i>
+                                        <h6 id="monthlyRangeLabel">—</h6>
+                                        <button class="btn btn-outline-primary btn-sm px-3" id="monthNextBtn" onclick="changeMonth(1)">
+                                            Next <i class="fas fa-chevron-right ml-1"></i>
                                         </button>
                                     </div>
 
-                                    <div class="card shadow mb-4">
-                                        <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                                            <h6 class="m-0 font-weight-bold text-primary">
-                                                <i class="fas fa-shoe-prints mr-1"></i> Steps — Daily (30 days)
-                                            </h6>
-                                            <small class="text-muted" id="monthlyStepsPeak">—</small>
-                                        </div>
-                                        <div class="card-body">
-                                            <div id="monthlyStepsEmpty" class="text-center py-4 d-none">
-                                                <i class="fas fa-shoe-prints fa-2x text-gray-300 mb-2"></i>
-                                                <p class="text-muted small mb-0">No steps logged this month.</p>
+                                    <!-- Charts row -->
+                                    <div class="row mb-4">
+
+                                        <div class="col-xl-6 mb-4">
+                                            <div class="card shadow-sm h-100" style="border-radius:10px; border:none;">
+                                                <div class="chart-card-header">
+                                                    <div class="title">
+                                                        <div class="icon-wrap" style="background:#eaeffc;">
+                                                            <i class="fas fa-shoe-prints" style="color:#4e73df;"></i>
+                                                        </div>
+                                                        Steps — Daily (30 days)
+                                                    </div>
+                                                    <span class="badge badge-pill" style="background:#eaeffc; color:#4e73df; font-size:0.78rem;" id="monthlyStepsPeak">—</span>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div id="monthlyStepsEmpty" class="empty-state-chart d-none">
+                                                        <i class="fas fa-shoe-prints"></i>
+                                                        <p>No steps logged this month.</p>
+                                                    </div>
+                                                    <div style="height:280px;">
+                                                        <canvas id="monthlyStepsChart"></canvas>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div style="height:280px;">
-                                                <canvas id="monthlyStepsChart"></canvas>
+                                        </div>
+
+                                        <div class="col-xl-6 mb-4">
+                                            <div class="card shadow-sm h-100" style="border-radius:10px; border:none;">
+                                                <div class="chart-card-header">
+                                                    <div class="title">
+                                                        <div class="icon-wrap" style="background:#e0f5ee;">
+                                                            <i class="fas fa-dumbbell" style="color:#1cc88a;"></i>
+                                                        </div>
+                                                        Workout Sessions Per Week
+                                                    </div>
+                                                    <span class="badge badge-pill" style="background:#e0f5ee; color:#1cc88a; font-size:0.78rem;" id="monthlySessionsPeak">—</span>
+                                                </div>
+                                                <div class="card-body d-flex flex-column">
+                                                    <div id="monthlySessionsEmpty" class="empty-state-chart d-none">
+                                                        <i class="fas fa-dumbbell"></i>
+                                                        <p>No workouts logged this month.</p>
+                                                    </div>
+                                                    <div style="flex:1; min-height:0;">
+                                                        <canvas id="monthlySessionsChart"></canvas>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
+
                                     </div>
 
-                                    <div class="row">
+                                    <!-- Stats row -->
+                                    <div class="row mb-4">
 
+                                        <!-- This Month -->
                                         <div class="col-xl-4 mb-4">
-                                            <div class="card shadow h-100">
-                                                <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">
-                                                        <i class="fas fa-chart-bar mr-1"></i> This Month
-                                                    </h6>
+                                            <div class="card shadow-sm h-100" style="border-radius:10px; border:none;">
+                                                <div class="chart-card-header">
+                                                    <div class="title">
+                                                        <div class="icon-wrap" style="background:#eaeffc;">
+                                                            <i class="fas fa-chart-bar" style="color:#4e73df;"></i>
+                                                        </div>
+                                                        This Month
+                                                    </div>
                                                 </div>
-                                                <div class="card-body">
-                                                    <div class="mb-3">
-                                                        <div class="text-xs font-weight-bold text-uppercase text-muted mb-1">Avg Steps / Day</div>
-                                                        <div class="h5 font-weight-bold text-gray-800 mb-1" id="mAvgSteps">—</div>
-                                                        <small style="color:#5a5c69;" id="mAvgStepsVsLast">—</small>
+                                                <div class="card-body px-4 py-2">
+
+                                                    <div class="stat-row">
+                                                        <div class="stat-icon" style="background:#eaeffc;">
+                                                            <i class="fas fa-shoe-prints" style="color:#4e73df;"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="stat-label">Avg Steps / Day</div>
+                                                            <div class="stat-value" id="mAvgSteps">—</div>
+                                                            <div class="stat-sub" id="mAvgStepsVsLast">—</div>
+                                                        </div>
                                                     </div>
-                                                    <hr>
-                                                    <div class="mb-3">
-                                                        <div class="text-xs font-weight-bold text-uppercase text-muted mb-1">Total Sessions</div>
-                                                        <div class="h5 font-weight-bold text-gray-800 mb-1" id="mSessions">—</div>
-                                                        <small style="color:#5a5c69;" id="mSessionsVsLast">—</small>
+
+                                                    <div class="stat-row">
+                                                        <div class="stat-icon" style="background:#e0f5ee;">
+                                                            <i class="fas fa-dumbbell" style="color:#1cc88a;"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="stat-label">Total Sessions</div>
+                                                            <div class="stat-value" id="mSessions">—</div>
+                                                            <div class="stat-sub" id="mSessionsVsLast">—</div>
+                                                        </div>
                                                     </div>
-                                                    <hr>
-                                                    <div>
-                                                        <div class="text-xs font-weight-bold text-uppercase text-muted mb-1">Active Days</div>
-                                                        <div class="h5 font-weight-bold text-gray-800 mb-1" id="mActiveDays">—</div>
-                                                        <small style="color:#5a5c69;" id="mActiveDaysTotal">out of 30 days</small>
+
+                                                    <div class="stat-row">
+                                                        <div class="stat-icon" style="background:#fff3e0;">
+                                                            <i class="fas fa-calendar-check" style="color:#f6c23e;"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="stat-label">Active Days</div>
+                                                            <div class="stat-value" id="mActiveDays">—</div>
+                                                            <div class="stat-sub" id="mActiveDaysTotal">out of 30 days</div>
+                                                        </div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <!-- Consistency -->
                                         <div class="col-xl-4 mb-4">
-                                            <div class="card shadow h-100">
-                                                <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">
-                                                        <i class="fas fa-fire mr-1"></i> Consistency
-                                                    </h6>
+                                            <div class="card shadow-sm h-100" style="border-radius:10px; border:none;">
+                                                <div class="chart-card-header">
+                                                    <div class="title">
+                                                        <div class="icon-wrap" style="background:#fde8e6;">
+                                                            <i class="fas fa-fire" style="color:#e74a3b;"></i>
+                                                        </div>
+                                                        Consistency
+                                                    </div>
                                                 </div>
-                                                <div class="card-body">
-                                                    <div class="mb-3">
-                                                        <div class="text-xs font-weight-bold text-uppercase text-muted mb-1">Most Active Week</div>
-                                                        <div class="h5 font-weight-bold text-gray-800 mb-1" id="mMostActiveWeek">—</div>
-                                                        <small style="color:#5a5c69;" id="mMostActiveWeekSessions">—</small>
+                                                <div class="card-body px-4 py-2">
+
+                                                    <div class="stat-row">
+                                                        <div class="stat-icon" style="background:#fde8e6;">
+                                                            <i class="fas fa-star" style="color:#e74a3b;"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="stat-label">Most Active Week</div>
+                                                            <div class="stat-value" id="mMostActiveWeek">—</div>
+                                                            <div class="stat-sub" id="mMostActiveWeekSessions">—</div>
+                                                        </div>
                                                     </div>
-                                                    <hr>
-                                                    <div class="mb-3">
-                                                        <div class="text-xs font-weight-bold text-uppercase text-muted mb-1">Monthly Habit</div>
-                                                        <div class="font-weight-bold text-gray-800" id="mHabitStability">—</div>
+
+                                                    <div class="stat-row">
+                                                        <div class="stat-icon" style="background:#e8f5e9;">
+                                                            <i class="fas fa-sync-alt" style="color:#1cc88a;"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="stat-label">Monthly Habit</div>
+                                                            <div class="stat-value" style="font-size:0.9rem; line-height:1.3;" id="mHabitStability">—</div>
+                                                        </div>
                                                     </div>
-                                                    <hr>
-                                                    <div>
-                                                        <div class="text-xs font-weight-bold text-uppercase text-muted mb-1">Step Goal Hit</div>
-                                                        <div class="h5 font-weight-bold text-gray-800 mb-1" id="mStepGoalDays">—</div>
-                                                        <small style="color:#5a5c69;">days hit goal this month</small>
+
+                                                    <div class="stat-row">
+                                                        <div class="stat-icon" style="background:#eaeffc;">
+                                                            <i class="fas fa-bullseye" style="color:#4e73df;"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="stat-label">Step Goal Hit</div>
+                                                            <div class="stat-value" id="mStepGoalDays">—</div>
+                                                            <div class="stat-sub">days hit goal this month</div>
+                                                        </div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <!-- Top Activities -->
                                         <div class="col-xl-4 mb-4">
-                                            <div class="card shadow h-100">
-                                                <div class="card-header py-3">
-                                                    <h6 class="m-0 font-weight-bold text-primary">
-                                                        <i class="fas fa-list mr-1"></i> Top Activities
-                                                    </h6>
+                                            <div class="card shadow-sm h-100" style="border-radius:10px; border:none;">
+                                                <div class="chart-card-header">
+                                                    <div class="title">
+                                                        <div class="icon-wrap" style="background:#f3e8ff;">
+                                                            <i class="fas fa-trophy" style="color:#6f42c1;"></i>
+                                                        </div>
+                                                        Top Activities
+                                                    </div>
                                                 </div>
                                                 <div class="card-body">
                                                     <div id="mTopActivities">
@@ -319,6 +454,8 @@
 
                                     </div>
 
+
+
                                 </div>
                                 <!-- End Monthly Panel -->
 
@@ -327,29 +464,21 @@
                     </div>
 
                 </div>
-                <!-- End Main Content -->
 
             </div>
 
-            <!-- FOOTER (injected by layout.js) -->
             <div id="footer-placeholder"></div>
 
         </div>
     </div>
 
-    <!-- SCROLL TO TOP + LOGOUT MODAL (injected by layout.js) -->
     <div id="extras-placeholder"></div>
 
-    <!-- Vendor Scripts (jQuery MUST be first) -->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="../js/sb-admin-2.min.js"></script>
-
-    <!-- Chart.js before any chart code -->
     <script src="../vendor/chart.js/Chart.min.js"></script>
-
-    <!-- layout.js before page scripts -->
     <script src="../js/layout.js"></script>
     <script src="../js/progress.js"></script>
     <script src="../js/progress-charts.js"></script>

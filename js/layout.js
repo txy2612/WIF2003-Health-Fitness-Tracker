@@ -194,6 +194,39 @@ const EXTRAS_HTML = `
     </div>`;
 
 
+// ── LAYOUT FIX ────────────────────────────────────────────────────
+// The placeholder divs break sb-admin-2's flex + fixed positioning.
+// This patch restores the expected sidebar + topbar behaviour.
+(function () {
+    const style = document.createElement('style');
+    style.textContent = `
+        /* Give the sidebar placeholder the same width as the sidebar
+           so content-wrapper starts at the right position */
+        #sidebar-placeholder {
+            width: 224px;
+            flex-shrink: 0;
+        }
+
+        /* Keep the sidebar fixed to the left, full height, scrollable */
+        #sidebar-placeholder .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1030;
+        }
+
+        /* Stick the topbar to the top as you scroll */
+        #topbar-placeholder .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+        }
+    `;
+    document.head.appendChild(style);
+})();
+
 document.addEventListener('DOMContentLoaded', function () {
 
     // Inject shared layout components

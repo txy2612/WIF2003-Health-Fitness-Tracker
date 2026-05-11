@@ -1,0 +1,195 @@
+/* ── TABS ───────────────────────────────────────────────── */
+#progressTabs {
+    border-bottom: none;
+    gap: 8px;
+}
+#progressTabs .nav-link {
+    border: 2px solid #e3e6f0;
+    border-radius: 8px !important;
+    color: #6e707e;
+    font-weight: 600;
+    padding: 8px 20px;
+    transition: all 0.2s;
+    background: #fff;
+}
+#progressTabs .nav-link:hover {
+    border-color: #4e73df;
+    color: #4e73df;
+}
+#progressTabs .nav-link.active {
+    background: #4e73df;
+    border-color: #4e73df;
+    color: #fff !important;
+}
+#progressTabs .nav-link.active i { color: #fff !important; }
+
+/* ── STAT ROWS ──────────────────────────────────────────── */
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f1f5;
+}
+.stat-row:last-child { border-bottom: none; }
+
+.stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+.stat-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #b7b9cc;
+    margin-bottom: 1px;
+}
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #2d3748;
+    line-height: 1.1;
+}
+.stat-sub {
+    font-size: 0.75rem;
+    color: #a0aec0;
+    margin-top: 1px;
+}
+
+/* ── INSIGHT CARDS ──────────────────────────────────────── */
+.insight-card {
+    border-left: 4px solid;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.insight-card.performance { border-color: #4e73df; background: #fafbff; }
+.insight-card.streak      { border-color: #e74a3b; background: #fffafa; }
+.insight-card.trend       { border-color: #1cc88a; background: #fafffe; }
+
+.insight-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+}
+.insight-card.performance .insight-icon { background: #eaeffc; color: #4e73df; }
+.insight-card.streak      .insight-icon { background: #fde8e6; color: #e74a3b; }
+.insight-card.trend       .insight-icon { background: #e0f5ee; color: #1cc88a; }
+
+.insight-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 2px;
+    line-height: 1.4;
+}
+.insight-sub {
+    font-size: 0.78rem;
+    color: #a0aec0;
+    margin: 0;
+}
+.insight-badge {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 99px;
+}
+.badge-blue  { background: #eaeffc; color: #4e73df; }
+.badge-red   { background: #fde8e6; color: #e74a3b; }
+.badge-green { background: #e0f5ee; color: #1cc88a; }
+
+/* ── NAV STRIP (Prev / Next) ────────────────────────────── */
+.period-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8f9fc;
+    border-radius: 10px;
+    padding: 10px 16px;
+    margin-bottom: 24px;
+}
+.period-nav h6 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #4e73df;
+    margin: 0;
+}
+
+/* ── CHART CARD HEADERS ─────────────────────────────────── */
+.chart-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid #f0f1f5;
+}
+.chart-card-header .title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #4e73df;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.chart-card-header .title .icon-wrap {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+}
+
+/* ── INSIGHTS HEADER ────────────────────────────────────── */
+.insights-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #f0f1f5;
+    background: linear-gradient(90deg, #f8f9fc 0%, #fff 100%);
+    border-radius: 6px 6px 0 0;
+}
+.insights-header .icon-wrap {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: #fff8e1;
+    color: #f6c23e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+/* ── EMPTY STATES ───────────────────────────────────────── */
+.empty-state-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+    color: #b7b9cc;
+}
+.empty-state-chart i { font-size: 2.5rem; margin-bottom: 10px; }
+.empty-state-chart p { font-size: 0.85rem; margin: 0; }
