@@ -3,6 +3,7 @@
     border-bottom: none;
     gap: 8px;
 }
+
 #progressTabs .nav-link {
     border: 2px solid #e3e6f0;
     border-radius: 8px !important;
@@ -12,16 +13,21 @@
     transition: all 0.2s;
     background: #fff;
 }
+
 #progressTabs .nav-link:hover {
     border-color: #4e73df;
     color: #4e73df;
 }
+
 #progressTabs .nav-link.active {
     background: #4e73df;
     border-color: #4e73df;
     color: #fff !important;
 }
-#progressTabs .nav-link.active i { color: #fff !important; }
+
+#progressTabs .nav-link.active i {
+    color: #fff !important;
+}
 
 /* ── STAT ROWS ──────────────────────────────────────────── */
 .stat-row {
@@ -31,7 +37,10 @@
     padding: 12px 0;
     border-bottom: 1px solid #f0f1f5;
 }
-.stat-row:last-child { border-bottom: none; }
+
+.stat-row:last-child {
+    border-bottom: none;
+}
 
 .stat-icon {
     width: 40px;
@@ -43,6 +52,7 @@
     flex-shrink: 0;
     font-size: 1rem;
 }
+
 .stat-label {
     font-size: 0.72rem;
     font-weight: 700;
@@ -51,12 +61,14 @@
     color: #b7b9cc;
     margin-bottom: 1px;
 }
+
 .stat-value {
     font-size: 1.25rem;
     font-weight: 800;
     color: #2d3748;
     line-height: 1.1;
 }
+
 .stat-sub {
     font-size: 0.75rem;
     color: #a0aec0;
@@ -70,14 +82,26 @@
     padding: 14px 16px;
     margin-bottom: 10px;
     background: #fff;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
     display: flex;
     align-items: center;
     gap: 14px;
 }
-.insight-card.performance { border-color: #4e73df; background: #fafbff; }
-.insight-card.streak      { border-color: #e74a3b; background: #fffafa; }
-.insight-card.trend       { border-color: #1cc88a; background: #fafffe; }
+
+.insight-card.performance {
+    border-color: #4e73df;
+    background: #fafbff;
+}
+
+.insight-card.streak {
+    border-color: #e74a3b;
+    background: #fffafa;
+}
+
+.insight-card.trend {
+    border-color: #1cc88a;
+    background: #fafffe;
+}
 
 .insight-icon {
     width: 44px;
@@ -89,9 +113,21 @@
     flex-shrink: 0;
     font-size: 1.1rem;
 }
-.insight-card.performance .insight-icon { background: #eaeffc; color: #4e73df; }
-.insight-card.streak      .insight-icon { background: #fde8e6; color: #e74a3b; }
-.insight-card.trend       .insight-icon { background: #e0f5ee; color: #1cc88a; }
+
+.insight-card.performance .insight-icon {
+    background: #eaeffc;
+    color: #4e73df;
+}
+
+.insight-card.streak .insight-icon {
+    background: #fde8e6;
+    color: #e74a3b;
+}
+
+.insight-card.trend .insight-icon {
+    background: #e0f5ee;
+    color: #1cc88a;
+}
 
 .insight-title {
     font-size: 0.9rem;
@@ -100,11 +136,13 @@
     margin-bottom: 2px;
     line-height: 1.4;
 }
+
 .insight-sub {
     font-size: 0.78rem;
     color: #a0aec0;
     margin: 0;
 }
+
 .insight-badge {
     margin-left: auto;
     flex-shrink: 0;
@@ -113,9 +151,21 @@
     padding: 5px 12px;
     border-radius: 99px;
 }
-.badge-blue  { background: #eaeffc; color: #4e73df; }
-.badge-red   { background: #fde8e6; color: #e74a3b; }
-.badge-green { background: #e0f5ee; color: #1cc88a; }
+
+.badge-blue {
+    background: #eaeffc;
+    color: #4e73df;
+}
+
+.badge-red {
+    background: #fde8e6;
+    color: #e74a3b;
+}
+
+.badge-green {
+    background: #e0f5ee;
+    color: #1cc88a;
+}
 
 /* ── NAV STRIP (Prev / Next) ────────────────────────────── */
 .period-nav {
@@ -127,6 +177,7 @@
     padding: 10px 16px;
     margin-bottom: 24px;
 }
+
 .period-nav h6 {
     font-size: 1rem;
     font-weight: 700;
@@ -142,6 +193,7 @@
     padding: 14px 20px;
     border-bottom: 1px solid #f0f1f5;
 }
+
 .chart-card-header .title {
     font-size: 0.85rem;
     font-weight: 700;
@@ -150,6 +202,7 @@
     align-items: center;
     gap: 8px;
 }
+
 .chart-card-header .title .icon-wrap {
     width: 30px;
     height: 30px;
@@ -170,6 +223,7 @@
     background: linear-gradient(90deg, #f8f9fc 0%, #fff 100%);
     border-radius: 6px 6px 0 0;
 }
+
 .insights-header .icon-wrap {
     width: 34px;
     height: 34px;
@@ -191,5 +245,17 @@
     padding: 40px 0;
     color: #b7b9cc;
 }
-.empty-state-chart i { font-size: 2.5rem; margin-bottom: 10px; }
-.empty-state-chart p { font-size: 0.85rem; margin: 0; }
+
+.empty-state-chart i {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.empty-state-chart p {
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+h1 {
+    font-family: 'DM Serif Display', serif;
+}

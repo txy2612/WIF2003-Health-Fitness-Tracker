@@ -12,9 +12,14 @@
     <title>Fitness Tracker</title>
 
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap"
         rel="stylesheet">
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../css/fitness.css" rel="stylesheet">
 
 </head>
 
@@ -34,7 +39,8 @@
                 <div class="container-fluid">
 
                     <h1 class="h3 mb-1 text-gray-800">Fitness Tracker</h1>
-                    <p class="mb-4 text-muted">Log your workouts and daily activity. Track every session to stay on top of your goals.</p>
+                    <p class="mb-4 text-muted">Log your workouts and daily activity. Track every session to stay on top
+                        of your goals.</p>
 
                     <!-- Log Activity Form -->
                     <div class="card shadow mb-4">
@@ -49,7 +55,8 @@
 
                             <ul class="nav nav-tabs mb-4" id="logTabs" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="workout-tab" data-toggle="tab" href="#tab-workout" role="tab">
+                                    <a class="nav-link active" id="workout-tab" data-toggle="tab" href="#tab-workout"
+                                        role="tab">
                                         <i class="fas fa-dumbbell mr-1"></i> Log Workout
                                     </a>
                                 </li>
@@ -68,7 +75,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="activityType">
-                                                    <i class="fas fa-running fa-sm text-gray-500 mr-1"></i> Activity / Workout Type
+                                                    <i class="fas fa-running fa-sm text-gray-500 mr-1"></i> Activity /
+                                                    Workout Type
                                                 </label>
                                                 <select class="form-control" id="activityType">
                                                     <option value="" disabled selected>Select an activity...</option>
@@ -87,9 +95,11 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="duration">
-                                                    <i class="fas fa-clock fa-sm text-gray-500 mr-1"></i> Duration (minutes)
+                                                    <i class="fas fa-clock fa-sm text-gray-500 mr-1"></i> Duration
+                                                    (minutes)
                                                 </label>
-                                                <input type="number" class="form-control" id="duration" placeholder="e.g. 45" min="1">
+                                                <input type="number" class="form-control" id="duration"
+                                                    placeholder="e.g. 45" min="1">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -102,12 +112,16 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label><i class="fas fa-fire fa-sm text-gray-500 mr-1"></i> Calories Burned</label>
-                                                <div class="p-2 rounded d-flex align-items-center justify-content-between" style="background:#f0f4ff; border:1px solid #d0d8f0; min-height:38px;">
-                                                    <span class="font-weight-bold text-primary" id="workoutCalDisplay">—</span>
+                                                <label><i class="fas fa-fire fa-sm text-gray-500 mr-1"></i> Calories
+                                                    Burned</label>
+                                                <div class="p-2 rounded d-flex align-items-center justify-content-between"
+                                                    style="background:#f0f4ff; border:1px solid #d0d8f0; min-height:38px;">
+                                                    <span class="font-weight-bold text-primary"
+                                                        id="workoutCalDisplay">—</span>
                                                     <small class="text-muted">kcal · MET formula</small>
                                                 </div>
-                                                <small class="text-muted">Auto-calculated from activity + duration</small>
+                                                <small class="text-muted">Auto-calculated from activity +
+                                                    duration</small>
                                             </div>
                                         </div>
                                         <div class="col-12">
@@ -122,7 +136,8 @@
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <button class="btn btn-outline-primary mr-2" type="button" onclick="clearWorkoutForm()">
+                                        <button class="btn btn-outline-primary mr-2" type="button"
+                                            onclick="clearWorkoutForm()">
                                             <i class="fas fa-times fa-sm mr-1"></i> Clear
                                         </button>
                                         <button class="btn btn-primary" type="button" onclick="logWorkout()">
@@ -137,9 +152,11 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="stepsCount">
-                                                    <i class="fas fa-shoe-prints fa-sm text-gray-500 mr-1"></i> Steps Taken
+                                                    <i class="fas fa-shoe-prints fa-sm text-gray-500 mr-1"></i> Steps
+                                                    Taken
                                                 </label>
-                                                <input type="number" class="form-control" id="stepsCount" placeholder="e.g. 8000" min="0">
+                                                <input type="number" class="form-control" id="stepsCount"
+                                                    placeholder="e.g. 8000" min="0">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -152,9 +169,12 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label><i class="fas fa-fire fa-sm text-gray-500 mr-1"></i> Estimated Calories</label>
-                                                <div class="p-2 rounded d-flex align-items-center justify-content-between" style="background:#f0f4ff; border:1px solid #d0d8f0; min-height:38px;">
-                                                    <span class="font-weight-bold text-primary" id="stepsCalDisplay">—</span>
+                                                <label><i class="fas fa-fire fa-sm text-gray-500 mr-1"></i> Estimated
+                                                    Calories</label>
+                                                <div class="p-2 rounded d-flex align-items-center justify-content-between"
+                                                    style="background:#f0f4ff; border:1px solid #d0d8f0; min-height:38px;">
+                                                    <span class="font-weight-bold text-primary"
+                                                        id="stepsCalDisplay">—</span>
                                                     <small class="text-muted">kcal · 0.04 kcal/step</small>
                                                 </div>
                                                 <small class="text-muted">Auto-calculated from steps count</small>
@@ -162,7 +182,8 @@
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <button class="btn btn-outline-primary mr-2" type="button" onclick="clearStepsForm()">
+                                        <button class="btn btn-outline-primary mr-2" type="button"
+                                            onclick="clearStepsForm()">
                                             <i class="fas fa-times fa-sm mr-1"></i> Clear
                                         </button>
                                         <button class="btn btn-primary" type="button" onclick="logSteps()">
@@ -189,7 +210,8 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-hover" id="activityTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered table-hover" id="activityTable" width="100%"
+                                    cellspacing="0">
                                     <thead class="thead-light">
                                         <tr>
                                             <th>Date</th>
@@ -256,4 +278,5 @@
     <script src="../js/fitness.js"></script>
 
 </body>
+
 </html>

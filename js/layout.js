@@ -91,41 +91,12 @@ const TOPBAR_HTML = `
         <ul class="navbar-nav ml-auto">
 
             <!-- Notifications bell -->
-            <li class="nav-item dropdown no-arrow mx-1">
-                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <li class="nav-item no-arrow mx-1">
+                <a class="nav-link" href="notification.html">
                     <i class="fas fa-bell fa-fw"></i>
+                    <!-- You can keep the counter badge here! -->
                     <span class="badge badge-danger badge-counter">2</span>
                 </a>
-                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                    aria-labelledby="alertsDropdown">
-                    <h6 class="dropdown-header">Notifications</h6>
-                    <a class="dropdown-item d-flex align-items-center" href="notification.html">
-                        <div class="mr-3">
-                            <div class="icon-circle bg-primary">
-                                <i class="fas fa-dumbbell text-white"></i>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="small text-gray-500">Today, 7:00 AM</div>
-                            <span class="font-weight-bold">Workout reminder — Morning Run</span>
-                        </div>
-                    </a>
-                    <a class="dropdown-item d-flex align-items-center" href="notification.html">
-                        <div class="mr-3">
-                            <div class="icon-circle bg-success">
-                                <i class="fas fa-apple-alt text-white"></i>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="small text-gray-500">Today, 12:30 PM</div>
-                            <span class="font-weight-bold">Lunch log reminder</span>
-                        </div>
-                    </a>
-                    <a class="dropdown-item text-center small text-gray-500" href="notification.html">
-                        View All Notifications
-                    </a>
-                </div>
             </li>
 
             <div class="topbar-divider d-none d-sm-block"></div>
@@ -265,5 +236,5 @@ document.addEventListener('DOMContentLoaded', function () {
             const pic = document.getElementById('topbarProfilePic');
             if (pic) pic.innerHTML = `<img src="${profile.photo}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
         }
-    } catch (e) {}
+    } catch (e) { }
 });

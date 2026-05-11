@@ -11,9 +11,14 @@
     <title>Dashboard</title>
 
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap"
         rel="stylesheet">
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../css/dashboard.css" rel="stylesheet">
 
     <style>
         .score-ring-wrapper {
@@ -21,6 +26,7 @@
             width: 220px;
             height: 220px;
         }
+
         .score-ring {
             width: 220px;
             height: 220px;
@@ -29,6 +35,7 @@
             position: relative;
             box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, .15);
         }
+
         .score-ring::after {
             content: "";
             position: absolute;
@@ -39,9 +46,11 @@
             background: #fff;
             border-radius: 50%;
         }
+
         .score-ring-center {
             position: absolute;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             width: 220px;
             height: 220px;
             display: flex;
@@ -50,17 +59,20 @@
             justify-content: center;
             z-index: 2;
         }
+
         .score-number {
             font-size: 3.5rem;
             font-weight: 700;
             color: #4e73df;
             line-height: 1;
         }
+
         .score-label {
             font-size: 1rem;
             color: #5a5c69;
             margin-top: 8px;
         }
+
         .pattern-row:last-child {
             border-bottom: none !important;
         }
@@ -85,7 +97,8 @@
                     <div class="d-sm-flex align-items-center justify-content-between mb-1">
                         <div>
                             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                            <p class="mb-0 text-muted">Welcome back! Here is your health and fitness overview for today.</p>
+                            <p class="mb-0 text-muted">Welcome back! Here is your health and fitness overview for today.
+                            </p>
                         </div>
                     </div>
                     <small class="text-muted d-inline-block mb-4" id="dashDate"></small>
@@ -108,11 +121,13 @@
 
                                 <div class="col-md-4 mb-4 mb-md-0">
                                     <div class="d-flex align-items-center mb-2">
-                                        <div class="mr-3" style="width:38px;height:38px;border-radius:10px;background:#eaeffc;display:flex;align-items:center;justify-content:center;">
+                                        <div class="mr-3"
+                                            style="width:38px;height:38px;border-radius:10px;background:#eaeffc;display:flex;align-items:center;justify-content:center;">
                                             <i class="fas fa-shoe-prints text-primary"></i>
                                         </div>
                                         <div>
-                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Steps Goal</div>
+                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Steps Goal
+                                            </div>
                                             <div class="font-weight-bold text-gray-800">
                                                 <span id="today-steps-count">8,450</span>
                                                 <span class="text-muted font-weight-normal small">/ 10,000</span>
@@ -121,18 +136,22 @@
                                         <span class="ml-auto badge badge-success" id="stepsPct">85%</span>
                                     </div>
                                     <div class="progress" style="height:8px; border-radius:99px;">
-                                        <div class="progress-bar bg-success" id="stepsGoalBar" role="progressbar" style="width:85%; border-radius:99px;"></div>
+                                        <div class="progress-bar bg-success" id="stepsGoalBar" role="progressbar"
+                                            style="width:85%; border-radius:99px;"></div>
                                     </div>
-                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;" id="stepsRemaining">1,550 steps to reach your goal</small>
+                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;"
+                                        id="stepsRemaining">1,550 steps to reach your goal</small>
                                 </div>
 
                                 <div class="col-md-4 mb-4 mb-md-0">
                                     <div class="d-flex align-items-center mb-2">
-                                        <div class="mr-3" style="width:38px;height:38px;border-radius:10px;background:#e0f5fb;display:flex;align-items:center;justify-content:center;">
+                                        <div class="mr-3"
+                                            style="width:38px;height:38px;border-radius:10px;background:#e0f5fb;display:flex;align-items:center;justify-content:center;">
                                             <i class="fas fa-tint text-info"></i>
                                         </div>
                                         <div>
-                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Water Intake</div>
+                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Water Intake
+                                            </div>
                                             <div class="font-weight-bold text-gray-800">
                                                 <span id="dashboard-water-count">5</span>
                                                 <span class="text-muted font-weight-normal small">/ 8 glasses</span>
@@ -141,18 +160,22 @@
                                         <span class="ml-auto badge badge-info" id="dashboard-water-badge">63%</span>
                                     </div>
                                     <div class="progress" style="height:8px; border-radius:99px;">
-                                        <div class="progress-bar bg-info" id="dashboard-water-bar" role="progressbar" style="width:63%; border-radius:99px;"></div>
+                                        <div class="progress-bar bg-info" id="dashboard-water-bar" role="progressbar"
+                                            style="width:63%; border-radius:99px;"></div>
                                     </div>
-                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;" id="dashboard-water-text">3 more glasses to go</small>
+                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;"
+                                        id="dashboard-water-text">3 more glasses to go</small>
                                 </div>
 
                                 <div class="col-md-4">
                                     <div class="d-flex align-items-center mb-2">
-                                        <div class="mr-3" style="width:38px;height:38px;border-radius:10px;background:#fff3e0;display:flex;align-items:center;justify-content:center;">
+                                        <div class="mr-3"
+                                            style="width:38px;height:38px;border-radius:10px;background:#fff3e0;display:flex;align-items:center;justify-content:center;">
                                             <i class="fas fa-fire" style="color:#f6c23e;"></i>
                                         </div>
                                         <div>
-                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Calories Burned</div>
+                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Calories
+                                                Burned</div>
                                             <div class="font-weight-bold text-gray-800">
                                                 <span id="today-calories-count">560</span>
                                                 <span class="text-muted font-weight-normal small">kcal today</span>
@@ -161,9 +184,11 @@
                                         <span class="ml-auto badge badge-warning text-dark">Active</span>
                                     </div>
                                     <div class="progress" style="height:8px; border-radius:99px;">
-                                        <div class="progress-bar" id="calorieBar" role="progressbar" style="width:56%; background:#f6c23e; border-radius:99px;"></div>
+                                        <div class="progress-bar" id="calorieBar" role="progressbar"
+                                            style="width:56%; background:#f6c23e; border-radius:99px;"></div>
                                     </div>
-                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;" id="calorieText">From 2 sessions today</small>
+                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;" id="calorieText">From
+                                        2 sessions today</small>
                                 </div>
 
                             </div>
@@ -173,25 +198,33 @@
                             <div class="row">
                                 <div class="col-md-6 mb-0">
                                     <div class="d-flex align-items-center">
-                                        <div class="mr-3" style="width:38px;height:38px;border-radius:10px;background:#eaeffc;display:flex;align-items:center;justify-content:center;">
+                                        <div class="mr-3"
+                                            style="width:38px;height:38px;border-radius:10px;background:#eaeffc;display:flex;align-items:center;justify-content:center;">
                                             <i class="fas fa-bell text-primary"></i>
                                         </div>
                                         <div>
-                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Next Reminder</div>
-                                            <div class="font-weight-bold text-gray-800 mb-1" style="font-size:1rem;">Evening walk at 6:30 PM</div>
-                                            <small class="text-muted" style="font-size:0.9rem;">Stay consistent with your daily routine.</small>
+                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Next
+                                                Reminder</div>
+                                            <div class="font-weight-bold text-gray-800 mb-1" style="font-size:1rem;">
+                                                Evening walk at 6:30 PM</div>
+                                            <small class="text-muted" style="font-size:0.9rem;">Stay consistent with
+                                                your daily routine.</small>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-2">
                                     <div class="d-flex align-items-center py-2">
-                                        <div class="mr-3" style="width:38px;height:38px;border-radius:10px;background:#e0f5f1;display:flex;align-items:center;justify-content:center;">
+                                        <div class="mr-3"
+                                            style="width:38px;height:38px;border-radius:10px;background:#e0f5f1;display:flex;align-items:center;justify-content:center;">
                                             <i class="fas fa-dumbbell text-success"></i>
                                         </div>
                                         <div>
-                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Today's Workout</div>
-                                            <div class="font-weight-bold text-gray-800 mb-1" style="font-size:1rem;">30-minute cardio</div>
-                                            <small class="text-muted" style="font-size:0.9rem;">Goal: Build stamina</small>
+                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Today's
+                                                Workout</div>
+                                            <div class="font-weight-bold text-gray-800 mb-1" style="font-size:1rem;">
+                                                30-minute cardio</div>
+                                            <small class="text-muted" style="font-size:0.9rem;">Goal: Build
+                                                stamina</small>
                                         </div>
                                     </div>
                                 </div>
@@ -245,8 +278,8 @@
                                             <polyline id="trendLine" fill="none" stroke="#1cc88a" stroke-width="3"
                                                 points="20,80 80,60 140,70 200,58 260,72 320,52 380,42"></polyline>
                                             <g id="trendDots"></g>
-                                            <text x="20"  y="115" font-size="12" fill="#858796">Mon</text>
-                                            <text x="80"  y="115" font-size="12" fill="#858796">Tue</text>
+                                            <text x="20" y="115" font-size="12" fill="#858796">Mon</text>
+                                            <text x="80" y="115" font-size="12" fill="#858796">Tue</text>
                                             <text x="140" y="115" font-size="12" fill="#858796">Wed</text>
                                             <text x="200" y="115" font-size="12" fill="#858796">Thu</text>
                                             <text x="260" y="115" font-size="12" fill="#858796">Fri</text>
@@ -297,7 +330,8 @@
                                 <div class="col-md-4 mb-3">
                                     <div class="border rounded p-3 h-100" style="border-color:#e3e6f0 !important;">
                                         <div class="d-flex align-items-center mb-2">
-                                            <div class="mr-2" style="width:32px;height:32px;border-radius:8px;background:#eaeffc;display:flex;align-items:center;justify-content:center;">
+                                            <div class="mr-2"
+                                                style="width:32px;height:32px;border-radius:8px;background:#eaeffc;display:flex;align-items:center;justify-content:center;">
                                                 <i class="fas fa-plus-circle text-primary fa-sm"></i>
                                             </div>
                                             <h6 class="mb-0 font-weight-bold">Log Workout</h6>
@@ -312,12 +346,14 @@
                                 <div class="col-md-4 mb-3">
                                     <div class="border rounded p-3 h-100" style="border-color:#e3e6f0 !important;">
                                         <div class="d-flex align-items-center mb-2">
-                                            <div class="mr-2" style="width:32px;height:32px;border-radius:8px;background:#e0f5f1;display:flex;align-items:center;justify-content:center;">
+                                            <div class="mr-2"
+                                                style="width:32px;height:32px;border-radius:8px;background:#e0f5f1;display:flex;align-items:center;justify-content:center;">
                                                 <i class="fas fa-utensils text-success fa-sm"></i>
                                             </div>
                                             <h6 class="mb-0 font-weight-bold">Plan Meals</h6>
                                         </div>
-                                        <p class="text-muted small mb-3">Explore meal ideas and log your daily nutrition.</p>
+                                        <p class="text-muted small mb-3">Explore meal ideas and log your daily
+                                            nutrition.</p>
                                         <a href="nutrition-planner.html" class="btn btn-primary btn-sm">
                                             <i class="fas fa-apple-alt fa-sm mr-1"></i> Go to Nutrition
                                         </a>
@@ -327,12 +363,14 @@
                                 <div class="col-md-4 mb-3">
                                     <div class="border rounded p-3 h-100" style="border-color:#e3e6f0 !important;">
                                         <div class="d-flex align-items-center mb-2">
-                                            <div class="mr-2" style="width:32px;height:32px;border-radius:8px;background:#eaeffc;display:flex;align-items:center;justify-content:center;">
+                                            <div class="mr-2"
+                                                style="width:32px;height:32px;border-radius:8px;background:#eaeffc;display:flex;align-items:center;justify-content:center;">
                                                 <i class="fas fa-chart-line text-primary fa-sm"></i>
                                             </div>
                                             <h6 class="mb-0 font-weight-bold">View Progress</h6>
                                         </div>
-                                        <p class="text-muted small mb-3">See detailed fitness charts and trends over time.</p>
+                                        <p class="text-muted small mb-3">See detailed fitness charts and trends over
+                                            time.</p>
                                         <a href="progress-charts.html" class="btn btn-outline-primary btn-sm">
                                             <i class="fas fa-chart-bar fa-sm mr-1"></i> View Charts
                                         </a>
@@ -449,7 +487,7 @@
             function getStepInsight() {
                 const steps = getTodaySteps();
                 if (steps >= 10000) return "Great job! You reached your daily step goal.";
-                if (steps >= 7000)  return "You're close to your step goal today.";
+                if (steps >= 7000) return "You're close to your step goal today.";
                 return "You may need a short walk to reach your step target.";
             }
 
@@ -470,8 +508,8 @@
                 const steps = getTodaySteps();
                 const calBurn = getTodayCaloriesBurned();
                 const workoutSessions = logs.filter(l => l.type === 'workout' && l.date === today).length;
-                const stepScore    = Math.min((steps / 10000) * 100, 100);
-                const waterScore   = Math.min((waterGlasses / 8) * 100, 100);
+                const stepScore = Math.min((steps / 10000) * 100, 100);
+                const waterScore = Math.min((waterGlasses / 8) * 100, 100);
                 const calorieScore = Math.min((calBurn / 500) * 100, 100);
                 const workoutScore = workoutSessions > 0 ? 100 : 0;
                 return Math.round(stepScore * 0.35 + waterScore * 0.20 + calorieScore * 0.20 + workoutScore * 0.25);
@@ -481,15 +519,15 @@
                 const last7 = getLast7Dates();
                 let total = 0;
                 last7.forEach(date => {
-                    const stepDay    = logs.filter(l => l.date === date).reduce((sum, l) => sum + num(l.steps), 0);
-                    const calDay     = logs.filter(l => l.date === date).reduce((sum, l) => sum + num(l.calories), 0);
+                    const stepDay = logs.filter(l => l.date === date).reduce((sum, l) => sum + num(l.steps), 0);
+                    const calDay = logs.filter(l => l.date === date).reduce((sum, l) => sum + num(l.calories), 0);
                     const workoutDay = logs.filter(l => l.type === 'workout' && l.date === date).length;
-                    const waterDay   = parseInt(localStorage.getItem('np_water_' + date) || '0', 10);
-                    const dayScore   = Math.round(
-                        Math.min((stepDay / 10000) * 100, 100)  * 0.35 +
-                        Math.min((waterDay / 8)    * 100, 100)  * 0.20 +
-                        Math.min((calDay  / 500)   * 100, 100)  * 0.20 +
-                        (workoutDay > 0 ? 100 : 0)              * 0.25
+                    const waterDay = parseInt(localStorage.getItem('np_water_' + date) || '0', 10);
+                    const dayScore = Math.round(
+                        Math.min((stepDay / 10000) * 100, 100) * 0.35 +
+                        Math.min((waterDay / 8) * 100, 100) * 0.20 +
+                        Math.min((calDay / 500) * 100, 100) * 0.20 +
+                        (workoutDay > 0 ? 100 : 0) * 0.25
                     );
                     total += dayScore;
                 });
@@ -509,12 +547,12 @@
             }
 
             function renderTrendChart() {
-                const last7    = getLast7Dates();
+                const last7 = getLast7Dates();
                 const stepsArr = last7.map(date => logs.filter(l => l.date === date).reduce((sum, l) => sum + num(l.steps), 0));
-                const max      = Math.max(...stepsArr, 10000);
-                const xs       = [20, 80, 140, 200, 260, 320, 380];
-                const points   = stepsArr.map((v, i) => `${xs[i]},${95 - (v / max) * 55}`).join(' ');
-                const line     = document.getElementById('trendLine');
+                const max = Math.max(...stepsArr, 10000);
+                const xs = [20, 80, 140, 200, 260, 320, 380];
+                const points = stepsArr.map((v, i) => `${xs[i]},${95 - (v / max) * 55}`).join(' ');
+                const line = document.getElementById('trendLine');
                 if (line) line.setAttribute('points', points);
                 const dotsGroup = document.getElementById('trendDots');
                 if (dotsGroup) {
@@ -527,20 +565,20 @@
             }
 
             // — Compute values —
-            const todaySteps    = getTodaySteps()          || 8450;
+            const todaySteps = getTodaySteps() || 8450;
             const todayCalories = getTodayCaloriesBurned() || 560;
             const weeklySessions = getWeeklyWorkoutSessions() || 4;
-            const streak        = getCurrentStreak()       || 4;
-            const todayScore    = calculateDailyHealthScore() || 72;
-            const weeklyScore   = calculateWeeklyHealthScore() || 75;
-            const stepsGoal     = 10000;
-            const stepsPct      = Math.min(Math.round((todaySteps / stepsGoal) * 100), 100);
-            const stepsRemain   = Math.max(0, stepsGoal - todaySteps);
-            const caloriePct    = Math.min(Math.round((todayCalories / 1000) * 100), 100);
+            const streak = getCurrentStreak() || 4;
+            const todayScore = calculateDailyHealthScore() || 72;
+            const weeklyScore = calculateWeeklyHealthScore() || 75;
+            const stepsGoal = 10000;
+            const stepsPct = Math.min(Math.round((todaySteps / stepsGoal) * 100), 100);
+            const stepsRemain = Math.max(0, stepsGoal - todaySteps);
+            const caloriePct = Math.min(Math.round((todayCalories / 1000) * 100), 100);
 
             // — Update DOM —
             function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
-            function setWidth(id, w)  { const el = document.getElementById(id); if (el) el.style.width = w; }
+            function setWidth(id, w) { const el = document.getElementById(id); if (el) el.style.width = w; }
 
             setText('today-steps-count', todaySteps.toLocaleString());
             setText('stepsPct', stepsPct + '%');
@@ -556,8 +594,8 @@
             const streakBadge = document.getElementById('streak-badge');
             if (streakBadge) streakBadge.innerHTML = `<i class="fas fa-fire mr-1"></i> ${streak}-Day Streak 🔥`;
 
-            setText('pattern-hour',  getMostActiveHour());
-            setText('pattern-step',  getStepInsight());
+            setText('pattern-hour', getMostActiveHour());
+            setText('pattern-step', getStepInsight());
             setText('pattern-water', getWaterInsight());
 
             const waterCount = document.getElementById('dashboard-water-count');
@@ -568,11 +606,12 @@
             const remain = Math.max(0, waterMax - waterGlasses);
             setText('dashboard-water-text', remain === 0 ? "You've reached today's water goal." : remain + " more glasses to go");
 
-            setRing('todayScoreRing',  todayScore);
+            setRing('todayScoreRing', todayScore);
             setRing('weeklyScoreRing', weeklyScore);
             renderTrendChart();
         });
     </script>
 
 </body>
+
 </html>
