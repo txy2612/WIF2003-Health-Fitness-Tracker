@@ -8,41 +8,6 @@ const C_GRAY   = '#858796';
  
 const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
  
-// ── DAILY BAR — Steps by Hour ─────────────────────────────────────────────────
-(function() {
-    const hourlySteps = [120,80,200,350,600,900,750,400,550,800,1200,950,700,500,650,1850,1200,700,400,300,200,150,100,80];
-    const hours = Array.from({length:24}, (_,i) => `${i}:00`);
-    const maxVal = Math.max(...hourlySteps);
-    const colors = hourlySteps.map(v => v === maxVal ? C_BLUE : 'rgba(78,115,223,0.45)');
- 
-    new Chart(document.getElementById('dailyBarChart'), {
-        type: 'bar',
-        data: {
-            labels: hours,
-            datasets: [{
-                label: 'Steps',
-                data: hourlySteps,
-                backgroundColor: colors,
-                borderRadius: 3,
-                borderSkipped: false
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            responsive: true,
-            legend: { display: false },
-            tooltips: {
-                callbacks: {
-                    label: ctx => ` ${ctx.yLabel.toLocaleString()} steps`
-                }
-            },
-            scales: {
-                xAxes: [{ gridLines: { display: false }, ticks: { fontSize: 10, maxRotation: 45 } }],
-                yAxes: [{ ticks: { beginAtZero: true, callback: v => v.toLocaleString() } }]
-            }
-        }
-    });
-})();
  
 // ── DAILY PIE — Activity Breakdown ───────────────────────────────────────────
 (function() {
@@ -70,10 +35,16 @@ const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 // ── WEEKLY BAR — Steps Per Day ────────────────────────────────────────────────
 (function() {
     const weeklySteps = [6200, 9800, 11200, 7500, 8100, 10500, 6400];
+    const hasData = weeklySteps.some(v => v > 0);
     const maxVal = Math.max(...weeklySteps);
     const colors = weeklySteps.map(v => v === maxVal ? C_BLUE : 'rgba(78,115,223,0.5)');
- 
-    new Chart(document.getElementById('weeklyBarChart'), {
+    
+    if (!hasData) {// check if has data
+        document.getElementById('weeklyStepsEmpty').classList.remove('d-none'); 
+        // Remove Bootstrap's hidden class instead of using style.display
+        // because .d-none uses display: none !important
+    }
+    new Chart(document.getElementById('weeklyStepsChart'), {//draw chart
         type: 'bar',
         data: {
             labels: DAYS,
@@ -94,7 +65,10 @@ const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
             },
             scales: {
                 xAxes: [{ gridLines: { display: false } }],
-                yAxes: [{ ticks: { beginAtZero: true, callback: v => v.toLocaleString() } }]
+                yAxes: [{ ticks: { 
+                    beginAtZero: true, 
+                    max: hasData ? Math.ceil(Math.max(...weeklySteps) * 1.2) : 10000,
+                    callback: v => v.toLocaleString() } }]
             }
         }
     });

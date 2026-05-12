@@ -303,6 +303,18 @@ function removeFavourite(id) {
   renderFavourites();
 }
 
+// ── Cleanup: remove water keys older than 30 days ──
+const cutoff = new Date();
+cutoff.setDate(cutoff.getDate() - 30);
+Object.keys(localStorage)
+    .filter(key => key.startsWith('np_water_'))
+    .forEach(key => {
+        const dateStr = key.replace('np_water_', '');
+        if (new Date(dateStr) < cutoff) {
+            localStorage.removeItem(key);
+        }
+    });
+
 // ---- Water Intake (teammate implementation) ----
 const today = new Date().toISOString().split('T')[0];
 let waterGlasses = parseInt(localStorage.getItem('np_water_' + today) || '0', 10); // Update water today so it doesn't load yesterday's data -> Start fresh at 0 everyday

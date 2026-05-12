@@ -37,17 +37,20 @@
                 <div id="topbar-placeholder"></div>
 
                 <!-- Begin Page Content -->
+                <!-- Begin Page Content -->
                 <div class="container-fluid">
 
+                    <!-- Page Heading -->
                     <h1 class="h3 mb-1 text-gray-800">Notifications</h1>
                     <p class="mb-4 text-muted">Manage your reminders and stay on track.</p>
 
-                    <!-- ADD + LIST side by side -->
+                    <!-- ===== ROW: ADD + LIST SIDE BY SIDE ===== -->
                     <div class="row justify-content-center">
 
                         <!-- ADD REMINDER -->
                         <div class="col-lg-5 mb-4">
                             <div class="card shadow h-100">
+
                                 <div class="card-header py-3 d-flex align-items-center">
                                     <i class="fas fa-bell text-primary mr-2"></i>
                                     <div>
@@ -55,10 +58,13 @@
                                         <small class="text-muted">Create a reminder</small>
                                     </div>
                                 </div>
+
                                 <div class="card-body">
                                     <form id="reminderForm">
+
                                         <div class="row">
 
+                                            <!-- REMINDER TYPE -->
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>
@@ -80,6 +86,7 @@
                                                 </div>
                                             </div>
 
+                                            <!-- DATE -->
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Date</label>
@@ -87,6 +94,7 @@
                                                 </div>
                                             </div>
 
+                                            <!-- TIME -->
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Time</label>
@@ -94,6 +102,7 @@
                                                 </div>
                                             </div>
 
+                                            <!-- NOTE -->
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label>Note (optional)</label>
@@ -102,19 +111,23 @@
                                             </div>
 
                                         </div>
+
                                         <div class="text-right">
                                             <button class="btn btn-primary" type="submit">
                                                 <i class="fas fa-plus mr-1"></i> Add Reminder
                                             </button>
                                         </div>
+
                                     </form>
                                 </div>
+
                             </div>
                         </div>
 
                         <!-- REMINDER LIST -->
                         <div class="col-lg-5 mb-4">
                             <div class="card shadow h-100">
+
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                     <div>
                                         <h6 class="m-0 font-weight-bold text-primary">Reminder List</h6>
@@ -122,38 +135,49 @@
                                     </div>
                                     <span class="badge badge-primary" id="count">0</span>
                                 </div>
+
                                 <div class="card-body">
+
+                                    <!-- EMPTY STATE -->
                                     <div id="emptyState" class="text-center py-4">
                                         <i class="fas fa-bell-slash fa-2x text-gray-300 mb-2"></i>
                                         <p class="text-muted mb-0">No reminders yet</p>
                                     </div>
+
+                                    <!-- LIST -->
                                     <ul id="reminderList" class="list-group"></ul>
+
                                 </div>
+
                             </div>
                         </div>
 
                     </div>
 
-                    <!-- Feedback / Insights -->
+                    <!-- ===== FEEDBACK / INSIGHTS ===== -->
                     <div class="row justify-content-center">
                         <div class="col-lg-10">
                             <div class="card shadow mb-4">
+
                                 <div class="card-header py-3 d-flex align-items-center">
                                     <i class="fas fa-lightbulb text-primary mr-2"></i>
                                     <div>
                                         <h6 class="m-0 font-weight-bold text-primary">Feedback / Insights</h6>
-                                        <small class="text-muted">Smart suggestions based on your activity</small>
+                                        <small class="text-muted style=1.2rem">Smart suggestions based on your activity</small>
                                     </div>
                                 </div>
+
                                 <div>
-                                    <ul class="list-group" id="insightsList"></ul>
+                                    <ul class="list-group" id="insightsList">
+                                    </ul>
                                 </div>
+
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <!-- End Page Content -->
+                <!-- /.container-fluid -->
 
             </div>
 

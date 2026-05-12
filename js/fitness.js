@@ -51,7 +51,7 @@ function addLog(entry) {
 }
 
 function deleteLog(id) {
-    saveLogs(getLogs().filter(l => l.id !== id));
+    saveLogs(getLogs().filter(l => String(l.id) !== String(id))); // makes both IDs become strings before comparing
 }
 
 function getProfile() {

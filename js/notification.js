@@ -126,20 +126,23 @@ render(); // Initial render on page load
 
 document.addEventListener("DOMContentLoaded", function () {
     const list = document.getElementById("insightsList");
+    if (!list) return;
 
     const insights = [
         getStepWeekInsight(),
         getWorkoutComparisonInsight(),
         getWorkoutStreakInsight(),
         getHydrationWeekInsight(),
-        getMealInsight(),
+        getWeekendWorkoutInsight(),
         getStepGoalInsight(),
-        getWeekendWorkoutInsight()
+        getWorkoutReminderInsight(),
+        getWaterInsight(),
+        getMealReminderInsight()
     ];
 
-    const filtered = insights.filter(i => i !== null);
+    const filtered = insights.filter(i => i !== null && i !== "");
 
-    if (filtered.length === 0) {
+    if (filtered.length === 0) {// shows 'You're all caught up!'
         list.innerHTML = `
             <li class="list-group-item text-center text-muted py-4">
                 <i class="fas fa-check-circle fa-2x text-gray-300 mb-2"></i>
@@ -149,15 +152,44 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    list.innerHTML = "";
+    const MAX_SHOW = 5;
+    let showingAll = false; //show more/less toggle logic
 
-    filtered.forEach(text => {
-        const li = document.createElement("li");
-        li.className = "list-group-item d-flex align-items-center";
-        li.innerHTML = `
-            <i class="fas fa-fw fa-info-circle text-primary mr-3"></i>
-            <span>${text}</span>
-        `;
-        list.appendChild(li);
-    });
+    function renderInsights() {
+        list.innerHTML = "";
+
+        // when showingAll boolean -> true -> filtered
+        //                         -> false -> filtered.slice(0, MAX_SHOW)
+        const itemsToShow = showingAll ? filtered : filtered.slice(0, MAX_SHOW);
+
+        itemsToShow.forEach(text => {
+            const li = document.createElement("li");
+            li.className = "list-group-item d-flex align-items-center";
+            li.innerHTML = `
+                <i class="fas fa-fw fa-info-circle text-primary mr-3"></i>
+                <span>${text}</span>
+            `;
+            list.appendChild(li);
+        });
+
+        if (filtered.length > MAX_SHOW) {
+            const btnLi = document.createElement("li");
+            btnLi.className = "list-group-item text-center";
+
+            btnLi.innerHTML = `
+                <button class="btn btn-outline-primary btn-sm" id="toggleInsightsBtn">
+                    ${showingAll ? "Show less" : `Show ${filtered.length - MAX_SHOW} more insights`}
+                </button>
+            `;// if collapese -> "Show 3 or more insights"; if expanded -> "Show less"
+
+            list.appendChild(btnLi);
+
+            document.getElementById("toggleInsightsBtn").addEventListener("click", function () {
+                showingAll = !showingAll;
+                renderInsights();
+            });
+        }
+    }
+
+    renderInsights();
 });
