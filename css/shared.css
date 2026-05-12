@@ -1,0 +1,9 @@
+/** Hide the sidebar/topbar placeholders initially*/::after,
+#topbar-placeholder {
+    visibility: hidden;
+}
+
+body.layout-ready #sidebar-placeholder,
+body.layout-ready #topbar-placeholder {
+    visibility: visible;
+}
