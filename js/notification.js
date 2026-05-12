@@ -14,6 +14,12 @@ const count = document.getElementById("count");
 // We call this function every time the array changes
 function saveReminders() {
     localStorage.setItem("fittrack_reminders", JSON.stringify(reminders));
+
+    //  updates the bell instantly 
+    // only call if this function exists (layout.js is called before notification.js in html)
+    if (typeof updateNotificationBadge === "function") {
+        updateNotificationBadge();
+    }
 }
 
 // ── ADD REMINDER ──

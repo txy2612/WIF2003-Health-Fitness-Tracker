@@ -213,6 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- D. UPDATE DOM UI ELEMENTS ---
 
     // 1. Progress Bars
+    // steps
     const stepPct = Math.min(Math.round((todaySteps / stepGoal) * 100), 100);
     const stepRem = Math.max(0, stepGoal - todaySteps).toLocaleString();
     if (document.getElementById('today-steps-count')) document.getElementById('today-steps-count').textContent = todaySteps.toLocaleString();
@@ -220,6 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('stepsProgressBar')) document.getElementById('stepsProgressBar').style.width = `${stepPct}%`;
     if (document.getElementById('stepsRemaining')) document.getElementById('stepsRemaining').textContent = stepRem === "0" ? "Goal reached! 🎉" : `${stepRem} steps to reach your goal`;
 
+    // water
     const waterPct = Math.min(Math.round((waterGlasses / waterGoal) * 100), 100);
     const waterRem = Math.max(0, waterGoal - waterGlasses);
     if (document.getElementById('dashboard-water-count')) document.getElementById('dashboard-water-count').textContent = waterGlasses;
@@ -227,10 +229,37 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('dashboard-water-bar')) document.getElementById('dashboard-water-bar').style.width = `${waterPct}%`;
     if (document.getElementById('dashboard-water-text')) document.getElementById('dashboard-water-text').textContent = waterRem === 0 ? "Goal reached! 💧" : `${waterRem} more glasses to go`;
 
+    // calories
     const calPct = Math.min(Math.round((todayCal / calGoal) * 100), 100);
     if (document.getElementById('today-calories-count')) document.getElementById('today-calories-count').textContent = todayCal.toLocaleString();
     if (document.getElementById('calProgressBar')) document.getElementById('calProgressBar').style.width = `${calPct}%`;
     if (document.getElementById('calorieText')) document.getElementById('calorieText').textContent = todayWorkouts.length > 0 ? `From ${todayWorkouts.length} workout session(s) today` : `Active calories recorded`;
+
+    // Extra dashboard stat cards
+const stepsCardValue = document.getElementById('steps-card-value');
+if (stepsCardValue) stepsCardValue.textContent = todaySteps.toLocaleString();
+
+const stepsCardBar = document.getElementById('stepsCardBar');
+if (stepsCardBar) stepsCardBar.style.width = `${stepPct}%`;
+
+const stepsCardLabel = document.getElementById('stepsCardLabel');
+if (stepsCardLabel) {
+    stepsCardLabel.textContent = stepPct >= 100
+        ? "Daily step goal achieved"
+        : `${stepPct}% of daily target`;
+}
+
+const caloriesCardValue = document.getElementById('calories-card-value');
+if (caloriesCardValue) caloriesCardValue.textContent = todayCal.toLocaleString();
+
+const workoutsCardValue = document.getElementById('workouts-card-value');
+if (workoutsCardValue) workoutsCardValue.textContent = weeklySessions;
+
+const goalProgressValue = document.getElementById('goal-progress-value');
+if (goalProgressValue) goalProgressValue.textContent = `${dailyHealthScore}%`;
+
+const goalProgressBar = document.getElementById('goal-progress-bar');
+if (goalProgressBar) goalProgressBar.style.width = `${dailyHealthScore}%`;
 
     // 2. Streaks & Sessions
     const streakBadge = document.getElementById('streak-badge');
@@ -255,6 +284,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setRing('weeklyScoreRing', weeklyHealthScore);
     renderTrendChart(logs);
 
+
     // 4. Update "Your Patterns" Text
     if (document.getElementById('pattern-step')) {
         document.getElementById('pattern-step').textContent = todaySteps >= stepGoal
@@ -265,5 +295,28 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('pattern-water').textContent = waterGlasses >= waterGoal
             ? "Excellent! You met your water intake goal."
             : "Your water intake is below target today.";
+    }
+
+    // 5. Next Reminder
+    const reminders = JSON.parse(localStorage.getItem('fittrack_reminders') || '[]');
+
+    const nextReminder = reminders
+        .filter(r => !r.completed)
+        .sort((a, b) => new Date(a.datetime.replace(' ', 'T')) - new Date(b.datetime.replace(' ', 'T')))[0] || null;
+
+    const reminderTitle = document.getElementById('next-reminder-title');
+    const reminderDesc = document.getElementById('next-reminder-desc');
+
+    if (nextReminder) {
+        if (reminderTitle) {
+            reminderTitle.textContent = nextReminder.title
+                ? `${nextReminder.type} - ${nextReminder.title}`
+                : nextReminder.type;
+        }
+
+        if (reminderDesc) reminderDesc.textContent = nextReminder.datetime;
+    } else {
+        if (reminderTitle) reminderTitle.textContent = "No upcoming reminder";
+        if (reminderDesc) reminderDesc.textContent = "Add a reminder to see it here.";
     }
 });

@@ -198,8 +198,21 @@ const EXTRAS_HTML = `
     document.head.appendChild(style);
 })();
 
-document.addEventListener('DOMContentLoaded', function () {
+// functions should exist before called -> placed before DOMContentLoaded
+function updateNotificationBadge() {
+    const reminders = JSON.parse(localStorage.getItem('fittrack_reminders') || '[]');
+    const activeCount = reminders.filter(r => !r.completed).length;
 
+    const badge = document.querySelector('.badge-counter');
+    if (badge) {
+        badge.textContent = activeCount > 0 ? activeCount : '';
+        badge.style.display = activeCount > 0 ? 'inline-block' : 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.body.classList.remove('layout-ready');
+    
     // Inject shared layout components
     const sidebarEl = document.getElementById('sidebar-placeholder');
     if (sidebarEl) sidebarEl.innerHTML = SIDEBAR_HTML;
@@ -237,4 +250,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (pic) pic.innerHTML = `<img src="${profile.photo}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
         }
     } catch (e) { }
+
+    document.body.classList.add('layout-ready');
 });
