@@ -20,6 +20,63 @@
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
     <link href="../css/dashboard.css" rel="stylesheet">
     <link href="../css/shared.css" rel="stylesheet">
+    <style>
+         .score-ring-wrapper {
+            position: relative;
+            width: 220px;
+            height: 220px;
+        }
+
+        .score-ring {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: conic-gradient(#1cc88a 0% 25%, #36b9cc 25% 50%, #f6c23e 50% 72%, #eaecf4 72% 100%);
+            position: relative;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, .15);
+        }
+
+        .score-ring::after {
+            content: "";
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            width: 184px;
+            height: 184px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .score-ring-center {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .score-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #4e73df;
+            line-height: 1;
+        }
+
+        .score-label {
+            font-size: 1rem;
+            color: #5a5c69;
+            margin-top: 8px;
+        }
+
+        .pattern-row:last-child {
+            border-bottom: none !important;
+        }
+        </style>
 
 </head>
 
