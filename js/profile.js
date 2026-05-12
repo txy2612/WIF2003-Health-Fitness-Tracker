@@ -2,7 +2,7 @@
 
 const PROFILE_KEY    = 'fittrack_profile';
 const GOAL_KEY       = 'fittrack_goals';
-const PROFILE_FIELDS = ['name', 'email', 'age', 'gender', 'weight', 'height', 'goal', 'phone'];
+const PROFILE_FIELDS = ['name', 'email', 'age', 'gender', 'weight', 'height', 'goal'];
 
 // ── LOCALSTORAGE HELPERS ──────────────────────────────────────────────────────
 

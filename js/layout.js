@@ -66,10 +66,6 @@ const SIDEBAR_HTML = `
 
         <hr class="sidebar-divider d-none d-md-block">
 
-        <!-- Sidebar Toggler -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
 
     </ul>`;
 
@@ -198,6 +194,8 @@ const EXTRAS_HTML = `
     document.head.appendChild(style);
 })();
 
+
+
 // functions should exist before called -> placed before DOMContentLoaded
 function updateNotificationBadge() {
     const reminders = JSON.parse(localStorage.getItem('fittrack_reminders') || '[]');
@@ -212,7 +210,7 @@ function updateNotificationBadge() {
 
 document.addEventListener('DOMContentLoaded', function () {
     document.body.classList.remove('layout-ready');
-    
+
     // Inject shared layout components
     const sidebarEl = document.getElementById('sidebar-placeholder');
     if (sidebarEl) sidebarEl.innerHTML = SIDEBAR_HTML;
