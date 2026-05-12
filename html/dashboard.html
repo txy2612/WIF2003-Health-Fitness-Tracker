@@ -563,7 +563,7 @@
             const waterCount = document.getElementById('dashboard-water-count');
             if (waterCount) waterCount.textContent = waterGlasses;
             const waterBadge = document.getElementById('dashboard-water-badge');
-            if (waterBadge) waterBadge.textContent = waterPct + '%';
+            if (git waterBadge) waterBadge.textContent = waterPct + '%';
             setWidth('dashboard-water-bar', waterPct + '%');
             const remain = Math.max(0, waterMax - waterGlasses);
             setText('dashboard-water-text', remain === 0 ? "You've reached today's water goal." : remain + " more glasses to go");
