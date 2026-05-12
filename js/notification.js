@@ -9,6 +9,7 @@ const form = document.getElementById("reminderForm");
 const list = document.getElementById("reminderList");
 const emptyState = document.getElementById("emptyState");
 const count = document.getElementById("count");
+let reminderToDeleteId = null;
 
 // ── LOCAL STORAGE HELPER ──
 // We call this function every time the array changes
@@ -28,6 +29,15 @@ form.addEventListener("submit", function (e) {
 
     const date = document.getElementById("date").value;
     const time = document.getElementById("time").value;
+
+    // only allow upcoming date/time to be selected
+    const selectedDateTime = new Date(date + "T" + time);// takes 2026-05-12 + T + 18:30
+    const now = new Date();// creaye a real Date object
+
+    if (selectedDateTime <= now) {// reject 
+        alert("Please choose an upcoming date and time.");
+        return;
+    }
 
     // Safety check in case the title input is removed
     const titleEl = document.getElementById("title");
@@ -90,7 +100,7 @@ function render() {
                     <i class="fas fa-pencil-alt"></i>
                 </button>
 
-                <button class="btn btn-danger btn-sm" onclick="removeItem(${r.id})">
+                <button class="btn btn-danger btn-sm" onclick="openDeleteModal(${r.id})">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
@@ -115,6 +125,20 @@ function removeItem(id) {
     saveReminders(); // Save change
     render();
 }
+
+function openDeleteModal(id) {
+    reminderToDeleteId = id;
+    $('#deleteModal').modal('show');
+}
+
+document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+    if (reminderToDeleteId !== null) {
+        removeItem(reminderToDeleteId);
+        reminderToDeleteId = null;
+    }
+
+    $('#deleteModal').modal('hide');
+});
 
 function edit(id) {
     const r = reminders.find(x => x.id === id);
