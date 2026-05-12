@@ -10,15 +10,14 @@
 
     <title>Dashboard</title>
 
+    <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap"
-        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="../css/dashboard.css" rel="stylesheet">
 
     <style>
         .score-ring-wrapper {
@@ -81,19 +80,174 @@
 
 <body id="page-top">
 
+    <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <!-- SIDEBAR (injected by layout.js) -->
-        <div id="sidebar-placeholder"></div>
+        <!-- ===================== SIDEBAR ===================== -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
+            <!-- Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard.html">
+                <div class="sidebar-brand-text" style="font-size:1.25rem; font-weight:800; letter-spacing:-0.5px;">
+                    Fit<span style="opacity:0.65;">Track</span>
+                </div>
+            </a>
+
+            <hr class="sidebar-divider my-0">
+
+            <!-- Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="dashboard.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">Tracking</div>
+
+            <!-- Fitness Tracker -->
+            <li class="nav-item">
+                <a class="nav-link" href="fitness-tracker.html">
+                    <i class="fas fa-fw fa-dumbbell"></i>
+                    <span>Fitness Tracker</span>
+                </a>
+            </li>
+
+            <!-- Nutrition Planner -->
+            <li class="nav-item">
+                <a class="nav-link" href="nutrition-planner.html">
+                    <i class="fas fa-fw fa-apple-alt"></i>
+                    <span>Nutrition Planner</span>
+                </a>
+            </li>
+
+            <!-- Progress Charts -->
+            <li class="nav-item">
+                <a class="nav-link" href="progress-charts.html">
+                    <i class="fas fa-fw fa-chart-line"></i>
+                    <span>Progress Charts</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">Account</div>
+
+            <!-- Notifications -->
+            <li class="nav-item">
+                <a class="nav-link" href="notification.html">
+                    <i class="fas fa-fw fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+            </li>
+
+            <!-- Profile -->
+            <li class="nav-item">
+                <a class="nav-link" href="profile.html">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
 
-                <!-- TOPBAR (injected by layout.js) -->
-                <div id="topbar-placeholder"></div>
+                <!-- ===================== TOPBAR ===================== -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (mobile) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Page title -->
+                    <span class="topbar-page-title d-none d-sm-inline font-weight-bold text-gray-800"
+                        style="font-size:0.95rem; letter-spacing:-0.2px;">
+                    </span>
+
+                    <!-- Right side -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Notifications bell -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw"></i>
+                                <span class="badge badge-danger badge-counter">2</span>
+                            </a>
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">Notifications</h6>
+                                <a class="dropdown-item d-flex align-items-center" href="notification.html">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-dumbbell text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">Today, 7:00 AM</div>
+                                        <span class="font-weight-bold">Workout reminder — Morning Run</span>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="notification.html">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-apple-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">Today, 12:30 PM</div>
+                                        <span class="font-weight-bold">Lunch log reminder</span>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="notification.html">
+                                    View All Notifications
+                                </a>
+                            </div>
+                        </li>
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- User dropdown -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">My Profile</span>
+                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg" alt="Profile">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="profile.html">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
+                                </a>
+                                <a class="dropdown-item" href="notification.html">
+                                    <i class="fas fa-bell fa-sm fa-fw mr-2 text-gray-400"></i> Notifications
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+                </nav>
+                <!-- End of Topbar -->
 
                 <div class="container-fluid">
 
+                    <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-1">
                         <div>
                             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
@@ -103,7 +257,7 @@
                     </div>
                     <small class="text-muted d-inline-block mb-4" id="dashDate"></small>
 
-                    <!-- Today's Plan -->
+                    <!-- ── TODAY'S PLAN — full width ──────────────────────────────────────── -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex align-items-center justify-content-between">
                             <div>
@@ -112,13 +266,16 @@
                                 </h6>
                                 <small class="text-muted">Your targets and progress for today</small>
                             </div>
+
                             <span class="badge badge-success px-3 py-2" id="streak-badge">
                                 <i class="fas fa-fire mr-1"></i> 4-Day Streak 🔥
                             </span>
                         </div>
+
                         <div class="card-body py-4">
                             <div class="row">
 
+                                <!-- Steps goal -->
                                 <div class="col-md-4 mb-4 mb-md-0">
                                     <div class="d-flex align-items-center mb-2">
                                         <div class="mr-3"
@@ -129,20 +286,22 @@
                                             <div class="text-xs font-weight-bold text-uppercase text-muted">Steps Goal
                                             </div>
                                             <div class="font-weight-bold text-gray-800">
-                                                <span id="today-steps-count">8,450</span>
-                                                <span class="text-muted font-weight-normal small">/ 10,000</span>
+                                                <span id="today-steps-count">0</span>
+                                                <span id="today-steps-goal"
+                                                    class="text-muted font-weight-normal small">/ 10,000</span>
                                             </div>
                                         </div>
-                                        <span class="ml-auto badge badge-success" id="stepsPct">85%</span>
+                                        <span class="ml-auto badge badge-success" id="stepsPct">0%</span>
                                     </div>
                                     <div class="progress" style="height:8px; border-radius:99px;">
-                                        <div class="progress-bar bg-success" id="stepsGoalBar" role="progressbar"
-                                            style="width:85%; border-radius:99px;"></div>
+                                        <div class="progress-bar bg-success" id="stepsProgressBar" role="progressbar"
+                                            style="width:0%; border-radius:99px;"></div>
                                     </div>
                                     <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;"
-                                        id="stepsRemaining">1,550 steps to reach your goal</small>
+                                        id="stepsRemaining">Calculating...</small>
                                 </div>
 
+                                <!-- Water goal -->
                                 <div class="col-md-4 mb-4 mb-md-0">
                                     <div class="d-flex align-items-center mb-2">
                                         <div class="mr-3"
@@ -153,20 +312,22 @@
                                             <div class="text-xs font-weight-bold text-uppercase text-muted">Water Intake
                                             </div>
                                             <div class="font-weight-bold text-gray-800">
-                                                <span id="dashboard-water-count">5</span>
-                                                <span class="text-muted font-weight-normal small">/ 8 glasses</span>
+                                                <span id="dashboard-water-count">0</span>
+                                                <span id="dashboard-water-goal"
+                                                    class="text-muted font-weight-normal small">/ 8 glasses</span>
                                             </div>
                                         </div>
-                                        <span class="ml-auto badge badge-info" id="dashboard-water-badge">63%</span>
+                                        <span class="ml-auto badge badge-info" id="dashboard-water-badge">0%</span>
                                     </div>
                                     <div class="progress" style="height:8px; border-radius:99px;">
                                         <div class="progress-bar bg-info" id="dashboard-water-bar" role="progressbar"
-                                            style="width:63%; border-radius:99px;"></div>
+                                            style="width:0%; border-radius:99px;"></div>
                                     </div>
                                     <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;"
-                                        id="dashboard-water-text">3 more glasses to go</small>
+                                        id="dashboard-water-text">Loading...</small>
                                 </div>
 
+                                <!-- Calories goal -->
                                 <div class="col-md-4">
                                     <div class="d-flex align-items-center mb-2">
                                         <div class="mr-3"
@@ -177,24 +338,25 @@
                                             <div class="text-xs font-weight-bold text-uppercase text-muted">Calories
                                                 Burned</div>
                                             <div class="font-weight-bold text-gray-800">
-                                                <span id="today-calories-count">560</span>
+                                                <span id="today-calories-count">0</span>
                                                 <span class="text-muted font-weight-normal small">kcal today</span>
                                             </div>
                                         </div>
                                         <span class="ml-auto badge badge-warning text-dark">Active</span>
                                     </div>
                                     <div class="progress" style="height:8px; border-radius:99px;">
-                                        <div class="progress-bar" id="calorieBar" role="progressbar"
-                                            style="width:56%; background:#f6c23e; border-radius:99px;"></div>
+                                        <div class="progress-bar" id="calProgressBar" role="progressbar"
+                                            style="width:0%; background:#f6c23e; border-radius:99px;"></div>
                                     </div>
-                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;" id="calorieText">From
-                                        2 sessions today</small>
+                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;"
+                                        id="calorieText">Loading...</small>
                                 </div>
 
                             </div>
 
                             <hr class="my-3">
 
+                            <!-- Next reminder + workout -->
                             <div class="row">
                                 <div class="col-md-6 mb-0">
                                     <div class="d-flex align-items-center">
@@ -233,13 +395,16 @@
                         </div>
                     </div>
 
-                    <!-- Health Score -->
+
+                    <!-- ── HEALTH SCORE ─────────────────────────────────────────────── -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
                             <div class="row">
 
+                                <!-- Today's Health Score -->
                                 <div class="col-lg-6 text-center mb-4">
                                     <h3 class="mb-4 text-gray-800">Today's Health Score</h3>
+
                                     <div class="score-ring-wrapper mx-auto mb-4">
                                         <div class="score-ring" id="todayScoreRing"></div>
                                         <div class="score-ring-center">
@@ -247,7 +412,8 @@
                                             <div class="score-label">Daily Progress</div>
                                         </div>
                                     </div>
-                                    <div class="text-center mx-auto mt-15" style="max-width:300px;">
+
+                                    <div class="text-center mx-auto mt-15" style="max-width: 300px;">
                                         <p class="mb-3 mt-7" style="font-size:1.1rem; font-weight:700;">
                                             <i class="fas fa-fire text-warning mr-2"></i>
                                             <span id="dashboard-streak">4 day streak 🔥</span>
@@ -259,8 +425,10 @@
                                     </div>
                                 </div>
 
+                                <!-- Weekly Average Score -->
                                 <div class="col-lg-6 text-center mb-4">
                                     <h3 class="mb-4 text-gray-800">Weekly Average Score</h3>
+
                                     <div class="score-ring-wrapper mx-auto mb-4">
                                         <div class="score-ring" id="weeklyScoreRing"></div>
                                         <div class="score-ring-center">
@@ -268,16 +436,22 @@
                                             <div class="score-label">7-Day Avg</div>
                                         </div>
                                     </div>
-                                    <div class="text-left mx-auto" style="max-width:420px;">
+
+                                    <div class="text-left mx-auto" style="max-width: 420px;">
                                         <h5 class="mb-3 text-gray-800">This Week's Trend</h5>
+
                                         <svg id="trendChart" width="100%" height="120" viewBox="0 0 420 120">
                                             <line x1="20" y1="20" x2="400" y2="20" stroke="#e3e6f0" />
                                             <line x1="20" y1="45" x2="400" y2="45" stroke="#e3e6f0" />
                                             <line x1="20" y1="70" x2="400" y2="70" stroke="#e3e6f0" />
                                             <line x1="20" y1="95" x2="400" y2="95" stroke="#e3e6f0" />
+
                                             <polyline id="trendLine" fill="none" stroke="#1cc88a" stroke-width="3"
-                                                points="20,80 80,60 140,70 200,58 260,72 320,52 380,42"></polyline>
+                                                points="20,80 80,60 140,70 200,58 260,72 320,52 380,42">
+                                            </polyline>
+
                                             <g id="trendDots"></g>
+
                                             <text x="20" y="115" font-size="12" fill="#858796">Mon</text>
                                             <text x="80" y="115" font-size="12" fill="#858796">Tue</text>
                                             <text x="140" y="115" font-size="12" fill="#858796">Wed</text>
@@ -293,7 +467,7 @@
                         </div>
                     </div>
 
-                    <!-- Your Patterns -->
+                    <!-- ── YOUR PATTERNS ───────────────────────────────────────────── -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">
@@ -316,7 +490,8 @@
                         </div>
                     </div>
 
-                    <!-- Quick Actions -->
+
+                    <!-- ── QUICK ACTIONS ──────────────────────────────────────────────────── -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">
@@ -380,238 +555,79 @@
                             </div>
                         </div>
                     </div>
+                    <!-- /.container-fluid -->
 
                 </div>
-                <!-- End Main Content -->
+                <!-- End of Main Content -->
 
             </div>
 
-            <!-- FOOTER (injected by layout.js) -->
-            <div id="footer-placeholder"></div>
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; FitTrack 2026</span>
+                    </div>
+                </div>
+            </footer>
 
         </div>
-    </div>
+        <!-- End of Content Wrapper -->
 
-    <!-- SCROLL TO TOP + LOGOUT MODAL (injected by layout.js) -->
-    <div id="extras-placeholder"></div>
+        <!-- Scroll to Top -->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
 
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="../js/sb-admin-2.min.js"></script>
+        <!-- Logout Modal -->
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Ready to leave?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Select "Logout" below if you are ready to end your current session.
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="login.html">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <!-- layout.js handles: active link, topbar title, notification badge, profile photo -->
-    <script src="../js/layout.js"></script>
+        <script src="../vendor/jquery/jquery.min.js"></script>
+        <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+        <script src="../js/sb-admin-2.min.js"></script>
 
-    <!-- Page-specific: dashDate + all dashboard data/DOM logic (kept inline) -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const dashDate = document.getElementById('dashDate');
-            if (dashDate) {
-                const now = new Date();
-                dashDate.textContent = now.toLocaleDateString('en-MY', {
-                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-                });
-            }
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const today = new Date().toISOString().split('T')[0];
-            const logs = JSON.parse(localStorage.getItem('fittrack_logs') || '[]');
-
-            function num(v) { return Number(v) || 0; }
-
-            function getLast7Dates() {
-                const arr = [];
-                for (let i = 6; i >= 0; i--) {
-                    const d = new Date();
-                    d.setDate(d.getDate() - i);
-                    arr.push(d.toISOString().split('T')[0]);
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const activeLink = document.querySelector('.nav-item.active .nav-link span');
+                const titleEl = document.querySelector('.topbar-page-title');
+                if (activeLink && titleEl) {
+                    titleEl.textContent = activeLink.textContent.trim();
                 }
-                return arr;
-            }
 
-            const waterGlasses = parseInt(localStorage.getItem('np_water_' + today) || '0', 10);
-            const waterMax = 8;
-            const waterPct = Math.round((waterGlasses / waterMax) * 100);
-
-            function getTodaySteps() {
-                return logs.filter(l => l.date === today).reduce((sum, l) => sum + num(l.steps), 0);
-            }
-
-            function getTodayCaloriesBurned() {
-                return logs.filter(l => l.date === today).reduce((sum, l) => sum + num(l.calories), 0);
-            }
-
-            function getWeeklyWorkoutSessions() {
-                const last7 = getLast7Dates();
-                return logs.filter(l => l.type === 'workout' && last7.includes(l.date)).length;
-            }
-
-            function getCurrentStreak() {
-                const workoutLogs = JSON.parse(localStorage.getItem('fittrack_logs') || '[]')
-                    .filter(l => l.type === 'workout');
-                if (!workoutLogs.length) return 0;
-                const uniqueDates = [...new Set(workoutLogs.map(l => l.date))].sort().reverse();
-                let streak = 0;
-                let currentDate = new Date();
-                currentDate.setDate(currentDate.getDate() - 1);
-                for (const date of uniqueDates) {
-                    const expected = currentDate.toISOString().split('T')[0];
-                    if (date === expected) {
-                        streak++;
-                        currentDate.setDate(currentDate.getDate() - 1);
-                    } else break;
-                }
-                if (uniqueDates.includes(today)) streak++;
-                return streak;
-            }
-
-            function getMostActiveHour() {
-                const timeLogs = logs.filter(l => l.time);
-                if (!timeLogs.length) return "You are most active at 6 PM.";
-                const hourCount = {};
-                timeLogs.forEach(l => {
-                    const hour = l.time.split(':')[0];
-                    hourCount[hour] = (hourCount[hour] || 0) + 1;
-                });
-                let bestHour = Object.keys(hourCount)[0];
-                Object.keys(hourCount).forEach(h => { if (hourCount[h] > hourCount[bestHour]) bestHour = h; });
-                const hourNum = parseInt(bestHour, 10);
-                const displayHour = hourNum === 0 ? "12 AM" : hourNum < 12 ? hourNum + " AM" : hourNum === 12 ? "12 PM" : (hourNum - 12) + " PM";
-                return "You are most active at " + displayHour + ".";
-            }
-
-            function getStepInsight() {
-                const steps = getTodaySteps();
-                if (steps >= 10000) return "Great job! You reached your daily step goal.";
-                if (steps >= 7000) return "You're close to your step goal today.";
-                return "You may need a short walk to reach your step target.";
-            }
-
-            function getWaterInsight() {
-                if (waterGlasses >= 8) return "Excellent! You met your water intake goal.";
-                if (waterGlasses >= 5) return "You are doing okay on water intake today.";
-                return "Your water intake is below target today.";
-            }
-
-            function getWorkoutStreakInsight() {
-                const streak = getCurrentStreak();
-                if (streak >= 5) return "Amazing! You are maintaining a strong workout streak.";
-                if (streak >= 2) return "Nice! Your workout streak is building up.";
-                return "Try to keep your workout streak going this week.";
-            }
-
-            function calculateDailyHealthScore() {
-                const steps = getTodaySteps();
-                const calBurn = getTodayCaloriesBurned();
-                const workoutSessions = logs.filter(l => l.type === 'workout' && l.date === today).length;
-                const stepScore = Math.min((steps / 10000) * 100, 100);
-                const waterScore = Math.min((waterGlasses / 8) * 100, 100);
-                const calorieScore = Math.min((calBurn / 500) * 100, 100);
-                const workoutScore = workoutSessions > 0 ? 100 : 0;
-                return Math.round(stepScore * 0.35 + waterScore * 0.20 + calorieScore * 0.20 + workoutScore * 0.25);
-            }
-
-            function calculateWeeklyHealthScore() {
-                const last7 = getLast7Dates();
-                let total = 0;
-                last7.forEach(date => {
-                    const stepDay = logs.filter(l => l.date === date).reduce((sum, l) => sum + num(l.steps), 0);
-                    const calDay = logs.filter(l => l.date === date).reduce((sum, l) => sum + num(l.calories), 0);
-                    const workoutDay = logs.filter(l => l.type === 'workout' && l.date === date).length;
-                    const waterDay = parseInt(localStorage.getItem('np_water_' + date) || '0', 10);
-                    const dayScore = Math.round(
-                        Math.min((stepDay / 10000) * 100, 100) * 0.35 +
-                        Math.min((waterDay / 8) * 100, 100) * 0.20 +
-                        Math.min((calDay / 500) * 100, 100) * 0.20 +
-                        (workoutDay > 0 ? 100 : 0) * 0.25
-                    );
-                    total += dayScore;
-                });
-                return Math.round(total / 7);
-            }
-
-            function setRing(id, percent) {
-                const ring = document.getElementById(id);
-                if (!ring) return;
-                ring.style.background =
-                    `conic-gradient(
-                        #1cc88a 0% ${Math.min(percent * 0.35, percent)}%,
-                        #36b9cc ${Math.min(percent * 0.35, percent)}% ${Math.min(percent * 0.70, percent)}%,
-                        #f6c23e ${Math.min(percent * 0.70, percent)}% ${percent}%,
-                        #eaecf4 ${percent}% 100%
-                    )`;
-            }
-
-            function renderTrendChart() {
-                const last7 = getLast7Dates();
-                const stepsArr = last7.map(date => logs.filter(l => l.date === date).reduce((sum, l) => sum + num(l.steps), 0));
-                const max = Math.max(...stepsArr, 10000);
-                const xs = [20, 80, 140, 200, 260, 320, 380];
-                const points = stepsArr.map((v, i) => `${xs[i]},${95 - (v / max) * 55}`).join(' ');
-                const line = document.getElementById('trendLine');
-                if (line) line.setAttribute('points', points);
-                const dotsGroup = document.getElementById('trendDots');
-                if (dotsGroup) {
-                    dotsGroup.innerHTML = '';
-                    stepsArr.forEach((v, i) => {
-                        const y = 95 - (v / max) * 55;
-                        dotsGroup.innerHTML += `<circle cx="${xs[i]}" cy="${y}" r="4" fill="#fff" stroke="#1cc88a" stroke-width="3"></circle>`;
+                const dashDate = document.getElementById('dashDate');
+                if (dashDate) {
+                    const now = new Date();
+                    dashDate.textContent = now.toLocaleDateString('en-MY', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
                     });
                 }
-            }
+            });
+        </script>
 
-            // — Compute values —
-            const todaySteps = getTodaySteps() || 8450;
-            const todayCalories = getTodayCaloriesBurned() || 560;
-            const weeklySessions = getWeeklyWorkoutSessions() || 4;
-            const streak = getCurrentStreak() || 4;
-            const todayScore = calculateDailyHealthScore() || 72;
-            const weeklyScore = calculateWeeklyHealthScore() || 75;
-            const stepsGoal = 10000;
-            const stepsPct = Math.min(Math.round((todaySteps / stepsGoal) * 100), 100);
-            const stepsRemain = Math.max(0, stepsGoal - todaySteps);
-            const caloriePct = Math.min(Math.round((todayCalories / 1000) * 100), 100);
-
-            // — Update DOM —
-            function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
-            function setWidth(id, w) { const el = document.getElementById(id); if (el) el.style.width = w; }
-
-            setText('today-steps-count', todaySteps.toLocaleString());
-            setText('stepsPct', stepsPct + '%');
-            setWidth('stepsGoalBar', stepsPct + '%');
-            setText('stepsRemaining', stepsRemain === 0 ? "You've reached your step goal today." : stepsRemain.toLocaleString() + " steps to reach your goal");
-            setText('today-calories-count', todayCalories);
-            setWidth('calorieBar', caloriePct + '%');
-            setText('today-health-score', todayScore + '%');
-            setText('weekly-health-score', weeklyScore + '%');
-            setText('dashboard-streak', streak + ' day streak 🔥');
-            setText('dashboard-sessions', weeklySessions + ' sessions this week');
-
-            const streakBadge = document.getElementById('streak-badge');
-            if (streakBadge) streakBadge.innerHTML = `<i class="fas fa-fire mr-1"></i> ${streak}-Day Streak 🔥`;
-
-            setText('pattern-hour', getMostActiveHour());
-            setText('pattern-step', getStepInsight());
-            setText('pattern-water', getWaterInsight());
-
-            const waterCount = document.getElementById('dashboard-water-count');
-            if (waterCount) waterCount.textContent = waterGlasses;
-            const waterBadge = document.getElementById('dashboard-water-badge');
-            if (git waterBadge) waterBadge.textContent = waterPct + '%';
-            setWidth('dashboard-water-bar', waterPct + '%');
-            const remain = Math.max(0, waterMax - waterGlasses);
-            setText('dashboard-water-text', remain === 0 ? "You've reached today's water goal." : remain + " more glasses to go");
-
-            setRing('todayScoreRing', todayScore);
-            setRing('weeklyScoreRing', weeklyScore);
-            renderTrendChart();
-        });
-    </script>
-
+        <script src="../js/dashboard.js"></script>
+        <script src="../js/nutrition-planner.js"></script>
 </body>
 
 </html>
