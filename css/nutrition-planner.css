@@ -1,10 +1,10 @@
-
 /* ---- Meal Cards ---- */
 .meal-card img {
     height: 160px;
     object-fit: cover;
     width: 100%;
 }
+
 .meal-card .badge {
     font-size: 0.75rem;
 }
@@ -23,15 +23,19 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
     transition: transform 0.15s, color 0.2s, background 0.2s;
     z-index: 10;
-    color: #d1d3e2;   /* white/outline look */
+    color: #d1d3e2;
+    /* white/outline look */
     font-size: 1rem;
 }
+
 .fav-heart-btn.active {
-    color: #4e73df;   /* blue when favourited */
+    color: #4e73df;
+    /* blue when favourited */
 }
+
 .fav-heart-btn:hover {
     transform: scale(1.15);
 }
@@ -45,9 +49,21 @@
     font-weight: 700;
     margin: 2px;
 }
-.macro-protein { background: #e8f5e9; color: #2e7d32; }
-.macro-carbs   { background: #fff3e0; color: #e65100; }
-.macro-fat     { background: #fce4ec; color: #c62828; }
+
+.macro-protein {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.macro-carbs {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.macro-fat {
+    background: #fce4ec;
+    color: #c62828;
+}
 
 /* ---- Favourites ---- */
 .fav-meal-img {
@@ -65,6 +81,7 @@
     padding: 20px;
     text-align: center;
 }
+
 .calorie-result-box h2 {
     font-size: 2.5rem;
     font-weight: 800;
@@ -76,13 +93,18 @@
     padding: 40px;
     color: #b7b9cc;
 }
-.empty-state i { font-size: 3rem; margin-bottom: 12px; }
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
 
 /* ---- Calorie calculator collapsible header ---- */
 .calc-toggle-header {
     cursor: pointer;
     user-select: none;
 }
+
 .calc-toggle-header:hover {
     background-color: #f8f9fc;
 }
@@ -97,9 +119,21 @@
     border-radius: 6px;
     margin-bottom: 10px;
 }
-.plan-breakfast-hdr { background: #fff8e1; color: #f57c00; }
-.plan-lunch-hdr     { background: #e3f2fd; color: #1565c0; }
-.plan-dinner-hdr    { background: #ede7f6; color: #4527a0; }
+
+.plan-breakfast-hdr {
+    background: #fff8e1;
+    color: #f57c00;
+}
+
+.plan-lunch-hdr {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.plan-dinner-hdr {
+    background: #ede7f6;
+    color: #4527a0;
+}
 
 /* ---- Water tracker ---- */
 .water-glasses-grid {
@@ -108,6 +142,7 @@
     justify-content: center;
     gap: 8px;
 }
+
 .water-glass {
     font-size: 1.8rem;
     cursor: pointer;
@@ -115,9 +150,11 @@
     transition: opacity 0.2s, transform 0.15s;
     user-select: none;
 }
+
 .water-glass.filled {
     opacity: 1;
 }
+
 .water-glass:hover {
     transform: scale(1.2);
 }
@@ -132,13 +169,14 @@
     padding: 12px 20px;
     border-radius: 8px;
     font-weight: 600;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     opacity: 0;
     transform: translateY(12px);
     transition: opacity 0.3s, transform 0.3s;
     z-index: 9999;
     pointer-events: none;
 }
+
 #npToast.show {
     opacity: 1;
     transform: translateY(0);
@@ -152,4 +190,10 @@
     border-radius: 8px;
 }
 
-#calorie-result { display: none; }
+#calorie-result {
+    display: none;
+}
+
+h1 {
+    font-family: 'DM Serif Display', serif;
+}

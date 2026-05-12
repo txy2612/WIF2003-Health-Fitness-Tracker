@@ -12,7 +12,11 @@
     <title>Nutrition Planner</title>
 
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap"
         rel="stylesheet">
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
     <link href="../css/nutrition-planner.css" rel="stylesheet">
@@ -39,7 +43,8 @@
                             <h1 class="h3 mb-0 text-gray-800">
                                 <i class="fas fa-apple-alt text-primary mr-2"></i>Nutrition Planner
                             </h1>
-                            <p class="text-muted mb-0">Search meals, calculate your daily calorie goal, and save your favourites.</p>
+                            <p class="text-muted mb-0">Search meals, calculate your daily calorie goal, and save your
+                                favourites.</p>
                         </div>
                     </div>
 
@@ -53,7 +58,8 @@
                                 Find meals by name or tag — e.g. "chicken", "high protein", "low carb"
                             </p>
                             <div class="input-group mb-4">
-                                <input type="text" class="form-control" id="mealSearchInput" placeholder="Search for a meal...">
+                                <input type="text" class="form-control" id="mealSearchInput"
+                                    placeholder="Search for a meal...">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="button" onclick="searchMeals()">
                                         <i class="fas fa-search fa-sm"></i> Search
@@ -84,17 +90,22 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label><i class="fas fa-ruler-vertical mr-1 text-muted"></i> Height (cm)</label>
+                                            <label><i class="fas fa-ruler-vertical mr-1 text-muted"></i> Height
+                                                (cm)</label>
                                             <div class="input-group">
-                                                <input type="number" class="form-control" id="calcHeight" placeholder="e.g. 165">
-                                                <div class="input-group-append"><span class="input-group-text">cm</span></div>
+                                                <input type="number" class="form-control" id="calcHeight"
+                                                    placeholder="e.g. 165">
+                                                <div class="input-group-append"><span class="input-group-text">cm</span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label><i class="fas fa-weight mr-1 text-muted"></i> Weight (kg)</label>
                                             <div class="input-group">
-                                                <input type="number" class="form-control" id="calcWeight" placeholder="e.g. 55">
-                                                <div class="input-group-append"><span class="input-group-text">kg</span></div>
+                                                <input type="number" class="form-control" id="calcWeight"
+                                                    placeholder="e.g. 55">
+                                                <div class="input-group-append"><span class="input-group-text">kg</span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -119,17 +130,22 @@
                                             <div class="card-body d-flex flex-column justify-content-center">
                                                 <div id="calorie-empty" class="empty-state">
                                                     <i class="fas fa-clipboard-list d-block"></i>
-                                                    <p class="mb-0">Fill in the form and click <strong>Calculate</strong> to see your suggested daily calorie target.</p>
+                                                    <p class="mb-0">Fill in the form and click
+                                                        <strong>Calculate</strong> to see your suggested daily calorie
+                                                        target.</p>
                                                 </div>
                                                 <div id="calorie-result">
                                                     <div class="calorie-result-box mb-3">
-                                                        <p class="mb-1 font-weight-bold" style="font-size:0.9rem; opacity:0.85;">YOUR DAILY CALORIE GOAL</p>
+                                                        <p class="mb-1 font-weight-bold"
+                                                            style="font-size:0.9rem; opacity:0.85;">YOUR DAILY CALORIE
+                                                            GOAL</p>
                                                         <h2 id="calorie-output">—</h2>
                                                         <p class="mb-0" style="opacity:0.85;">kcal / day</p>
                                                         <p class="text-muted small text-center mt-2" id="calc-note"></p>
                                                     </div>
                                                     <div id="macro-breakdown" class="text-center">
-                                                        <p class="text-muted small mb-1 font-weight-bold">Estimated Macros</p>
+                                                        <p class="text-muted small mb-1 font-weight-bold">Estimated
+                                                            Macros</p>
                                                         <div id="macro-pills"></div>
                                                     </div>
                                                     <p class="text-muted small text-center mt-2" id="goal-label"></p>
@@ -154,19 +170,23 @@
                                 </span>
                             </div>
                             <p class="text-muted small mb-4">
-                                Meals you've added to your day. Use <strong>Add to Plan</strong> on any meal card or favourite to get started.
+                                Meals you've added to your day. Use <strong>Add to Plan</strong> on any meal card or
+                                favourite to get started.
                             </p>
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <div class="plan-slot-header plan-breakfast-hdr"><i class="fas fa-sun mr-2"></i>Breakfast</div>
+                                    <div class="plan-slot-header plan-breakfast-hdr"><i
+                                            class="fas fa-sun mr-2"></i>Breakfast</div>
                                     <div id="plan-breakfast"></div>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <div class="plan-slot-header plan-lunch-hdr"><i class="fas fa-cloud-sun mr-2"></i>Lunch</div>
+                                    <div class="plan-slot-header plan-lunch-hdr"><i
+                                            class="fas fa-cloud-sun mr-2"></i>Lunch</div>
                                     <div id="plan-lunch"></div>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <div class="plan-slot-header plan-dinner-hdr"><i class="fas fa-moon mr-2"></i>Dinner</div>
+                                    <div class="plan-slot-header plan-dinner-hdr"><i class="fas fa-moon mr-2"></i>Dinner
+                                    </div>
                                     <div id="plan-dinner"></div>
                                 </div>
                             </div>
@@ -188,18 +208,21 @@
                         <div class="card-body text-center">
                             <div class="water-glasses-grid mb-3" id="waterGrid"></div>
                             <div class="d-flex justify-content-center align-items-center mb-3">
-                                <button class="btn btn-outline-primary mr-3" onclick="adjustWater(-1)"><i class="fas fa-minus"></i></button>
+                                <button class="btn btn-outline-primary mr-3" onclick="adjustWater(-1)"><i
+                                        class="fas fa-minus"></i></button>
                                 <div>
                                     <span class="h3 font-weight-bold text-primary" id="waterCount">0</span>
                                     <span class="text-muted"> / 8 glasses</span>
                                 </div>
-                                <button class="btn btn-primary ml-3" onclick="adjustWater(1)"><i class="fas fa-plus"></i></button>
+                                <button class="btn btn-primary ml-3" onclick="adjustWater(1)"><i
+                                        class="fas fa-plus"></i></button>
                             </div>
                             <div class="progress mb-2" style="height: 10px;">
                                 <div class="progress-bar bg-info" id="waterProgressBar" role="progressbar"
                                     style="width: 0%; transition: width 0.3s ease;"></div>
                             </div>
-                            <p class="text-muted small mb-0" id="waterMsg">Stay hydrated! Start logging your water intake.</p>
+                            <p class="text-muted small mb-0" id="waterMsg">Stay hydrated! Start logging your water
+                                intake.</p>
                         </div>
                     </div>
 
@@ -229,7 +252,8 @@
     <div id="extras-placeholder"></div>
 
     <!-- Page-specific modal (NOT shared, stays here) -->
-    <div class="modal fade" id="mealDetailModal" tabindex="-1" role="dialog" aria-labelledby="mealDetailModalLabel" aria-hidden="true">
+    <div class="modal fade" id="mealDetailModal" tabindex="-1" role="dialog" aria-labelledby="mealDetailModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -245,9 +269,12 @@
                         <strong>Calories:</strong> <span id="modalCalories"></span>
                     </p>
                     <div class="mb-3">
-                        <span class="mr-3"><strong>Protein:</strong> <span id="modalProteinLevel" class="badge badge-success ml-1"></span></span>
-                        <span class="mr-3"><strong>Carbs:</strong> <span id="modalCarbsLevel" class="badge badge-warning ml-1"></span></span>
-                        <span><strong>Fat:</strong> <span id="modalFatLevel" class="badge badge-info ml-1"></span></span>
+                        <span class="mr-3"><strong>Protein:</strong> <span id="modalProteinLevel"
+                                class="badge badge-success ml-1"></span></span>
+                        <span class="mr-3"><strong>Carbs:</strong> <span id="modalCarbsLevel"
+                                class="badge badge-warning ml-1"></span></span>
+                        <span><strong>Fat:</strong> <span id="modalFatLevel"
+                                class="badge badge-info ml-1"></span></span>
                     </div>
                     <p class="font-weight-bold mb-1"><i class="fas fa-list mr-1 text-muted"></i> Ingredients</p>
                     <ul id="modalIngredients" class="pl-4 mb-3 text-muted small"></ul>
@@ -277,4 +304,5 @@
     <script src="../js/nutrition-planner.js"></script>
 
 </body>
+
 </html>
