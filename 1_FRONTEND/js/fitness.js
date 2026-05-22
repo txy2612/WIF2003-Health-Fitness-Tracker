@@ -64,6 +64,9 @@ function getGoals() {
     catch (e) { return {}; }
 }
 
+// -- API
+const FITNESS_API_URL = 'http://localhost:3000/api/fitness-tracker'
+
 // ── CALORIE CALCULATORS ───────────────────────────────────────────────────────
 
 function getWeightKg() {
@@ -205,7 +208,7 @@ async function logWorkout() {
 
     // Save to backend 
     // no id bcz 
-    await fetch('/api/v1/fitness-tracker/activities', {
+    await fetch(`${FITNESS_API_URL}/activities`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -276,10 +279,10 @@ async function logSteps() {
         loggedAt
     });
 
-    await fetch('/api/v1/fitness-tracker/activities' ,{
+    await fetch(`${FITNESS_API_URL}/activities`, {
         method: 'POST',
-        headers:{
-
+        headers: {
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             type: 'steps',
@@ -469,9 +472,14 @@ document.addEventListener('DOMContentLoaded', function () {
     updateQuickSummary();
 
     // Delete modal confirmation
-    document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+    document.getElementById('confirmDeleteBtn').addEventListener('click', async function () {
         if (_rowToDelete) {
             const id = _rowToDelete.dataset.id;
+
+            await fetch(`${FITNESS_API_URL}/activities/${id}`, {
+                method: 'DELETE'
+            });
+
             deleteLog(id);
             _rowToDelete.remove();
             updateActivityCount();
