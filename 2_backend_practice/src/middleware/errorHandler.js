@@ -1,6 +1,6 @@
 import { ZodError } from 'zod'//zod = validation library = check if data has correct shape b4 backend uses it
-import { StatusCodes } from 'http-status-code'  //alows to write readable status code 
-import { problemDetails } from '../shared/problemDetails'
+import { StatusCodes } from 'http-status-codes'  //alows to write readable status code 
+import problemDetails from '../shared/problemDetails.js'
 
 // Zod(Validation) error
 function formatZodErrors(error){
@@ -62,4 +62,16 @@ const errorHandler = (error, request, response, next) => {
     }));
 };
 
+const notFoundHandler = (request, response) => {
+    response.status(StatusCodes.NOT_FOUND).type("application/problem+json").json(problemDetails({
+        type: "about:blank",
+        title: "Not Found",
+        status: StatusCodes.NOT_FOUND,
+        detail: "No route matched this request.",
+        instance: request.originalUrl,
+        requestId: request.id,
+    }));
+};
+
+export { notFoundHandler, errorHandler }
 export default errorHandler

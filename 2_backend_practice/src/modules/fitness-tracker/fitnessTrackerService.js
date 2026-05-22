@@ -36,7 +36,7 @@ async function getFitnessTrackerOverview() {
           workoutsCompleted:activities.filter( activity => activity.type === 'workout'
       ).length,
     },
-    goalProgressPercent: Math.round((completedMinutes / weeklyGoalMinutes) * 100),
+    goalProgressPercent: Math.round((completedMinutes / activeMinutes) * 100),
   }
 }
 
@@ -44,16 +44,16 @@ async function getFitnessTrackerOverview() {
 async function createActivity(activity){
     //Model = database manager/helper !!!
     //create() = insert new into db
-    return fitnessTrackerModel.create(preview)
+    return fitnessTrackerModel.create(activity)
 }
 
 // createActivity does not use id bcz activity DOESNT EXIST YET
-async function deleteAcivity(){
-    return fitnessTrackerModel.findIdAndDelete(id)// findAndDelete() = built-in Mongoose method
+async function deleteActivity(id){
+    return fitnessTrackerModel.findByIdAndDelete(id)// findAndDelete() = built-in Mongoose method
 }
 
 export default {
     getFitnessTrackerOverview,
     createActivity,
-    deleteAcivity
+    deleteActivity
 }

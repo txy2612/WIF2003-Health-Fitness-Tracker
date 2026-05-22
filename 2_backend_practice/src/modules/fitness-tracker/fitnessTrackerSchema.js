@@ -27,7 +27,7 @@ export const postActivitySchema = z.object({
 })
 
 // DELETE /activities/:id 
-export const deleteAcivitySchema = z.object({
+export const deleteActivitySchema = z.object({
   body: z.object({}),
   params: z.object({
     id: z.string().min(1, 'Activity ID is required'),//expects an ID from the URL

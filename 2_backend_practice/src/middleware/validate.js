@@ -16,11 +16,7 @@ export default function validate(schema) {//receives zod schema
       //allows request to continue to controller
       next()
     } catch (error) {
-        //if client/user send bad input -> 400
-      response.status(400).json({
-        message: 'Validation failed',
-        errors: error.errors,
-      })
+      next(error)
     }
   }
 }

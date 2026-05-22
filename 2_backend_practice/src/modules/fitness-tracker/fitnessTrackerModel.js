@@ -53,4 +53,4 @@ const fitnessTrackerSchema = new mongoose.Schema(
   }
 )
 
-export default mongoose.model('TestFitnessActivity', testFitnessTrackerSchema)
+export default mongoose.model('TestFitnessActivity', fitnessTrackerSchema)

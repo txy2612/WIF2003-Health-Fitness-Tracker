@@ -3,7 +3,7 @@
 import express from 'express'
 import fitnessTrackerService from './fitnessTrackerService.js'
 import validate from '../../middleware/validate.js'
-import { postActivitiesSchema, deleteActivitySchema } from './fitnessTrackerSchema.js'
+import { postActivitySchema, deleteActivitySchema } from './fitnessTrackerSchema.js'
 
 // creates a mini router for fitness tracker (mini receptionist for the department)
 const router = express.Router()
@@ -24,7 +24,7 @@ router.get('/', async (request, response, next) => {
 })
 
 // Save activities logged into MongoDB
-router.post('/activities', validate(postActivitiesSchema), async (request, response, next) =>{
+router.post('/activities', validate(postActivitySchema), async (request, response, next) =>{
     try{
 
         const { body } = request.validated
@@ -39,7 +39,7 @@ router.post('/activities', validate(postActivitiesSchema), async (request, respo
 
 
 // DELETE /api/v1/fitness-tracker/activities/:id
-router.delete('/activities/:id, validate(deleteActivitySchema'), async (request, response, next) =>{
+router.delete('/activities/:id', validate(deleteActivitySchema), async (request, response, next) =>{
     try{
         const {id} = request.validated.params//params of validated request
         //DESTRUCTURING !! {id} = bla.bla.bla.id
@@ -60,7 +60,7 @@ router.delete('/activities/:id, validate(deleteActivitySchema'), async (request,
     }catch(error){
         next(error)
     }
-}
+})
 
 //allows app.js to import this controller
 export default router
