@@ -174,7 +174,7 @@ function updateActivityCount() {
 
 // ── LOG WORKOUT ───────────────────────────────────────────────────────────────
 
-function logWorkout() {
+async function logWorkout() {
     const type     = document.getElementById('activityType').value;
     const duration = document.getElementById('duration').value;
     const date     = document.getElementById('activityDate').value;
@@ -203,6 +203,24 @@ function logWorkout() {
         loggedAt
     });
 
+    // Save to backend 
+    // no id bcz 
+    await fetch('/api/v1/fitness-tracker/activities', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            type: 'workout',
+            activity: type,
+            duration: parseFloat(duration),
+            calories: calories ?? 0,
+            date,
+            notes,
+            loggedAt
+        })
+    })
+
     appendRow(
         id,
         formatDate(date),
@@ -227,7 +245,7 @@ function clearWorkoutForm() {
 
 // ── LOG STEPS ─────────────────────────────────────────────────────────────────
 
-function logSteps() {
+async function logSteps() {
     const steps = document.getElementById('stepsCount').value;
     const date  = document.getElementById('stepsDate').value;
 
@@ -257,6 +275,20 @@ function logSteps() {
         date,
         loggedAt
     });
+
+    await fetch('/api/v1/fitness-tracker/activities' ,{
+        method: 'POST',
+        headers:{
+
+        },
+        body: JSON.stringify({
+            type: 'steps',
+            steps: parseInt(steps),
+            calories: calories ?? 0,
+            date,
+            loggedAt
+        })
+    })
 
     appendRow(
         id,
