@@ -65,7 +65,7 @@ function getGoals() {
 }
 
 // -- API
-const FITNESS_API_URL = 'http://localhost:3000/api/fitness-tracker'
+const FITNESS_API_URL = 'http://localhost:3000/api/v1/fitness-tracker'
 
 // ── CALORIE CALCULATORS ───────────────────────────────────────────────────────
 
@@ -214,6 +214,7 @@ async function logWorkout() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            id,
             type: 'workout',
             activity: type,
             duration: parseFloat(duration),
@@ -285,6 +286,7 @@ async function logSteps() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            id,
             type: 'steps',
             steps: parseInt(steps),
             calories: calories ?? 0,
@@ -476,9 +478,17 @@ document.addEventListener('DOMContentLoaded', function () {
         if (_rowToDelete) {
             const id = _rowToDelete.dataset.id;
 
-            await fetch(`${FITNESS_API_URL}/activities/${id}`, {
+            const response = await fetch(`${FITNESS_API_URL}/activities/${id}`, {
                 method: 'DELETE'
             });
+
+            const result = await response.json();
+            console.log('Delete response:', response.status, result);
+
+            if (!response.ok) {
+            alert(result.message || 'Failed to delete activity from database.');
+            return;
+        }
 
             deleteLog(id);
             _rowToDelete.remove();
