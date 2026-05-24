@@ -4,6 +4,11 @@ import mongoose from 'mongoose'
 // mongoose.Schema = Define document/database structure
 const fitnessTrackerSchema = new mongoose.Schema(
   {
+    id: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     type: {
       type: String,
       enum: ['workout', 'steps'],
@@ -53,4 +58,4 @@ const fitnessTrackerSchema = new mongoose.Schema(
   }
 )
 
-export default mongoose.model('TestFitnessActivity', fitnessTrackerSchema)
+export default mongoose.model('FitnessActivity', fitnessTrackerSchema)

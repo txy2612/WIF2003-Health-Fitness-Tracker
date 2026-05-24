@@ -7,7 +7,7 @@ import fitnessTrackerModel from './fitnessTrackerModel.js'
 async function getFitnessTrackerOverview() {
     const activities = await fitnessTrackerModel
     .find({})//retrieve all from MongoDB
-    .sort({ completedAt: -1 })//sort -1 = descending = latest first
+    .sort({ loggedAt : -1 })//sort -1 = descending = latest first
     .lean()//convert MongoDB doc into plain JS objects
 
     // now we reduce 'activities' array
@@ -47,10 +47,15 @@ async function createActivity(activity){
     return fitnessTrackerModel.create(activity)
 }
 
-// createActivity does not use id bcz activity DOESNT EXIST YET
+// createActivity does not use ID bcz activity DOESNT EXIST YET
 async function deleteActivity(id){
-    return fitnessTrackerModel.findByIdAndDelete(id)// findAndDelete() = built-in Mongoose method
-}
+    return fitnessTrackerModel.findOneAndDelete({id})
+    // findAndDelete() = built-in Mongoose method
+    // id VS {id} :
+    // _id = MongoDB's auto-generated ID
+    // id = frontend-generated ID
+    // findOneAndDelete({ id }) deletes the MongoDB document whose frontend id matches
+    }
 
 export default {
     getFitnessTrackerOverview,

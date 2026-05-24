@@ -1,6 +1,6 @@
 // Controller = define endpoint
-
 import express from 'express'
+import { StatusCodes } from 'http-status-codes'
 import fitnessTrackerService from './fitnessTrackerService.js'
 import validate from '../../middleware/validate.js'
 import { postActivitySchema, deleteActivitySchema } from './fitnessTrackerSchema.js'
@@ -17,7 +17,7 @@ router.get('/', async (request, response, next) => {
         const data = await fitnessTrackerService.getFitnessTrackerOverview()
 
         //if route succeeds, send reponse
-        response.status(200).json(data)
+        response.status(StatusCodes.OK).json(data)
   } catch (error) {//if fail, pass to handler
     next(error)
   }
@@ -29,8 +29,11 @@ router.post('/activities', validate(postActivitySchema), async (request, respons
 
         const { body } = request.validated
 
+        console.log('Vaidated body:', body)
+
         const data = await fitnessTrackerService.createActivity(body)
-        response.status(201).json(data)
+        
+        response.status(StatusCodes.CREATED).json(data)
     }catch(error){
         next(error)//next = go to the next middleware/route
         //happn only when normal route does not work

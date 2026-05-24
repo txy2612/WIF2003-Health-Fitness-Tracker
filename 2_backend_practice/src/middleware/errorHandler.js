@@ -37,6 +37,8 @@ const errorHandler = (error, request, response, next) => {
     }
 
     if (error instanceof ZodError) {
+        console.log(error.issues)
+
         response.status(StatusCodes.BAD_REQUEST).type("application/problem+json").json(problemDetails({
             type: "about:blank",
             title: "Validation failed",

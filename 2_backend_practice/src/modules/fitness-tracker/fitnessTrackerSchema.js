@@ -3,6 +3,8 @@ import { z } from 'zod'
 //z.object(...) defines expected input shape
 export const postActivitySchema = z.object({
   body: z.object({
+    id: z.string().min(1),
+
     type: z.enum(['workout', 'steps']),
 
     activity: z.string().optional(),
@@ -28,7 +30,7 @@ export const postActivitySchema = z.object({
 
 // DELETE /activities/:id 
 export const deleteActivitySchema = z.object({
-  body: z.object({}),
+  body: z.object({}).optional(),
   params: z.object({
     id: z.string().min(1, 'Activity ID is required'),//expects an ID from the URL
   }),
