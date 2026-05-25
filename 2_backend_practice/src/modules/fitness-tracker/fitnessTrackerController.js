@@ -23,6 +23,16 @@ router.get('/', async (request, response, next) => {
   }
 })
 
+router.get('/activities', async (request, response, next) => {
+    try {
+        const data = await fitnessTrackerService.getActivities()
+
+        response.status(StatusCodes.OK).json(data)
+    } catch (error) {
+        next(error)
+    }
+})
+
 // Save activities logged into MongoDB
 router.post('/activities', validate(postActivitySchema), async (request, response, next) =>{
     try{

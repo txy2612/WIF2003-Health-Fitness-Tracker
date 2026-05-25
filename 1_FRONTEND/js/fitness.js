@@ -26,32 +26,95 @@ const BADGE_MAP = {
     'Other':                'badge-dark'
 };
 
-// ── LOCALSTORAGE KEYS ─────────────────────────────────────────────────────────
+// ── STORAGE BOUNDARIES ────────────────────────────────────────────────────────
 
-const LOGS_KEY    = 'fittrack_logs';
+// Backend-backed activity logs
+let activityLogs = [];
+let activitiesLoadStatus = 'idle'; // idle | loading | success | error
+
+// Still localStorage-backed until backend endpoints exist:
+// const profile = JSON.parse(localStorage.getItem('fittrack_profile'))
+// const goals = JSON.parse(localStorage.getItem('fittrack_goals'))
 const PROFILE_KEY = 'fittrack_profile';
 const GOALS_KEY   = 'fittrack_goals';
+const FITNESS_API_URL = 'http://localhost:3000/api/v1/fitness-tracker'
 
-// ── LOCALSTORAGE HELPERS ──────────────────────────────────────────────────────
+// ── BACKEND ACTIVITY API HELPERS ──────────────────────────────────────────────
 
-// localStorage stores strings, so we parse it back to an array
-function getLogs() {
-    try { return JSON.parse(localStorage.getItem(LOGS_KEY)) || []; } 
-    catch (e) { return []; }
+
+async function parseApiResponse(response) {
+    const text = await response.text();
+    if (!text) return {};
+
+    try {
+        return JSON.parse(text);
+    } catch (error) {
+        return {};
+    }
 }
 
-function saveLogs(logs) {
-    localStorage.setItem(LOGS_KEY, JSON.stringify(logs));
+async function requestFitnessApi(path, options = {}) {
+    const response = await fetch(`${FITNESS_API_URL}${path}`, options);
+    const data = await parseApiResponse(response);
+
+    if (!response.ok) {
+        const error = new Error(data.detail || data.message || 'Fitness tracker request failed.');
+        error.status = response.status;
+        error.data = data;
+        throw error;
+    }
+
+    return data;
 }
 
-function addLog(entry) {
-    const logs = getLogs();  // 1. read existing array from localStorage
-    logs.push(entry);        // 2. add new entry to the array
-    saveLogs(logs);          // 3. write the whole array back
+async function loadActivityLogs() {
+    const data = await requestFitnessApi('/activities');
+    activityLogs = Array.isArray(data.activities) ? data.activities : [];
+    return activityLogs;
 }
 
-function deleteLog(id) {
-    saveLogs(getLogs().filter(l => String(l.id) !== String(id))); // makes both IDs become strings before comparing
+async function loadActivities() {
+    activitiesLoadStatus = 'loading';
+    showActivitiesLoading();
+
+    try {
+        await loadActivityLogs();
+        activitiesLoadStatus = 'success';
+
+        renderActivityTable(activityLogs);
+        updateQuickSummary();
+    } catch (error) {
+        activitiesLoadStatus = 'error';
+        activityLogs = [];
+
+        showActivitiesError();
+        updateQuickSummary();
+    }
+}
+
+async function createActivityLog(activity) {
+    const createdActivity = await requestFitnessApi('/activities', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(activity)
+    });
+
+    activityLogs = [createdActivity, ...activityLogs];
+    return createdActivity;
+}
+
+async function deleteActivityLog(id) {
+    await requestFitnessApi(`/activities/${id}`, {
+        method: 'DELETE'
+    });
+
+    activityLogs = activityLogs.filter(log => String(log.id) !== String(id));
+}
+
+function getActivityLogs() {
+    return activityLogs;
 }
 
 function getProfile() {
@@ -64,8 +127,6 @@ function getGoals() {
     catch (e) { return {}; }
 }
 
-// -- API
-const FITNESS_API_URL = 'http://localhost:3000/api/v1/fitness-tracker'
 
 // ── CALORIE CALCULATORS ───────────────────────────────────────────────────────
 
@@ -103,7 +164,7 @@ function calcDailyTarget(bmr, goal, workoutCalsBurned = 0) {
 
 function getTodayWorkoutCals() {
     const today = new Date().toISOString().split('T')[0];
-    return getLogs()
+    return getActivityLogs()
         .filter(l => l.type === 'workout' && l.date === today && l.calories)
         .reduce((sum, l) => sum + l.calories, 0);
 }
@@ -150,6 +211,7 @@ function generateId() {
 
 function appendRow(id, date, typeBadge, duration, steps, calories, notes) {
     const tbody = document.getElementById('activityTableBody');
+    tbody.querySelectorAll('.activity-state-row').forEach(row => row.remove());
     tbody.insertAdjacentHTML('afterbegin', `
         <tr data-id="${id}">
             <td>${date}</td>
@@ -171,8 +233,44 @@ function appendRow(id, date, typeBadge, duration, steps, calories, notes) {
 }
 
 function updateActivityCount() {
-    const count = document.getElementById('activityTableBody').querySelectorAll('tr').length;
-    document.getElementById('activityCount').textContent = count + ' Records';
+    const count = getActivityLogs().length;
+    document.getElementById('activityCount').textContent = count + (count === 1 ? ' Record' : ' Records');
+}
+
+function showActivitiesLoading() {
+    const tbody = document.getElementById('activityTableBody');
+    tbody.innerHTML = `
+        <tr class="activity-state-row">
+            <td colspan="7" class="text-center text-muted py-4">
+                Loading activities...
+            </td>
+        </tr>`;
+    document.getElementById('activityCount').textContent = 'Loading...';
+}
+
+function showActivitiesError() {
+    const tbody = document.getElementById('activityTableBody');
+    tbody.innerHTML = `
+        <tr class="activity-state-row">
+            <td colspan="7" class="text-center text-muted py-4">
+                <div class="mb-2">Could not load activities from the server.</div>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="loadActivities()">
+                    Retry
+                </button>
+            </td>
+        </tr>`;
+    updateActivityCount();
+}
+
+function showActivitiesEmpty() {
+    const tbody = document.getElementById('activityTableBody');
+    tbody.innerHTML = `
+        <tr class="activity-state-row">
+            <td colspan="7" class="text-center text-muted py-4">
+                No activity logged yet.
+            </td>
+        </tr>`;
+    updateActivityCount();
 }
 
 // ── LOG WORKOUT ───────────────────────────────────────────────────────────────
@@ -194,8 +292,7 @@ async function logWorkout() {
     const id         = generateId();
     const loggedAt   = new Date().toISOString();
 
-    // Save to localStorage
-    addLog({
+    const activity = {
         id,
         type:     'workout',
         activity: type,
@@ -204,26 +301,14 @@ async function logWorkout() {
         date,
         notes,
         loggedAt
-    });
+    };
 
-    // Save to backend 
-    // no id bcz 
-    await fetch(`${FITNESS_API_URL}/activities`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id,
-            type: 'workout',
-            activity: type,
-            duration: parseFloat(duration),
-            calories: calories ?? 0,
-            date,
-            notes,
-            loggedAt
-        })
-    })
+    try {
+        await createActivityLog(activity);
+    } catch (error) {
+        alert(error.message || 'Failed to save workout to database.');
+        return;
+    }
 
     appendRow(
         id,
@@ -259,7 +344,7 @@ async function logSteps() {
     }
 
     // Prevent duplicate steps for same date
-    const existing = getLogs().find(l => l.type === 'steps' && l.date === date);
+    const existing = getActivityLogs().find(l => l.type === 'steps' && l.date === date);
     if (existing) {
         alert(`Steps already logged for ${formatDate(date)}. Delete the existing entry first to update.`);
         return;
@@ -270,30 +355,25 @@ async function logSteps() {
     const id       = generateId();
     const loggedAt = new Date().toISOString();
 
-    // Save to localStorage
-    addLog({
+    const activity = {
         id,
         type:     'steps',
         steps:    parseInt(steps),
         calories: calories ?? 0,
         date,
         loggedAt
-    });
+    };
 
-    await fetch(`${FITNESS_API_URL}/activities`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id,
-            type: 'steps',
-            steps: parseInt(steps),
-            calories: calories ?? 0,
-            date,
-            loggedAt
-        })
-    })
+    try {
+        await createActivityLog(activity);
+    } catch (error) {
+        if (error.status === 409) {
+            alert(`Steps already logged for ${formatDate(date)}. Delete the existing entry first to update.`);
+        } else {
+            alert(error.message || 'Failed to save steps to database.');
+        }
+        return;
+    }
 
     appendRow(
         id,
@@ -331,7 +411,7 @@ function editActivity(btn) {
 // ── QUICK SUMMARY CARDS ───────────────────────────────────────────────────────
 
 function updateQuickSummary() {
-    const logs     = getLogs();
+    const logs     = getActivityLogs();
     const goals    = getGoals();
     const today    = new Date().toISOString().split('T')[0];
     const stepGoal = parseInt(goals.steps) || 10000;
@@ -372,8 +452,14 @@ function updateQuickSummary() {
 
 // ── RESTORE LOGS ON PAGE LOAD ─────────────────────────────────────────────────
 
-function restoreLogs() {
-    const logs = getLogs();
+function renderActivityTable(logs = getActivityLogs()) {
+    document.getElementById('activityTableBody').innerHTML = '';
+
+    if (logs.length === 0) {
+        showActivitiesEmpty();
+        return;
+    }
+
     [...logs].sort((a, b) => new Date(a.loggedAt) - new Date(b.loggedAt)).forEach(log => {
         if (log.type === 'workout') {
             const badgeClass = BADGE_MAP[log.activity] || 'badge-secondary';
@@ -400,12 +486,13 @@ function restoreLogs() {
             );
         }
     });
+    updateActivityCount();
 }
 
 // ── DASHBOARD INSIGHTS ────────────────────────────────────────────────────────
 
 function getMostActiveHour() {
-    const logs = getLogs().filter(l => l.type === 'workout' && l.loggedAt);
+    const logs = getActivityLogs().filter(l => l.type === 'workout' && l.loggedAt);
     if (!logs.length) return null;
     const hourCounts = {};
     logs.forEach(l => {
@@ -423,7 +510,7 @@ function getStepInsight() {
     const goal  = parseInt(goals.steps);
     if (!goal) return null;
     const today = new Date().toISOString().split('T')[0];
-    const todaySteps = getLogs()
+    const todaySteps = getActivityLogs()
         .filter(l => l.type === 'steps' && l.date === today)
         .reduce((sum, l) => sum + (l.steps || 0), 0);
     const remaining = goal - todaySteps;
@@ -443,7 +530,7 @@ function getWaterInsight() {
 }
 
 function getWeekendWorkoutInsight() {
-    const logs  = getLogs().filter(l => l.type === 'workout');
+    const logs  = getActivityLogs().filter(l => l.type === 'workout');
     const today = new Date();
     const day   = today.getDay();
     if (day < 1 || day > 3) return null;
@@ -460,7 +547,7 @@ function getWeekendWorkoutInsight() {
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('activityDate').value = today;
     document.getElementById('stepsDate').value    = today;
@@ -469,28 +556,20 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('duration').addEventListener('input',  updateWorkoutCalDisplay);
     document.getElementById('stepsCount').addEventListener('input', updateStepsCalDisplay);
 
-    // Restore persisted logs on page load
-    restoreLogs();
-    updateQuickSummary();
+    loadActivities();
 
     // Delete modal confirmation
     document.getElementById('confirmDeleteBtn').addEventListener('click', async function () {
         if (_rowToDelete) {
             const id = _rowToDelete.dataset.id;
 
-            const response = await fetch(`${FITNESS_API_URL}/activities/${id}`, {
-                method: 'DELETE'
-            });
+            try {
+                await deleteActivityLog(id);
+            } catch (error) {
+                alert(error.message || 'Failed to delete activity from database.');
+                return;
+            }
 
-            const result = await response.json();
-            console.log('Delete response:', response.status, result);
-
-            if (!response.ok) {
-            alert(result.message || 'Failed to delete activity from database.');
-            return;
-        }
-
-            deleteLog(id);
             _rowToDelete.remove();
             updateActivityCount();
             updateQuickSummary();

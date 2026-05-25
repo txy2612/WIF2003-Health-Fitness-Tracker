@@ -58,4 +58,12 @@ const fitnessTrackerSchema = new mongoose.Schema(
   }
 )
 
+fitnessTrackerSchema.index(
+  { type: 1, date: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { type: 'steps' },
+  }
+)
+
 export default mongoose.model('FitnessActivity', fitnessTrackerSchema)

@@ -1,4 +1,5 @@
 import fitnessTrackerModel from './fitnessTrackerModel.js'
+import { StatusCodes } from 'http-status-codes'
 
 //why ansyc ?
 // because later we'll do 'await databaseQuery()'
@@ -40,16 +41,71 @@ async function getFitnessTrackerOverview() {
   }
 }
 
+function formatActivity(activity){
+    const plainActivity = activity?.toObject ? activity.toObject() : { ...activity }
+
+    delete plainActivity._id
+    delete plainActivity.__v
+
+    return plainActivity
+}
+
+async function getActivities(){
+    const activities = await fitnessTrackerModel
+    .find({})
+    .sort({ loggedAt: -1 })
+    .lean()
+
+    return {
+        activities: activities.map(formatActivity)
+    }
+}
+
+function createDuplicateStepsError(date){
+    const error = new Error(`A steps activity already exists for ${date}.`)
+    error.status = StatusCodes.CONFLICT
+    error.title = 'Duplicate steps activity'
+    error.type = 'about:blank'
+    return error
+}
+
+function isDuplicateStepsKeyError(error){
+    return error?.code === 11000
+        && (error?.keyValue?.type === 'steps'
+            || (error?.keyPattern?.type && error?.keyPattern?.date))
+}
+
 //save activity function
 async function createActivity(activity){
+    if(activity.type === 'steps'){
+        const existingStepsActivity = await fitnessTrackerModel.exists({
+            type: 'steps',
+            date: activity.date,
+        })
+
+        if(existingStepsActivity){
+            throw createDuplicateStepsError(activity.date)
+        }
+    }
+
     //Model = database manager/helper !!!
     //create() = insert new into db
-    return fitnessTrackerModel.create(activity)
+    try{
+        const createdActivity = await fitnessTrackerModel.create(activity)
+        return formatActivity(createdActivity)
+    }catch(error){
+        if(isDuplicateStepsKeyError(error)){
+            throw createDuplicateStepsError(activity.date)
+        }
+
+        throw error
+    }
 }
 
 // createActivity does not use ID bcz activity DOESNT EXIST YET
 async function deleteActivity(id){
-    return fitnessTrackerModel.findOneAndDelete({id})
+    const deletedActivity = await fitnessTrackerModel.findOneAndDelete({id})
+    return deletedActivity ? formatActivity(deletedActivity) : null
     // findAndDelete() = built-in Mongoose method
     // id VS {id} :
     // _id = MongoDB's auto-generated ID
@@ -59,6 +115,7 @@ async function deleteActivity(id){
 
 export default {
     getFitnessTrackerOverview,
+    getActivities,
     createActivity,
     deleteActivity
 }
