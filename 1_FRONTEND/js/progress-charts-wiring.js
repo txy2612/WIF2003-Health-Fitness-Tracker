@@ -19,6 +19,15 @@ function _getProfile() {
     return JSON.parse(localStorage.getItem('fittrack_profile') || '{}');
 }
 
+// use user's local time-zone instead of UTC time
+// show only date
+function _toLocalDateString(d) {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
 function _getWeekDates(offset) {
     const today  = new Date();
     const day    = today.getDay() === 0 ? 7 : today.getDay();
@@ -28,7 +37,7 @@ function _getWeekDates(offset) {
     return Array.from({length: 7}, (_, i) => {
         const d = new Date(monday);
         d.setDate(monday.getDate() + i);
-        return d.toISOString().split('T')[0];
+        return _toLocalDateString(d);
     });
 }
 
@@ -40,7 +49,7 @@ function _getMonthDates(offset) {
     const last  = new Date(year, month + 1, 0);
     const dates = [];
     for (let d = new Date(first); d <= last; d.setDate(d.getDate() + 1)) {
-        dates.push(new Date(d).toISOString().split('T')[0]);
+        dates.push(_toLocalDateString(d));
     }
     return dates;
 }
@@ -82,12 +91,12 @@ function _getCurrentStreak() {
     const cursor = new Date();
     cursor.setDate(cursor.getDate() - 1);
     for (const date of uniqueDates) {
-        if (date === cursor.toISOString().split('T')[0]) {
+        if (date === _toLocalDateString(cursor)) {
             streak++;
             cursor.setDate(cursor.getDate() - 1);
         } else break;
     }
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = _toLocalDateString(new Date());
     if (uniqueDates.includes(todayStr)) streak++;
     return streak;
 }
@@ -176,8 +185,8 @@ function buildWeekly() {
 
     // Sessions chart
     const sessionsData = _workoutsOnDates(logs, dates);
-    const hasSessions  = sessionsData.some(v => v > 0);
-    const maxSessions  = Math.max(...sessionsData, 0);
+    const hasSessions = sessionsData.some(v => v > 0);
+    const maxSessions = Math.max(...sessionsData, 0);
 
     document.getElementById('weeklySessionsEmpty').classList.toggle('d-none', hasSessions);
 
@@ -211,10 +220,10 @@ function buildWeekly() {
     });
 
     // This Week insights
-    const thisAvgSteps  = _avgNonZero(stepsData);
+    const thisAvgSteps = _avgNonZero(stepsData);
     const prevStepsData = _stepsOnDates(logs, prevDates);
-    const prevAvgSteps  = _avgNonZero(prevStepsData);
-    const stepsDiff     = thisAvgSteps - prevAvgSteps;
+    const prevAvgSteps = _avgNonZero(prevStepsData);
+    const stepsDiff = thisAvgSteps - prevAvgSteps;
 
     const wAvgStepsEl = document.getElementById('wAvgSteps');
     if (wAvgStepsEl) wAvgStepsEl.textContent = thisAvgSteps.toLocaleString() + ' steps/day';
@@ -227,7 +236,7 @@ function buildWeekly() {
 
     const thisWeekWorkouts = logs.filter(l => l.type === 'workout' && dates.includes(l.date));
     const prevWeekWorkouts = logs.filter(l => l.type === 'workout' && prevDates.includes(l.date));
-    const sessionsDiff     = thisWeekWorkouts.length - prevWeekWorkouts.length;
+    const sessionsDiff = thisWeekWorkouts.length - prevWeekWorkouts.length;
 
     const wSessionsEl = document.getElementById('wSessions');
     if (wSessionsEl) wSessionsEl.textContent = thisWeekWorkouts.length + ' sessions';
@@ -247,7 +256,7 @@ function buildWeekly() {
     // Consistency insights
     const currentStreak = _getCurrentStreak();
     const longestStreak = _getLongestStreak();
-    const consistWeeks  = _getConsistencyWeeks();
+    const consistWeeks = _getConsistencyWeeks();
 
     const wStreakEl = document.getElementById('wStreak');
     if (wStreakEl) wStreakEl.textContent = currentStreak + ' day' + (currentStreak !== 1 ? 's' : '') + (currentStreak > 0 ? ' 🔥' : '');
@@ -256,14 +265,14 @@ function buildWeekly() {
 
     const wHabitEl = document.getElementById('wHabitStability');
     if (wHabitEl) {
-        if (consistWeeks >= 4)       wHabitEl.textContent = `You maintained workouts for ${consistWeeks} consecutive weeks 💪`;
-        else if (consistWeeks >= 2)  wHabitEl.textContent = `${consistWeeks}-week consistency streak 🔥`;
+        if (consistWeeks >= 4) wHabitEl.textContent = `You maintained workouts for ${consistWeeks} consecutive weeks 💪`;
+        else if (consistWeeks >= 2) wHabitEl.textContent = `${consistWeeks}-week consistency streak 🔥`;
         else if (consistWeeks === 1) wHabitEl.textContent = 'Keep it up — build your weekly streak!';
-        else                         wHabitEl.textContent = 'No recent workout streak — start this week!';
+        else wHabitEl.textContent = 'No recent workout streak — start this week!';
     }
 
     const stepGoalDays = stepsData.filter(s => s >= stepGoal).length;
-    const wStepGoalEl  = document.getElementById('wStepGoalDays');
+    const wStepGoalEl = document.getElementById('wStepGoalDays');
     if (wStepGoalEl) wStepGoalEl.textContent = stepGoalDays + '/7';
 
     // Session breakdown
@@ -289,10 +298,10 @@ function buildWeekly() {
 // ── MONTHLY ───────────────────────────────────────────────────────
 
 function buildMonthly() {
-    const logs      = _getLogs();
-    const goals     = _getGoals();
-    const stepGoal  = parseInt(goals.steps) || 10000;
-    const dates     = _getMonthDates(monthOffset);
+    const logs = _getLogs();
+    const goals = _getGoals();
+    const stepGoal = parseInt(goals.steps) || 10000;
+    const dates = _getMonthDates(monthOffset);
     const prevDates = _getMonthDates(monthOffset - 1);
 
     document.getElementById('monthlyRangeLabel').textContent = _formatMonthLabel(monthOffset);
@@ -301,9 +310,9 @@ function buildMonthly() {
     const labels = dates.map(d => new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }));
 
     // Steps chart
-    const stepsData  = _stepsOnDates(logs, dates);
-    const maxSteps   = Math.max(...stepsData, 0);
-    const hasSteps   = stepsData.some(v => v > 0);
+    const stepsData = _stepsOnDates(logs, dates);
+    const maxSteps = Math.max(...stepsData, 0);
+    const hasSteps = stepsData.some(v => v > 0);
 
     document.getElementById('monthlyStepsEmpty').classList.toggle('d-none', hasSteps);
     document.getElementById('monthlyStepsPeak').textContent = maxSteps > 0
@@ -339,7 +348,7 @@ function buildMonthly() {
     });
 
     // Workout Sessions Per Week chart
-    const weekLabels        = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+    const weekLabels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
     const weekSessionCounts = [0, 1, 2, 3].map(w => {
         const wDates = dates.slice(w * 7, (w + 1) * 7);
         return logs.filter(l => l.type === 'workout' && wDates.includes(l.date)).length;
@@ -385,10 +394,10 @@ function buildMonthly() {
     });
 
     // This Month insights
-    const thisAvgSteps  = _avgNonZero(stepsData);
+    const thisAvgSteps = _avgNonZero(stepsData);
     const prevStepsData = _stepsOnDates(logs, prevDates);
-    const prevAvgSteps  = _avgNonZero(prevStepsData);
-    const stepsDiff     = thisAvgSteps - prevAvgSteps;
+    const prevAvgSteps = _avgNonZero(prevStepsData);
+    const stepsDiff = thisAvgSteps - prevAvgSteps;
 
     const mAvgEl = document.getElementById('mAvgSteps');
     if (mAvgEl) mAvgEl.textContent = thisAvgSteps.toLocaleString() + ' steps/day';
@@ -401,7 +410,7 @@ function buildMonthly() {
 
     const thisMonthWorkouts = logs.filter(l => l.type === 'workout' && dates.includes(l.date));
     const prevMonthWorkouts = logs.filter(l => l.type === 'workout' && prevDates.includes(l.date));
-    const sessionsDiff      = thisMonthWorkouts.length - prevMonthWorkouts.length;
+    const sessionsDiff = thisMonthWorkouts.length - prevMonthWorkouts.length;
 
     const mSessionsEl = document.getElementById('mSessions');
     if (mSessionsEl) mSessionsEl.textContent = thisMonthWorkouts.length + ' sessions';
@@ -436,14 +445,14 @@ function buildMonthly() {
     const mHabitEl = document.getElementById('mHabitStability');
     if (mHabitEl) {
         const pct = Math.round((activeDays / dates.length) * 100);
-        if (pct >= 80)      mHabitEl.textContent = `Active ${pct}% of the month — excellent consistency! 💪`;
+        if (pct >= 80) mHabitEl.textContent = `Active ${pct}% of the month — excellent consistency! 💪`;
         else if (pct >= 50) mHabitEl.textContent = `Active ${pct}% of the month — good progress!`;
-        else if (pct > 0)   mHabitEl.textContent = `Active ${pct}% of the month — room to improve.`;
-        else                mHabitEl.textContent  = 'No activity logged this month.';
+        else if (pct > 0) mHabitEl.textContent = `Active ${pct}% of the month — room to improve.`;
+        else mHabitEl.textContent = 'No activity logged this month.';
     }
 
     const stepGoalDays = stepsData.filter(s => s >= stepGoal).length;
-    const mStepGoalEl  = document.getElementById('mStepGoalDays');
+    const mStepGoalEl = document.getElementById('mStepGoalDays');
     if (mStepGoalEl) mStepGoalEl.textContent = stepGoalDays + '/' + dates.length;
 
     // Top Activities
@@ -457,7 +466,7 @@ function buildMonthly() {
                 if (!grouped[l.activity]) grouped[l.activity] = { count: 0, totalDuration: 0, totalCals: 0 };
                 grouped[l.activity].count++;
                 grouped[l.activity].totalDuration += l.duration || 0;
-                grouped[l.activity].totalCals     += l.calories || 0;
+                grouped[l.activity].totalCals += l.calories || 0;
             });
             topEl.innerHTML = Object.entries(grouped)
                 .sort((a, b) => b[1].count - a[1].count)
@@ -476,19 +485,19 @@ function buildMonthly() {
 // ── ACTIVITY DONUT ────────────────────────────────────────────────
 
 const ACTIVITY_COLORS = {
-    '🏃 Running':           '#4e73df',
-    '🚴 Cycling':           '#1cc88a',
-    '🏊 Swimming':          '#36b9cc',
-    '🏋️ Weight Training':  '#f6c23e',
-    '🧘 Yoga':              '#858796',
-    '🚶 Walking':           '#e74a3b',
+    '🏃 Running': '#4e73df',
+    '🚴 Cycling': '#1cc88a',
+    '🏊 Swimming': '#36b9cc',
+    '🏋️ Weight Training': '#f6c23e',
+    '🧘 Yoga': '#858796',
+    '🚶 Walking': '#e74a3b',
     '⚽ Football / Soccer': '#fd7e14',
-    '🏸 Badminton':         '#20c9a6',
-    'Other':                '#6f42c1'
+    '🏸 Badminton': '#20c9a6',
+    'Other': '#6f42c1'
 };
 
 function buildActivityDonut(canvasId, legendId, workoutLogs) {
-    const canvas   = document.getElementById(canvasId);
+    const canvas = document.getElementById(canvasId);
     const legendEl = document.getElementById(legendId);
     if (!canvas) return;
 
@@ -499,12 +508,12 @@ function buildActivityDonut(canvasId, legendId, workoutLogs) {
         return;
     }
 
-    const grouped   = {};
+    const grouped = {};
     workoutLogs.forEach(l => { grouped[l.activity] = (grouped[l.activity] || 0) + (l.duration || 0); });
-    const labels    = Object.keys(grouped);
+    const labels = Object.keys(grouped);
     const durations = labels.map(k => grouped[k]);
-    const total     = durations.reduce((a, b) => a + b, 0);
-    const colors    = labels.map(k => ACTIVITY_COLORS[k] || '#858796');
+    const total = durations.reduce((a, b) => a + b, 0);
+    const colors = labels.map(k => ACTIVITY_COLORS[k] || '#858796');
 
     const chart = new Chart(canvas, {
         type: 'doughnut',
@@ -522,7 +531,7 @@ function buildActivityDonut(canvasId, legendId, workoutLogs) {
                 callbacks: {
                     label: ctx => {
                         const mins = durations[ctx.index];
-                        const pct  = Math.round((mins / total) * 100);
+                        const pct = Math.round((mins / total) * 100);
                         return ` ${labels[ctx.index]}: ${mins} min (${pct}%)`;
                     }
                 }
@@ -535,9 +544,9 @@ function buildActivityDonut(canvasId, legendId, workoutLogs) {
 
     if (legendEl) {
         legendEl.innerHTML = labels.map((label, i) => {
-            const mins  = durations[i];
-            const hrs   = (mins / 60).toFixed(1);
-            const pct   = Math.round((mins / total) * 100);
+            const mins = durations[i];
+            const hrs = (mins / 60).toFixed(1);
+            const pct = Math.round((mins / total) * 100);
             const color = colors[i];
             return `
                 <div class="d-flex align-items-center justify-content-between mb-1">
@@ -567,7 +576,7 @@ function changeMonth(dir) {
 }
 
 function resetAll() {
-    weekOffset  = 0;
+    weekOffset = 0;
     monthOffset = 0;
     buildWeekly();
     buildMonthly();

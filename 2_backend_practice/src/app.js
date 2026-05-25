@@ -7,12 +7,18 @@ import requestId from './middleware/requestId.js'
 import { notFoundHandler, errorHandler } from './middleware/errorHandler.js'
 
 import fitnessTrackerController from './modules/fitness-tracker/fitnessTrackerController.js'
-import nutritionController from './modules/nutrition/nutritionController.js'
-import progressController from './modules/progress/progressController.js'
-import userProfileController from './modules/user-profile/userProfileController.js'
+import nutritionPlannerController from './modules/nutrition-planner/nutritionPlannerController.js'
+import progressChartsController from './modules/progress-charts/progressChartsController.js'
+import profileController from './modules/profile/profileController.js'
 import authController from './modules/auth/authController.js'
-import notification from './modules/notification/notificationController.js'
-import dashboard from './dashboard/dashboardController.js'
+import dashboardController from './modules/dashboard/dashboardController.js'
+
+// Temporarily disabled until these legacy module paths exist again:
+// import nutritionController from './modules/nutrition/nutritionController.js'
+// import progressController from './modules/progress/progressController.js'
+// import userProfileController from './modules/user-profile/userProfileController.js'
+// import dashboard from './dashboard/dashboardController.js'
+// import notificationController from './modules/notification/notificationController.js'
 
 const app = express() // create app
 
@@ -31,12 +37,17 @@ app.get('/', (request, response) => {
 
 // redirect request to their modules
 app.use('/api/v1/fitness-tracker', fitnessTrackerController)
-app.use('/api/v1/nutrition', nutritionController)
-app.use('/api/v1/progress', progressController)
-app.use('/api/v1/user-profile', userProfileController)
 app.use('/api/v1/auth', authController)
-app.use('/api/v1/notification', notificationController)
 app.use('/api/v1/dashboard', dashboardController)
+app.use('/api/v1/nutrition-planner', nutritionPlannerController)
+app.use('/api/v1/progress-charts', progressChartsController)
+app.use('/api/v1/profile', profileController)
+
+// Temporarily disabled until these legacy route modules are restored:
+// app.use('/api/v1/nutrition', nutritionController)
+// app.use('/api/v1/progress', progressController)
+// app.use('/api/v1/user-profile', userProfileController)
+// app.use('/api/v1/notification', notificationController)
 
 // Why after test route? notFoundHandler -> "No routes matched"
 //these two ORDER matters 'Not found' -> 'error'

@@ -220,6 +220,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('stepsPct')) document.getElementById('stepsPct').textContent = `${stepPct}%`;
     if (document.getElementById('stepsProgressBar')) document.getElementById('stepsProgressBar').style.width = `${stepPct}%`;
     if (document.getElementById('stepsRemaining')) document.getElementById('stepsRemaining').textContent = stepRem === "0" ? "Goal reached! 🎉" : `${stepRem} steps to reach your goal`;
+    if (document.getElementById('steps-goal-display')) document.getElementById('steps-goal-display').textContent = '/ ' + stepGoal.toLocaleString();
 
     // water
     const waterPct = Math.min(Math.round((waterGlasses / waterGoal) * 100), 100);
@@ -236,30 +237,30 @@ document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('calorieText')) document.getElementById('calorieText').textContent = todayWorkouts.length > 0 ? `From ${todayWorkouts.length} workout session(s) today` : `Active calories recorded`;
 
     // Extra dashboard stat cards
-const stepsCardValue = document.getElementById('steps-card-value');
-if (stepsCardValue) stepsCardValue.textContent = todaySteps.toLocaleString();
+    const stepsCardValue = document.getElementById('steps-card-value');
+    if (stepsCardValue) stepsCardValue.textContent = todaySteps.toLocaleString();
 
-const stepsCardBar = document.getElementById('stepsCardBar');
-if (stepsCardBar) stepsCardBar.style.width = `${stepPct}%`;
+    const stepsCardBar = document.getElementById('stepsCardBar');
+    if (stepsCardBar) stepsCardBar.style.width = `${stepPct}%`;
 
-const stepsCardLabel = document.getElementById('stepsCardLabel');
-if (stepsCardLabel) {
-    stepsCardLabel.textContent = stepPct >= 100
-        ? "Daily step goal achieved"
-        : `${stepPct}% of daily target`;
-}
+    const stepsCardLabel = document.getElementById('stepsCardLabel');
+    if (stepsCardLabel) {
+        stepsCardLabel.textContent = stepPct >= 100
+            ? "Daily step goal achieved"
+            : `${stepPct}% of daily target`;
+    }
 
-const caloriesCardValue = document.getElementById('calories-card-value');
-if (caloriesCardValue) caloriesCardValue.textContent = todayCal.toLocaleString();
+    const caloriesCardValue = document.getElementById('calories-card-value');
+    if (caloriesCardValue) caloriesCardValue.textContent = todayCal.toLocaleString();
 
-const workoutsCardValue = document.getElementById('workouts-card-value');
-if (workoutsCardValue) workoutsCardValue.textContent = weeklySessions;
+    const workoutsCardValue = document.getElementById('workouts-card-value');
+    if (workoutsCardValue) workoutsCardValue.textContent = weeklySessions;
 
-const goalProgressValue = document.getElementById('goal-progress-value');
-if (goalProgressValue) goalProgressValue.textContent = `${dailyHealthScore}%`;
+    const goalProgressValue = document.getElementById('goal-progress-value');
+    if (goalProgressValue) goalProgressValue.textContent = `${dailyHealthScore}%`;
 
-const goalProgressBar = document.getElementById('goal-progress-bar');
-if (goalProgressBar) goalProgressBar.style.width = `${dailyHealthScore}%`;
+    const goalProgressBar = document.getElementById('goal-progress-bar');
+    if (goalProgressBar) goalProgressBar.style.width = `${dailyHealthScore}%`;
 
     // 2. Streaks & Sessions
     const streakBadge = document.getElementById('streak-badge');

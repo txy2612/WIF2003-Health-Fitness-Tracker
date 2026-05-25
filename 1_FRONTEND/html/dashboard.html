@@ -132,16 +132,17 @@
                                             <div class="text-xs font-weight-bold text-uppercase text-muted">Steps Goal</div>
                                             <div class="font-weight-bold text-gray-800">
                                                 <span id="today-steps-count">8,450</span>
-                                                <span class="text-muted font-weight-normal small">/ 10,000</span>
+                                                <span id="steps-goal-display" class="text-muted font-weight-normal small">/ 10,000</span>
                                             </div>
                                         </div>
                                         <span class="ml-auto badge badge-success" id="stepsPct">85%</span>
                                     </div>
                                     <div class="progress" style="height:8px; border-radius:99px;">
-                                        <div class="progress-bar bg-success" id="stepsGoalBar" role="progressbar"
+                                        <div class="progress-bar bg-success" id="stepsProgressBar" role="progressbar"
                                             style="width:85%; border-radius:99px;"></div>
                                     </div>
-                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;"  id="stepsRemaining">1,550 steps to reach your goal</small>
+                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;"
+                                        id="stepsRemaining">1,550 steps to reach your goal</small>
                                 </div>
 
                                 <!-- Water goal -->
@@ -152,7 +153,8 @@
                                             <i class="fas fa-tint text-info"></i>
                                         </div>
                                         <div>
-                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Water Intake</div>
+                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Water Intake
+                                            </div>
                                             <div class="font-weight-bold text-gray-800">
                                                 <span id="dashboard-water-count">5</span>
                                                 <span class="text-muted font-weight-normal small">/ 8 glasses</span>
@@ -164,7 +166,8 @@
                                         <div class="progress-bar bg-info" id="dashboard-water-bar" role="progressbar"
                                             style="width:63%; border-radius:99px;"></div>
                                     </div>
-                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;" id="dashboard-water-text">3 more glasses to go</small>
+                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;"
+                                        id="dashboard-water-text">3 more glasses to go</small>
                                 </div>
 
                                 <!-- Calories goal -->
@@ -175,7 +178,8 @@
                                             <i class="fas fa-fire" style="color:#f6c23e;"></i>
                                         </div>
                                         <div>
-                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Calories Burned</div>
+                                            <div class="text-xs font-weight-bold text-uppercase text-muted">Calories
+                                                Burned</div>
                                             <div class="font-weight-bold text-gray-800">
                                                 <span id="today-calories-count">560</span>
                                                 <span class="text-muted font-weight-normal small">kcal today</span>
@@ -184,10 +188,11 @@
                                         <span class="ml-auto badge badge-warning text-dark">Active</span>
                                     </div>
                                     <div class="progress" style="height:8px; border-radius:99px;">
-                                        <div class="progress-bar" id="calorieBar" role="progressbar"
+                                        <div class="progress-bar" id="calProgressBar" role="progressbar"
                                             style="width:56%; background:#f6c23e; border-radius:99px;"></div>
                                     </div>
-                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;" id="calorieText">From 2 sessions today</small>
+                                    <small class="text-muted mt-1 mb-3" style="font-size:0.9rem;" id="calorieText">From
+                                        2 sessions today</small>
                                 </div>
 
                             </div>
@@ -202,10 +207,13 @@
                                         <i class="fas fa-bell text-primary"></i>
                                     </div>
                                     <div>
-                                        <div class="text-xs font-weight-bold text-uppercase text-muted">Next Reminder</div>
-                                        <div class="font-weight-bold text-gray-800 mb-1" style="font-size:1rem;" id="next-reminder-title">No upcoming reminders
+                                        <div class="text-xs font-weight-bold text-uppercase text-muted">Next Reminder
                                         </div>
-                                        <small class="text-muted" style="font-size:0.9rem;" id="next-reminder-desc">Stay consistent with your daily routine.</small>
+                                        <div class="font-weight-bold text-gray-800 mb-1" style="font-size:1rem;"
+                                            id="next-reminder-title">No upcoming reminders
+                                        </div>
+                                        <small class="text-muted" style="font-size:0.9rem;" id="next-reminder-desc">Stay
+                                            consistent with your daily routine.</small>
                                     </div>
                                 </div>
                             </div>
@@ -213,7 +221,7 @@
                         </div>
                     </div>
 
-                    
+
                     <!-- ── HEALTH SCORE ─────────────────────────────────────────────── -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
@@ -323,7 +331,8 @@
                                             </div>
                                             <h6 class="mb-0 font-weight-bold">Plan Meals</h6>
                                         </div>
-                                        <p class="text-muted small mb-3">Explore meal ideas and log your daily nutrition.</p>
+                                        <p class="text-muted small mb-3">Explore meal ideas and log your daily
+                                            nutrition.</p>
                                         <a href="nutrition-planner.html" class="btn btn-primary btn-sm">
                                             <i class="fas fa-apple-alt fa-sm mr-1"></i> Go to Nutrition
                                         </a>
@@ -339,7 +348,8 @@
                                             </div>
                                             <h6 class="mb-0 font-weight-bold">View Progress</h6>
                                         </div>
-                                        <p class="text-muted small mb-3">See detailed fitness charts and trends over time.</p>
+                                        <p class="text-muted small mb-3">See detailed fitness charts and trends over
+                                            time.</p>
                                         <a href="progress-charts.html" class="btn btn-outline-primary btn-sm">
                                             <i class="fas fa-chart-bar fa-sm mr-1"></i> View Charts
                                         </a>
