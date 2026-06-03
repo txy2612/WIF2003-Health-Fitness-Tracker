@@ -41,23 +41,29 @@ const FITNESS_API_URL = 'http://localhost:3000/api/v1/fitness-tracker'
 
 // ── BACKEND ACTIVITY API HELPERS ──────────────────────────────────────────────
 
-
+// Purpose: Prevent crashing if there is nothing in response by API
+// const data = await reponse.json()
+// may crach if backend returns empty response
+// response.json() may fail bcz there's ntg to parse
 async function parseApiResponse(response) {
-    const text = await response.text();
-    if (!text) return {};
+    const text = await response.text();// first read the response as plain text
+    if (!text) return {};// if backend sent ntg, just return empty object instead of crashing
 
     try {
-        return JSON.parse(text);
+        return JSON.parse(text);// if there is object, convert into js object
     } catch (error) {
         return {};
     }
 }
 
+// Purpose: Reduce amount of times of writing fetch()
+// options = {} - allows the helper func to work for GET, POST & DELETE
 async function requestFitnessApi(path, options = {}) {
     const response = await fetch(`${FITNESS_API_URL}${path}`, options);
     const data = await parseApiResponse(response);
 
     if (!response.ok) {
+        // priority: data.detail -> data.msg -> fitness failed
         const error = new Error(data.detail || data.message || 'Fitness tracker request failed.');
         error.status = response.status;
         error.data = data;
@@ -67,9 +73,10 @@ async function requestFitnessApi(path, options = {}) {
     return data;
 }
 
+// Purpose: loads activity logs from backend
 async function loadActivityLogs() {
-    const data = await requestFitnessApi('/activities');
-    activityLogs = Array.isArray(data.activities) ? data.activities : [];
+    const data = await requestFitnessApi('/activities');// calls 
+    activityLogs = Array.isArray(data.activities) ? data.activities : []; // data.activities is really an array ,store into activityLogs. Otherwise, use empty array
     return activityLogs;
 }
 

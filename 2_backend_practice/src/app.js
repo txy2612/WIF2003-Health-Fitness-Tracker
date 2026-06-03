@@ -13,12 +13,11 @@ import profileController from './modules/profile/profileController.js'
 import authController from './modules/auth/authController.js'
 import dashboardController from './modules/dashboard/dashboardController.js'
 
-// Temporarily disabled until these legacy module paths exist again:
-// import nutritionController from './modules/nutrition/nutritionController.js'
-// import progressController from './modules/progress/progressController.js'
-// import userProfileController from './modules/user-profile/userProfileController.js'
-// import dashboard from './dashboard/dashboardController.js'
-// import notificationController from './modules/notification/notificationController.js'
+import nutritionController from './modules/nutrition/nutritionController.js'
+import progressController from './modules/progress/progressController.js'
+import userProfileController from './modules/user-profile/userProfileController.js'
+import dashboard from './dashboard/dashboardController.js'
+import notificationController from './modules/notification/notificationController.js'
 
 const app = express() // create app
 
@@ -43,11 +42,10 @@ app.use('/api/v1/nutrition-planner', nutritionPlannerController)
 app.use('/api/v1/progress-charts', progressChartsController)
 app.use('/api/v1/profile', profileController)
 
-// Temporarily disabled until these legacy route modules are restored:
-// app.use('/api/v1/nutrition', nutritionController)
-// app.use('/api/v1/progress', progressController)
-// app.use('/api/v1/user-profile', userProfileController)
-// app.use('/api/v1/notification', notificationController)
+app.use('/api/v1/nutrition', nutritionController)
+app.use('/api/v1/progress', progressController)
+app.use('/api/v1/user-profile', userProfileController)
+app.use('/api/v1/notification', notificationController)
 
 // Why after test route? notFoundHandler -> "No routes matched"
 //these two ORDER matters 'Not found' -> 'error'
