@@ -32,6 +32,10 @@ const notificationSchema = new mongoose.Schema({
     type: Date,
     default: null,
   },
+  emailSendLockedAt: {
+    type: Date,
+    default: null,
+  },
   sendAttempts: {
     type: Number,
     min: 0,
@@ -59,7 +63,7 @@ const notificationSchema = new mongoose.Schema({
   { scheduledFor: 09:01 },
   { scheduledFor: 09:02 },
 */
-notificationSchema.index({ scheduledFor: 1, completed: 1, emailSentAt: 1 })
+notificationSchema.index({ scheduledFor: 1, completed: 1, emailSentAt: 1, emailSendLockedAt: 1 })
 
 // Schema defines structure of data
 // Model is created from Schema and is what mongoose use to interact w MongoDB

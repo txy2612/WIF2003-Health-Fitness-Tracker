@@ -12,6 +12,8 @@ import progressChartsController from './modules/progress-charts/progressChartsCo
 import profileController from './modules/profile/profileController.js'
 import authController from './modules/auth/authController.js'
 import dashboardController from './modules/dashboard/dashboardController.js'
+import { startReminderScheduler } from './modules/notification/reminderScheduler.js'
+import notificationController from './modules/notification/notificationController.js'
 
 import nutritionController from './modules/nutrition/nutritionController.js'
 import progressController from './modules/progress/progressController.js'
@@ -41,11 +43,10 @@ app.use('/api/v1/dashboard', dashboardController)
 app.use('/api/v1/nutrition-planner', nutritionPlannerController)
 app.use('/api/v1/progress-charts', progressChartsController)
 app.use('/api/v1/profile', profileController)
-
+app.use('/api/v1/notification', notificationController)
 app.use('/api/v1/nutrition', nutritionController)
 app.use('/api/v1/progress', progressController)
 app.use('/api/v1/user-profile', userProfileController)
-app.use('/api/v1/notification', notificationController)
 
 // Why after test route? notFoundHandler -> "No routes matched"
 //these two ORDER matters 'Not found' -> 'error'
@@ -54,6 +55,7 @@ app.use(errorHandler)
 
 //connect database first
 await connectDatabase()
+startReminderScheduler()
 
 // start server
 app.listen(env.PORT, () => {

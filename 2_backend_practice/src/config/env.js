@@ -5,9 +5,9 @@ dotenv.config({quiet: true})
 //Why quiet? -> reduce console noise 
 // not important but nice to have
 
-const optionalNumber = z.preprocess(
+const positiveIntWithDefault = (defaultValue) => z.preprocess(
     (value) => (value === '' || value === undefined ? undefined : value),
-    z.coerce.number().int().positive().default(587)
+    z.coerce.number().int().positive().default(defaultValue)
 )
 
 const booleanFromEnv = z.preprocess(
@@ -27,11 +27,15 @@ const envSchema = z.object({
     MONGODB_URI: z.string().min(1, 'MONGODB_URI is required.'),
     MONGODB_DNS_SERVERS: z.string().default('1.1.1.1,8.8.8.8'),
     SMTP_HOST: z.string().trim().default(''),
-    SMTP_PORT: optionalNumber,
+    SMTP_PORT: positiveIntWithDefault(587),
     SMTP_SECURE: booleanFromEnv,
     SMTP_USER: z.string().trim().default(''),
     SMTP_PASS: z.string().default(''),
     SMTP_FROM: z.string().trim().default('FitTrack <no-reply@fittrack.local>'),
+    REMINDER_CRON_SCHEDULE: z.string().trim().default('*/1 * * * *'),
+    REMINDER_BATCH_SIZE: positiveIntWithDefault(10),
+    REMINDER_SEND_LOCK_MINUTES: positiveIntWithDefault(10),
+    REMINDER_TIMEZONE: z.string().trim().default('Asia/Kuala_Lumpur'),
 })
 
 const env = envSchema.parse(process.env)

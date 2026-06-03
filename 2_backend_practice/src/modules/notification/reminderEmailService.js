@@ -1,5 +1,6 @@
 import mailer from '../../shared/mailer.js'
 
+// seller
 const DEFAULT_TIMEZONE = 'Asia/Kuala_Lumpur'
 
 function escapeHtml(value) {
@@ -19,7 +20,7 @@ function formatScheduledFor(scheduledFor, timezone = DEFAULT_TIMEZONE) {
   }).format(new Date(scheduledFor))
 }
 
-// processDueReminders -> sendReminderEmail -> buildReminderEmail -> mailer.sendMail
+// reminderProcessor -> sendReminderEmail -> buildReminderEmail -> mailer.sendMail
 function buildReminderEmail({ title, message, scheduledFor, timezone }) {
   // Produces 3 Jun 2026, 6:30 PM
   const formattedTime = formatScheduledFor(scheduledFor, timezone)
