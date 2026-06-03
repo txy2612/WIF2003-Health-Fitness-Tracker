@@ -15,11 +15,11 @@ import dashboardController from './modules/dashboard/dashboardController.js'
 import { startReminderScheduler } from './modules/notification/reminderScheduler.js'
 import notificationController from './modules/notification/notificationController.js'
 
-import nutritionController from './modules/nutrition/nutritionController.js'
-import progressController from './modules/progress/progressController.js'
-import userProfileController from './modules/user-profile/userProfileController.js'
-import dashboard from './dashboard/dashboardController.js'
-import notificationController from './modules/notification/notificationController.js'
+// Temporarily disabled until these legacy module paths exist again:
+// import nutritionController from './modules/nutrition/nutritionController.js'
+// import progressController from './modules/progress/progressController.js'
+// import userProfileController from './modules/user-profile/userProfileController.js'
+// import dashboard from './dashboard/dashboardController.js'
 
 const app = express() // create app
 
@@ -44,9 +44,11 @@ app.use('/api/v1/nutrition-planner', nutritionPlannerController)
 app.use('/api/v1/progress-charts', progressChartsController)
 app.use('/api/v1/profile', profileController)
 app.use('/api/v1/notification', notificationController)
-app.use('/api/v1/nutrition', nutritionController)
-app.use('/api/v1/progress', progressController)
-app.use('/api/v1/user-profile', userProfileController)
+
+// Temporarily disabled until these legacy route modules are restored:
+// app.use('/api/v1/nutrition', nutritionController)
+// app.use('/api/v1/progress', progressController)
+// app.use('/api/v1/user-profile', userProfileController)
 
 // Why after test route? notFoundHandler -> "No routes matched"
 //these two ORDER matters 'Not found' -> 'error'
