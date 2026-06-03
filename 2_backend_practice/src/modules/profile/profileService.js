@@ -19,6 +19,16 @@ async function updateProfilePreview(profile) {
   })
 }
 
+async function updateProfile(profile) {
+  const currentProfile = await profileModel.findOne({}).sort({ createdAt: -1 }).lean()
+
+  const savedProfile = currentProfile
+    ? await profileModel.findByIdAndUpdate(currentProfile._id, profile, { new: true }).lean()
+    : await profileModel.create(profile)
+
+  return buildProfileOverview(savedProfile)
+}
+
 function buildProfileOverview(profile = {}) {
   return {
     generatedAt: new Date().toISOString(),
@@ -39,5 +49,6 @@ function buildProfileOverview(profile = {}) {
 
 export default {
   getProfileOverview,
+  updateProfile,
   updateProfilePreview,
 }

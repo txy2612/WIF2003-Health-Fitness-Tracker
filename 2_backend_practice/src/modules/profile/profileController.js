@@ -2,7 +2,7 @@ import express from 'express'
 import { StatusCodes } from 'http-status-codes'
 import profileService from './profileService.js'
 import validate from '../../middleware/validate.js'
-import { getSchema, putProfilePreviewSchema } from './profileSchema.js'
+import { getSchema, putProfilePreviewSchema, putProfileSchema } from './profileSchema.js'
 
 const router = express.Router()
 
@@ -20,6 +20,17 @@ router.put('/preview', validate(putProfilePreviewSchema), async (request, respon
   try {
     const { body } = request.validated
     const data = await profileService.updateProfilePreview(body)
+
+    response.status(StatusCodes.OK).json(data)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.put('/', validate(putProfileSchema), async (request, response, next) => {
+  try {
+    const { body } = request.validated
+    const data = await profileService.updateProfile(body)
 
     response.status(StatusCodes.OK).json(data)
   } catch (error) {
