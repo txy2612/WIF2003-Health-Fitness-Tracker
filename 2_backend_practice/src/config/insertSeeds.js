@@ -35,7 +35,9 @@ const seedJobs = [
     model: notificationModel,
     documents: notificationSeeds,
     uniqueFilter: (notification) => ({
-      id: notification.id,//before inserting a noti, check if a notification with the same channel, title, and scheduledFor already exist
+      channel: notification.channel,
+      title: notification.title,
+      scheduledFor: notification.scheduledFor,//before inserting a noti, check if a notification with the same channel, title, and scheduledFor already exist
     }),
   },
   {

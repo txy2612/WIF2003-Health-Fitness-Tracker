@@ -1,38 +1,38 @@
 const notificationSeeds = [
   {
-    id: 1,
-    type: 'Workout',
+    channel: 'workout',
     title: 'Morning Run',
-    datetime: '2026-05-25 07:00',
-    note: '30-minute run around campus',
+    message: '30-minute run around campus',
+    scheduledFor: new Date('2026-06-04T07:00:00+08:00'),
     completed: false,
+    read: false,
   },
 
   {
-    id: 2,
-    type: 'Water',
+    channel: 'hydration',
     title: 'Drink Water',
-    datetime: '2026-05-25 10:00',
-    note: 'Drink 2 glasses of water',
+    message: 'Drink 2 glasses of water',
+    scheduledFor: new Date('2026-06-04T10:00:00+08:00'),
     completed: false,
+    read: false,
   },
 
   {
-    id: 3,
-    type: 'Meal',
+    channel: 'nutrition',
     title: 'Lunch Reminder',
-    datetime: '2026-05-25 12:30',
-    note: 'High-protein lunch',
+    message: 'High-protein lunch',
+    scheduledFor: new Date('2026-06-04T12:30:00+08:00'),
     completed: false,
+    read: false,
   },
 
   {
-    id: 4,
-    type: 'Workout',
+    channel: 'workout',
     title: 'Gym Session',
-    datetime: '2026-05-25 18:00',
-    note: 'Leg day',
+    message: 'Leg day',
+    scheduledFor: new Date('2026-06-04T18:00:00+08:00'),
     completed: true,
+    read: false,
   },
 ]
 
