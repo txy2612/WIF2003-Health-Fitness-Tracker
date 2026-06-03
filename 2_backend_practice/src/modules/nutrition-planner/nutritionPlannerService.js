@@ -1,4 +1,17 @@
 import nutritionPlannerModel from './nutritionPlannerModel.js'
+import favouriteModel from './favouriteModel.js'
+import mealPlanModel from './mealPlanModel.js'
+
+// Strip Mongo internals before returning to the frontend (same idea as
+// fitness-tracker's formatActivity).
+function formatDoc(doc) {
+  const plain = doc?.toObject ? doc.toObject() : { ...doc }
+  delete plain._id
+  delete plain.__v
+  return plain
+}
+
+// ── existing: catalogue + calorie calculator ─────────────────────────────────
 
 async function getNutritionPlannerOverview(query = {}) {
   const meals = await findMeals(query.search)
@@ -59,7 +72,62 @@ function getGoalAdjustment(goal) {
   return 0
 }
 
+// ── favourites ────────────────────────────────────────────────────────────────
+
+async function getFavourites() {
+  const favourites = await favouriteModel.find({}).sort({ createdAt: -1 }).lean()
+  return { favourites: favourites.map(formatDoc) }
+}
+
+async function addFavourite(body) {
+  // Idempotent: if the meal is already favourited, just return it instead of
+  // throwing a duplicate-key error (the frontend heart toggle only POSTs on add,
+  // but this keeps refreshes / double-clicks safe).
+  const existing = await favouriteModel.findOne({ mealId: body.mealId }).lean()
+  if (existing) {
+    return formatDoc(existing)
+  }
+
+  const created = await favouriteModel.create(body)
+  return formatDoc(created)
+}
+
+async function removeFavourite(mealId) {
+  const deleted = await favouriteModel.findOneAndDelete({ mealId })
+  return deleted ? formatDoc(deleted) : null
+}
+
+// ── today's plan ──────────────────────────────────────────────────────────────
+
+async function getPlan(date) {
+  const plan = await mealPlanModel.findOne({ date }).lean()
+  if (!plan) {
+    // No plan saved for that day yet — return an empty shape the UI can render.
+    return { date, breakfast: [], lunch: [], dinner: [] }
+  }
+  return formatDoc(plan)
+}
+
+async function savePlan(body) {
+  const { date, breakfast = [], lunch = [], dinner = [] } = body
+
+  // Upsert by date: one plan per day. Saving the whole plan in one PUT matches
+  // how the page already persists it, and avoids per-item round-trips.
+  const plan = await mealPlanModel.findOneAndUpdate(
+    { date },
+    { date, breakfast, lunch, dinner },
+    { new: true, upsert: true, setDefaultsOnInsert: true }
+  ).lean()
+
+  return formatDoc(plan)
+}
+
 export default {
   calculateCalorieGoal,
   getNutritionPlannerOverview,
+  getFavourites,
+  addFavourite,
+  removeFavourite,
+  getPlan,
+  savePlan,
 }
