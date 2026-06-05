@@ -37,10 +37,15 @@ let activitiesLoadStatus = 'idle'; // idle | loading | success | error
 // separation -> cleaner
 let profileData = {};
 let goalsData = {};
+let waterInsightData = {
+    glasses: 0,
+    loaded: false
+};
 
 // Profile and goals now come from the profile backend endpoint.
 const FITNESS_API_URL = 'http://localhost:3000/api/v1/fitness-tracker'
 const PROFILE_API_URL = 'http://localhost:3000/api/v1/profile'
+const NUTRITION_API_URL = 'http://localhost:3000/api/v1/nutrition-planner'
 
 // ── BACKEND ACTIVITY API HELPERS ──────────────────────────────────────────────
 
@@ -102,6 +107,7 @@ async function loadActivities() {
     }
 }
 
+// == Centralized Create & Delete, for steps & workout
 async function createActivityLog(activity) {
     const createdActivity = await requestFitnessApi('/activities', {
         method: 'POST',
@@ -156,19 +162,52 @@ async function loadProfile() {
             activityLevel: healthProfile.activityLevel || ''
         };
 
-        // if backend return data -> store; othwise, use empty
-        goalsData = data.goals || {};
+        loadGoals(data);
     } catch (error) {
         console.warn('Could not load profile from backend.', error);
     }
 }
 
+function loadGoals(profileResponse) {
+    // if backend return data -> store; othwise, use empty
+    goalsData = profileResponse.goals || {};
+}
+
+// why use getters?
+// Don't let every function access variables directly.
+
+// suppose change from localStorage -> session storage or await fetch
+// only change getter
 function getProfile() {
     return profileData;
 }
 
 function getGoals() {
     return goalsData;
+}
+
+// replaced localStorage.getItem
+async function loadWaterInsight(date) {
+    try {
+        const response = await fetch(`${NUTRITION_API_URL}/hydration?date=${date}`);
+        const data = await parseApiResponse(response);
+
+        if (!response.ok) {
+            throw new Error(data.detail || data.message || 'Hydration request failed.');
+        }
+
+        // mapper
+        waterInsightData = {
+            glasses: Number(data.glasses) || 0,
+            loaded: true
+        };
+    } catch (error) {
+        console.warn('Could not load hydration from backend.', error);
+        waterInsightData = {
+            glasses: 0,
+            loaded: false
+        };
+    }
 }
 
 
@@ -564,9 +603,13 @@ function getStepInsight() {
 }
 
 function getWaterInsight() {
-    const today = new Date().toISOString().split('T')[0];
-    const waterGlasses = parseInt(localStorage.getItem('np_water_' + today) || '0', 10);
-    const waterMax = 8;
+    if (!waterInsightData.loaded) {
+        return 'Hydration data is not available yet.';
+    }
+
+    const goals = getGoals();
+    const waterGlasses = waterInsightData.glasses;
+    const waterMax = parseInt(goals.water) || 8;
     const remaining = waterMax - waterGlasses;
     if (remaining <= 0)  return "🎉 You've hit your water goal today!";
     if (remaining === 1) return "Just 1 more glass of water to hit your goal!";
@@ -591,18 +634,18 @@ function getWeekendWorkoutInsight() {
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', async function () {
-    const today = new Date().toISOString().split('T')[0];
+function setDefaultDates(today) {
     document.getElementById('activityDate').value = today;
     document.getElementById('stepsDate').value    = today;
+}
 
+function setupFitnessFormEvents() {
     document.getElementById('activityType').addEventListener('change', updateWorkoutCalDisplay);
     document.getElementById('duration').addEventListener('input',  updateWorkoutCalDisplay);
     document.getElementById('stepsCount').addEventListener('input', updateStepsCalDisplay);
+}
 
-    await loadProfile();
-    loadActivities();
-
+function setupDeleteModal() {
     // Delete modal confirmation
     document.getElementById('confirmDeleteBtn').addEventListener('click', async function () {
         if (_rowToDelete) {
@@ -622,4 +665,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
         $('#deleteModal').modal('hide');
     });
+}
+
+// instead of big DOMContent blocl ->
+    // setDefaultDates()
+    // setupFitnessFormEvents()
+    //setupDeleteModal()
+document.addEventListener('DOMContentLoaded', async function () {
+    const today = new Date().toISOString().split('T')[0];
+
+    setDefaultDates(today);
+    setupFitnessFormEvents();
+    setupDeleteModal();
+
+    await loadProfile();
+    await loadWaterInsight(today);
+    await loadActivities();
+    updateQuickSummary();
 });

@@ -8,6 +8,14 @@ export const getSchema = z.object({
   }),
 })
 
+export const getHydrationSchema = z.object({
+  body: z.object({}),
+  params: z.object({}),
+  query: z.object({
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  }),
+})
+
 export const postCalorieGoalSchema = z.object({
   body: z.object({
     age: z.coerce.number().int().min(13).max(120),

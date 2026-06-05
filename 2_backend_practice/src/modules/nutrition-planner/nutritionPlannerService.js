@@ -1,4 +1,5 @@
 import nutritionPlannerModel from './nutritionPlannerModel.js'
+import progressChartsModel from '../progress-charts/progressChartsModel.js'
 
 async function getNutritionPlannerOverview(query = {}) {
   const meals = await findMeals(query.search)
@@ -34,6 +35,29 @@ function calculateCalorieGoal(profile) {
   }
 }
 
+async function getHydrationForDate(query = {}) {
+  const date = query.date || new Date().toISOString().slice(0, 10)
+  const startOfDay = new Date(`${date}T00:00:00.000Z`)
+  const endOfDay = new Date(startOfDay)
+  endOfDay.setUTCDate(endOfDay.getUTCDate() + 1)
+
+  const waterEntry = await progressChartsModel
+    .findOne({
+      metric: 'waterGlasses',
+      recordedFor: {
+        $gte: startOfDay,
+        $lt: endOfDay,
+      },
+    })
+    .sort({ updatedAt: -1 })
+    .lean()
+
+  return {
+    date,
+    glasses: waterEntry ? waterEntry.value : 0,
+  }
+}
+
 async function findMeals(search) {
   if (!search) {
     return nutritionPlannerModel.find({}).sort({ name: 1 }).lean()
@@ -61,5 +85,6 @@ function getGoalAdjustment(goal) {
 
 export default {
   calculateCalorieGoal,
+  getHydrationForDate,
   getNutritionPlannerOverview,
 }
