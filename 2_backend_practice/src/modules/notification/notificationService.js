@@ -13,6 +13,14 @@ async function createNotification(notification) {
   return notificationModel.create(notification)
 }
 
+// etc: update status 'to do' -> 'done'
+async function updateNotification(id, notification) {
+  return notificationModel.findByIdAndUpdate(id, notification, {
+    new: true,
+    runValidators: true,
+  })
+}
+
 // Purpose: delete notification by MongoDB id
 async function deleteNotification(id) {
   return notificationModel.findByIdAndDelete(id)//Mongoose helper
@@ -21,5 +29,6 @@ async function deleteNotification(id) {
 export default {
   getNotifications,
   createNotification,
+  updateNotification,
   deleteNotification,
 }

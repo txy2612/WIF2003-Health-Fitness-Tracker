@@ -7,6 +7,7 @@ import validate from '../../middleware/validate.js'
 import {
   deleteNotificationSchema,
   getNotificationSchema,
+  patchNotificationSchema,
   postNotificationSchema,
 } from './notificationSchema.js'
 
@@ -29,6 +30,24 @@ router.post('/', validate(postNotificationSchema), async (request, response, nex
     const data = await notificationService.createNotification(body)
 
     response.status(StatusCodes.CREATED).json(data)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.patch('/:id', validate(patchNotificationSchema), async (request, response, next) => {
+  try {
+    const { id } = request.validated.params
+    const { body } = request.validated
+    const updatedNotification = await notificationService.updateNotification(id, body)
+
+    if (!updatedNotification) {
+      return response.status(StatusCodes.NOT_FOUND).json({
+        message: 'Notification not found'
+      })
+    }
+
+    response.status(StatusCodes.OK).json(updatedNotification)
   } catch (error) {
     next(error)
   }

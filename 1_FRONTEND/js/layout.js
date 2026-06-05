@@ -208,6 +208,111 @@ function updateNotificationBadge() {
     }
 }
 
+const FITTRACK_REMINDER_STORAGE_KEY = 'fittrack_reminders';
+const MAX_REMINDER_TIMEOUT_MS = 2147483647;
+let fitTrackReminderTimers = new Map();
+let fitTrackReminderInterval = null;
+
+function getStoredFitTrackReminders() {
+    try {
+        return JSON.parse(localStorage.getItem(FITTRACK_REMINDER_STORAGE_KEY)) || [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function getReminderDueDate(reminder) {
+    if (reminder.scheduledFor) {
+        const scheduledDate = new Date(reminder.scheduledFor);
+        if (!Number.isNaN(scheduledDate.getTime())) return scheduledDate;
+    }
+
+    if (reminder.datetime) {
+        const localDate = new Date(String(reminder.datetime).replace(' ', 'T'));
+        if (!Number.isNaN(localDate.getTime())) return localDate;
+    }
+
+    return null;
+}
+
+function getReminderNotificationText(reminder) {
+    const title = reminder.title || reminder.type || 'FitTrack Reminder';
+    const body = reminder.note && reminder.note.trim()
+        ? reminder.note.trim()
+        : `Time for ${reminder.type || 'your activity'}.`;
+
+    return { title, body };
+}
+
+function showReminderNotification(reminder) {
+    const { title, body } = getReminderNotificationText(reminder);
+
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, {
+            body,
+            tag: `fittrack-reminder-${reminder.id}`,
+        });
+        return;
+    }
+
+    alert(`${title}\n${body}`);
+}
+
+function markReminderNotificationShown(reminderId) {
+    const storedReminders = getStoredFitTrackReminders();
+    const reminder = storedReminders.find(item => String(item.id) === String(reminderId));
+
+    if (!reminder || reminder.completed || reminder.notificationShownAt) return;
+
+    reminder.notificationShownAt = new Date().toISOString();
+    localStorage.setItem(FITTRACK_REMINDER_STORAGE_KEY, JSON.stringify(storedReminders));
+    updateNotificationBadge();
+}
+
+function processDueFitTrackReminder(reminderId) {
+    const reminder = getStoredFitTrackReminders()
+        .find(item => String(item.id) === String(reminderId));
+
+    if (!reminder || reminder.completed || reminder.notificationShownAt) return;
+
+    const dueDate = getReminderDueDate(reminder);
+    if (!dueDate || dueDate > new Date()) return;
+
+    showReminderNotification(reminder);
+    markReminderNotificationShown(reminder.id);
+}
+
+function scheduleFitTrackReminders() {
+    fitTrackReminderTimers.forEach(timerId => clearTimeout(timerId));
+    fitTrackReminderTimers = new Map();
+
+    const now = new Date();
+    getStoredFitTrackReminders()
+        .filter(reminder => !reminder.completed && !reminder.notificationShownAt)
+        .forEach(reminder => {
+            const dueDate = getReminderDueDate(reminder);
+            if (!dueDate) return;
+
+            const delay = dueDate.getTime() - now.getTime();
+
+            if (delay <= 0) {
+                processDueFitTrackReminder(reminder.id);
+                return;
+            }
+
+            if (delay <= MAX_REMINDER_TIMEOUT_MS) {
+                const timerId = setTimeout(() => {
+                    processDueFitTrackReminder(reminder.id);
+                    fitTrackReminderTimers.delete(String(reminder.id));
+                }, delay);
+
+                fitTrackReminderTimers.set(String(reminder.id), timerId);
+            }
+        });
+}
+
+window.scheduleFitTrackReminders = scheduleFitTrackReminders;
+
 document.addEventListener('DOMContentLoaded', function () {
     document.body.classList.remove('layout-ready');
 
@@ -240,6 +345,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const badge = document.querySelector('.badge-counter');
     if (badge) badge.textContent = activeCount > 0 ? activeCount : '';
 
+    scheduleFitTrackReminders();
+
+    if (!fitTrackReminderInterval) {
+        fitTrackReminderInterval = setInterval(scheduleFitTrackReminders, 30000);
+    }
+
     // Restore saved profile photo in topbar (works on every page)
     try {
         const profile = JSON.parse(localStorage.getItem('fittrack_profile')) || {};
@@ -250,4 +361,11 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (e) { }
 
     document.body.classList.add('layout-ready');
+});
+
+window.addEventListener('storage', function (event) {
+    if (event.key === FITTRACK_REMINDER_STORAGE_KEY) {
+        updateNotificationBadge();
+        scheduleFitTrackReminders();
+    }
 });
