@@ -5,7 +5,8 @@
     "dev": "nodemon src/app.js",
     "test": "node --test",
     "seed": "node src/config/insertSeeds.js",
-    "diagnose:mongo": "node scripts/diagnose-mongo.js"
+    "diagnose:mongo": "node scripts/diagnose-mongo.js",
+    "diagnose:reminders": "node scripts/diagnose-reminders.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
