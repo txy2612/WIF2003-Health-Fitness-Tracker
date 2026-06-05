@@ -2,6 +2,7 @@ import cron from 'node-cron' // runs things on a schedule 'alarm clock'
 import env from '../../config/env.js'
 import { processDueReminders } from './reminderProcessor.js'
 
+// this file is where it all begins -> imported in App.ts
 let reminderTask // current cron job
 let isProcessing = false
 
