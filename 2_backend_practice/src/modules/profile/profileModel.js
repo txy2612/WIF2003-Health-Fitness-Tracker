@@ -35,6 +35,25 @@ const profileSchema = new mongoose.Schema({
     enum: ['low', 'moderate', 'high'],
     default: 'moderate',
   },
+  stepsGoal: {
+    type: Number,
+    min: 1,
+    default: 10000,
+  },
+  caloriesGoal: {
+    type: Number,
+    min: 1,
+    default: 2000,
+  },
+  weightGoal: {
+    type: Number,
+    min: 1,
+  },
+  waterGoal: {
+    type: Number,
+    min: 1,
+    default: 8,
+  },
 }, {
   timestamps: true,
 })

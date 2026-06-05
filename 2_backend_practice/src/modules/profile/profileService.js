@@ -7,8 +7,10 @@ async function getProfileOverview() {
 }
 
 async function updateProfilePreview(profile) {
+  // gets last saved profile
   const currentProfile = await profileModel.findOne({}).sort({ createdAt: -1 }).lean()
 
+  // merges updated values
   return buildProfileOverview({
     ...currentProfile,
     displayName: profile.displayName,
@@ -16,6 +18,10 @@ async function updateProfilePreview(profile) {
     heightCm: profile.heightCm,
     weightKg: profile.weightKg,
     activityLevel: profile.activityLevel,
+    stepsGoal: profile.stepsGoal,
+    caloriesGoal: profile.caloriesGoal,
+    weightGoal: profile.weightGoal,
+    waterGoal: profile.waterGoal,
   })
 }
 
@@ -43,6 +49,12 @@ function buildProfileOverview(profile = {}) {
       heightCm: profile.heightCm,
       weightKg: profile.weightKg,
       activityLevel: profile.activityLevel,
+    },
+    goals: {
+      steps: profile.stepsGoal || 10000,
+      calories: profile.caloriesGoal || 2000,
+      weight: profile.weightGoal,
+      water: profile.waterGoal || 8,
     },
   }
 }

@@ -31,11 +31,14 @@ const BADGE_MAP = {
 // Backend-backed activity logs
 let activityLogs = [];
 let activitiesLoadStatus = 'idle'; // idle | loading | success | error
-let profileData = {};
 
-// Still localStorage-backed until backend endpoints exist:
-// const goals = JSON.parse(localStorage.getItem('fittrack_goals'))
-const GOALS_KEY   = 'fittrack_goals';
+// profile data (etc: weight) -> calculate calories
+// goals data (etc: steps) -> check progress
+// separation -> cleaner
+let profileData = {};
+let goalsData = {};
+
+// Profile and goals now come from the profile backend endpoint.
 const FITNESS_API_URL = 'http://localhost:3000/api/v1/fitness-tracker'
 const PROFILE_API_URL = 'http://localhost:3000/api/v1/profile'
 
@@ -152,8 +155,10 @@ async function loadProfile() {
             weight: healthProfile.weightKg || '',
             activityLevel: healthProfile.activityLevel || ''
         };
+
+        // if backend return data -> store; othwise, use empty
+        goalsData = data.goals || {};
     } catch (error) {
-        profileData = {};
         console.warn('Could not load profile from backend.', error);
     }
 }
@@ -163,8 +168,7 @@ function getProfile() {
 }
 
 function getGoals() {
-    try { return JSON.parse(localStorage.getItem(GOALS_KEY)) || {}; }
-    catch (e) { return {}; }
+    return goalsData;
 }
 
 
