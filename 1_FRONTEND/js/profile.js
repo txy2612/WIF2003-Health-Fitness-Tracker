@@ -3,6 +3,7 @@
 const PROFILE_KEY    = 'fittrack_profile';
 const GOAL_KEY       = 'fittrack_goals';
 const PROFILE_FIELDS = ['name', 'email', 'age', 'gender', 'weight', 'height', 'goal'];
+const PROFILE_API_URL = 'http://localhost:3000/api/v1/profile';
 
 // ── LOCALSTORAGE HELPERS ──────────────────────────────────────────────────────
 
@@ -15,11 +16,52 @@ function saveProfileField(field, rawValue) {
     const profile = getProfile();
     profile[field] = rawValue;
     localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+    syncProfileToBackend();
 }
 
 function getGoals() {
     try { return JSON.parse(localStorage.getItem(GOAL_KEY)) || {}; }
     catch (e) { return {}; }
+}
+
+function getInputValue(id, fallback = '') {
+    const input = document.getElementById(id);
+    return input && input.value ? input.value : fallback;
+}
+
+function buildBackendProfilePayload() {
+    const profile = getProfile();
+    const goals = getGoals();
+
+    return {
+        displayName: profile.name || document.getElementById('profileNameDisplay')?.textContent?.trim() || 'FitTrack User',
+        email: profile.email || getInputValue('input-email'),
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Kuala_Lumpur',
+        goal: profile.goal || getInputValue('input-goal', 'maintain'),
+        heightCm: profile.height || getInputValue('input-height', '170'),
+        weightKg: profile.weight || getInputValue('input-weight', '70'),
+        activityLevel: profile.activityLevel || 'moderate',
+        stepsGoal: goals.steps || undefined,
+        caloriesGoal: goals.calories || undefined,
+        weightGoal: goals.weight || undefined,
+    };
+}
+
+async function syncProfileToBackend() {
+    const profile = getProfile();
+    if (!profile.email) return;
+
+    try {
+        await fetch(PROFILE_API_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(buildBackendProfilePayload()),
+        });
+    } catch (error) {
+        console.warn('Could not sync profile to backend.', error);
+    }
 }
 
 // ── TOGGLE EDIT ───────────────────────────────────────────────────────────────
@@ -155,6 +197,7 @@ function saveGoalSettings() {
     const goals = { steps, calories, weight, savedAt: now };
 
     localStorage.setItem(GOAL_KEY, JSON.stringify(goals));
+    syncProfileToBackend();
     showPreview(goals);
 
     const badge = document.getElementById('goalsSavedBadge');
@@ -188,6 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     restoreProfile();
     loadGoalSettings();
+    syncProfileToBackend();
     updateCalHint();
 
     // Goal select change → update calorie hint

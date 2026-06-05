@@ -59,6 +59,9 @@ async function main() {
     .sort({ createdAt: -1 })
     .lean()
 
+  const fallbackEmail = env.REMINDER_RECIPIENT_EMAIL || (env.NODE_ENV === 'development' ? env.SMTP_USER : '')
+  const effectiveEmail = recipient?.email || fallbackEmail
+
   const dueReminders = await notificationModel
     .find(buildDueReminderFilter(new Date()))
     .sort({ scheduledFor: 1 })
@@ -79,9 +82,10 @@ async function main() {
     },
     smtp,
     recipient: {
-      exists: Boolean(recipient?.email),
-      emailDomain: recipient?.email ? recipient.email.split('@')[1] : null,
-      timezone: recipient?.timezone || null,
+      exists: Boolean(effectiveEmail),
+      source: recipient?.email ? 'profile' : fallbackEmail ? 'fallback' : null,
+      emailDomain: effectiveEmail ? effectiveEmail.split('@')[1] : null,
+      timezone: recipient?.timezone || env.REMINDER_TIMEZONE || null,
     },
     reminders: {
       dueUnsentCount: dueReminders.length,

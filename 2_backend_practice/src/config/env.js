@@ -32,6 +32,7 @@ const envSchema = z.object({
     SMTP_USER: z.string().trim().default(''),
     SMTP_PASS: z.string().default(''),
     SMTP_FROM: z.string().trim().default('FitTrack <no-reply@fittrack.local>'),
+    REMINDER_RECIPIENT_EMAIL: z.string().trim().default(''),
     REMINDER_CRON_SCHEDULE: z.string().trim().default('*/1 * * * *'),
     REMINDER_BATCH_SIZE: positiveIntWithDefault(10),
     REMINDER_SEND_LOCK_MINUTES: positiveIntWithDefault(10),

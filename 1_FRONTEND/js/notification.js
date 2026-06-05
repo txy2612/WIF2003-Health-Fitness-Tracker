@@ -51,10 +51,24 @@ function setBusy(isBusy) {
         });
 }
 
+function getActiveReminderCount() {
+    return reminders.filter(reminder => !reminder.completed).length;
+}
+
 // calls window.scheduleFitTrackReminders()
 // to refresj 'shared browder notification scheduling' after creating a reminder
 function refreshSharedReminderUi() {
-    if (typeof updateNotificationBadge === "function") updateNotificationBadge();
+    const activeCount = getActiveReminderCount();
+
+    if (typeof window.refreshFitTrackNotificationBadge === "function") {
+        // other pages call refreshFit... when notification count is updated 
+        window.refreshFitTrackNotificationBadge(activeCount);
+    } else {
+        window.dispatchEvent(new CustomEvent("fittrack:reminders-changed", {
+            detail: { activeCount },
+        }));
+    }
+
     if (typeof window.scheduleFitTrackReminders === "function") window.scheduleFitTrackReminders();
 }
 
@@ -172,7 +186,7 @@ async function loadReminders() {
 
 function render() {
     list.innerHTML = "";
-    count.textContent = reminders.filter(reminder => !reminder.completed).length;
+    count.textContent = getActiveReminderCount();
 
     if (reminders.length === 0) {
         emptyState.style.display = "block";

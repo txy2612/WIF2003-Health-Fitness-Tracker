@@ -36,12 +36,23 @@ function buildDueReminderFilter(now = new Date()) {
 
 // Purpose: get recipient email
 async function getReminderRecipient() {
-  return profileModel
+  const profile = await profileModel
     .findOne({
       email: { $exists: true, $ne: '' },
     })
     .sort({ createdAt: -1 })
     .lean()
+
+  if (profile?.email) return profile
+
+  // Useful for local testing when the profile page has not saved an email yet.
+  const fallbackEmail = env.REMINDER_RECIPIENT_EMAIL || (env.NODE_ENV === 'development' ? env.SMTP_USER : '')
+  if (!fallbackEmail) return null
+
+  return {
+    email: fallbackEmail,
+    timezone: env.REMINDER_TIMEZONE,
+  }
 }
 
 
@@ -93,9 +104,21 @@ async function markReminderFailed(reminderId, error) {
   )
 }
 
+async function markDueRemindersSkipped(reason) {
+  return notificationModel.updateMany(
+    buildDueReminderFilter(),
+    {
+      $set: {
+        lastSendError: reason.slice(0, 500),
+      },
+    }
+  )
+}
+
 async function processDueReminders() {
   if (!mailer.isSmtpConfigured()) {
     console.warn('Reminder processor skipped: SMTP_HOST is not configured.')
+    await markDueRemindersSkipped('SMTP_HOST is not configured.')
     return { processed: 0, sent: 0, failed: 0, skippedReason: 'smtp-not-configured' }
   }
 
@@ -103,6 +126,7 @@ async function processDueReminders() {
 
   if (!recipient?.email) {
     console.warn('Reminder processor skipped: no profile email found.')
+    await markDueRemindersSkipped('No profile email or REMINDER_RECIPIENT_EMAIL found.')
     return { processed: 0, sent: 0, failed: 0, skippedReason: 'missing-recipient' }
   }
 

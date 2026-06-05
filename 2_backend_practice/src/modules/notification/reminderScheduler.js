@@ -12,6 +12,21 @@ function logProcessorResult(result) {
   }
 }
 
+async function runReminderProcessor() {
+  if (isProcessing) return
+
+  isProcessing = true
+
+  try {
+    const result = await processDueReminders()
+    logProcessorResult(result)
+  } catch (error) {
+    console.error(`Reminder scheduler failed: ${error.message}`)
+  } finally {
+    isProcessing = false
+  }
+}
+
 // runs a cron schedule while backend is open
 // calls processDueReminders()
 function startReminderScheduler() {
@@ -27,26 +42,17 @@ function startReminderScheduler() {
 
   reminderTask = cron.schedule(
     env.REMINDER_CRON_SCHEDULE,
-    async () => {
-      if (isProcessing) return
-
-      isProcessing = true
-
-      try {
-        const result = await processDueReminders()
-        logProcessorResult(result)
-      } catch (error) {
-        console.error(`Reminder scheduler failed: ${error.message}`)
-      } finally {
-        isProcessing = false
-      }
-    },
+    runReminderProcessor,
     {
       timezone: env.REMINDER_TIMEZONE,
     }
   )
 
   console.log(`Reminder scheduler started with schedule: ${env.REMINDER_CRON_SCHEDULE}`)
+
+  // Run once when the backend starts, then keep using the cron schedule.
+  runReminderProcessor()
+
   return reminderTask
 }
 

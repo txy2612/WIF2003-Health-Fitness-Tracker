@@ -91,7 +91,7 @@ const TOPBAR_HTML = `
                 <a class="nav-link" href="notification.html">
                     <i class="fas fa-bell fa-fw"></i>
                     <!-- You can keep the counter badge here! -->
-                    <span class="badge badge-danger badge-counter">2</span>
+                    <span class="badge badge-danger badge-counter" style="display:none;"></span>
                 </a>
             </li>
 
@@ -201,6 +201,11 @@ const MAX_REMINDER_TIMEOUT_MS = 2147483647;
 let fitTrackReminderTimers = new Map();
 let fitTrackReminderInterval = null;
 let fitTrackReminderCache = [];
+let layoutNotificationBadgeCount = null;
+
+function getActiveNotificationCount(reminders) {
+    return reminders.filter(reminder => !reminder.completed).length;
+}
 
 async function parseLayoutApiResponse(response) {
     const text = await response.text();
@@ -230,27 +235,39 @@ async function requestLayoutNotificationApi(path = '', options = {}) {
 async function fetchFitTrackReminders() {
     const data = await requestLayoutNotificationApi('');
     fitTrackReminderCache = Array.isArray(data) ? data : [];
+    setNotificationBadgeCount(getActiveNotificationCount(fitTrackReminderCache));
     return fitTrackReminderCache;
 }
 
 function setNotificationBadgeCount(activeCount) {
-    const badge = document.querySelector('.badge-counter');
-    if (badge) {
-        badge.textContent = activeCount > 0 ? activeCount : '';
-        badge.style.display = activeCount > 0 ? 'inline-block' : 'none';
-    }
+    const safeCount = Number(activeCount) || 0;
+    layoutNotificationBadgeCount = safeCount;
+
+    document.querySelectorAll('.badge-counter').forEach(badge => {
+        badge.textContent = safeCount > 0 ? safeCount : '';
+        badge.style.display = safeCount > 0 ? 'inline-block' : 'none';
+    });
 }
 
 // functions should exist before called -> placed before DOMContentLoaded
 async function updateNotificationBadge() {
     try {
-        const reminders = await fetchFitTrackReminders();
-        const activeCount = reminders.filter(r => !r.completed).length;
-        setNotificationBadgeCount(activeCount);
+        await fetchFitTrackReminders();
     } catch (error) {
         setNotificationBadgeCount(0);
         console.warn('Could not update notification badge from backend', error);
     }
+}
+
+// Other pages can call this after they create/update/delete reminders.
+function refreshFitTrackNotificationBadge(activeCount) {
+    if (Number.isFinite(activeCount)) {
+        setNotificationBadgeCount(activeCount);
+    }
+
+    updateNotificationBadge().catch(error => {
+        console.warn('Could not refresh notification badge from backend', error);
+    });
 }
 
 function getReminderDueDate(reminder) {
@@ -374,6 +391,12 @@ function scheduleFitTrackReminders() {
 
 window.scheduleFitTrackReminders = scheduleFitTrackReminders;
 window.fetchFitTrackReminders = fetchFitTrackReminders;
+window.updateNotificationBadge = updateNotificationBadge;
+window.refreshFitTrackNotificationBadge = refreshFitTrackNotificationBadge;
+
+window.addEventListener('fittrack:reminders-changed', function (event) {
+    refreshFitTrackNotificationBadge(event.detail?.activeCount);
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     document.body.classList.remove('layout-ready');
@@ -384,6 +407,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const topbarEl = document.getElementById('topbar-placeholder');
     if (topbarEl) topbarEl.innerHTML = TOPBAR_HTML;
+    if (layoutNotificationBadgeCount !== null) setNotificationBadgeCount(layoutNotificationBadgeCount);
 
     const footerEl = document.getElementById('footer-placeholder');
     if (footerEl) footerEl.innerHTML = FOOTER_HTML;
