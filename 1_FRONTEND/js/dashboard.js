@@ -27,6 +27,68 @@ function getLast7Dates() {
     return arr;
 }
 
+const DASHBOARD_NOTIFICATION_API_URL = 'http://localhost:3000/api/v1/notification';
+
+async function parseDashboardApiResponse(response) {
+    const text = await response.text();
+    if (!text) return {};
+
+    try {
+        return JSON.parse(text);
+    } catch (error) {
+        return {};
+    }
+}
+
+async function fetchDashboardReminders() {
+    const response = await fetch(DASHBOARD_NOTIFICATION_API_URL);
+    const data = await parseDashboardApiResponse(response);
+
+    if (!response.ok) {
+        throw new Error(data.detail || data.message || 'Could not load reminders.');
+    }
+
+    return Array.isArray(data) ? data : [];
+}
+
+function formatDashboardReminderDate(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+
+    return date.toLocaleString('en-MY', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+    });
+}
+
+async function updateNextReminderCard() {
+    const reminderTitle = document.getElementById('next-reminder-title');
+    const reminderDesc = document.getElementById('next-reminder-desc');
+
+    if (!reminderTitle || !reminderDesc) return;
+
+    try {
+        const reminders = await fetchDashboardReminders();
+        const now = new Date();
+        const nextReminder = reminders
+            .filter(reminder => !reminder.completed && new Date(reminder.scheduledFor) >= now)
+            .sort((a, b) => new Date(a.scheduledFor) - new Date(b.scheduledFor))[0] || null;
+
+        if (nextReminder) {
+            reminderTitle.textContent = nextReminder.title && nextReminder.title !== nextReminder.type
+                ? `${nextReminder.type} - ${nextReminder.title}`
+                : nextReminder.type;
+            reminderDesc.textContent = formatDashboardReminderDate(nextReminder.scheduledFor);
+        } else {
+            reminderTitle.textContent = 'No upcoming reminder';
+            reminderDesc.textContent = 'Add a reminder to see it here.';
+        }
+    } catch (error) {
+        reminderTitle.textContent = 'Reminders unavailable';
+        reminderDesc.textContent = 'Start the backend to see your next reminder.';
+    }
+}
+
 // =========================================================================
 // 2. UI DRAWING HELPERS (Health Rings & Trend Chart)
 // =========================================================================
@@ -299,25 +361,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // 5. Next Reminder
-    const reminders = JSON.parse(localStorage.getItem('fittrack_reminders') || '[]');
-
-    const nextReminder = reminders
-        .filter(r => !r.completed)
-        .sort((a, b) => new Date(a.datetime.replace(' ', 'T')) - new Date(b.datetime.replace(' ', 'T')))[0] || null;
-
-    const reminderTitle = document.getElementById('next-reminder-title');
-    const reminderDesc = document.getElementById('next-reminder-desc');
-
-    if (nextReminder) {
-        if (reminderTitle) {
-            reminderTitle.textContent = nextReminder.title
-                ? `${nextReminder.type} - ${nextReminder.title}`
-                : nextReminder.type;
-        }
-
-        if (reminderDesc) reminderDesc.textContent = nextReminder.datetime;
-    } else {
-        if (reminderTitle) reminderTitle.textContent = "No upcoming reminder";
-        if (reminderDesc) reminderDesc.textContent = "Add a reminder to see it here.";
-    }
+    updateNextReminderCard();
 });

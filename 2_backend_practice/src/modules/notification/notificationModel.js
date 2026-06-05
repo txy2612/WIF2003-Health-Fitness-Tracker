@@ -6,6 +6,13 @@ const notificationSchema = new mongoose.Schema({
     enum: ['workout', 'nutrition', 'hydration', 'progress', 'system', 'other'],
     required: true,
   },
+  type: {
+    type: String,
+    trim: true,
+    default() {
+      return this.channel
+    },
+  },
   title: {
     type: String,
     required: true,
@@ -44,6 +51,10 @@ const notificationSchema = new mongoose.Schema({
   lastSendError: {
     type: String,
     trim: true,
+    default: null,
+  },
+  browserNotifiedAt: {
+    type: Date,
     default: null,
   },
 }, {
