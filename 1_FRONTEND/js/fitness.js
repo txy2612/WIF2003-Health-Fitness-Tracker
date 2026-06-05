@@ -31,13 +31,13 @@ const BADGE_MAP = {
 // Backend-backed activity logs
 let activityLogs = [];
 let activitiesLoadStatus = 'idle'; // idle | loading | success | error
+let profileData = {};
 
 // Still localStorage-backed until backend endpoints exist:
-// const profile = JSON.parse(localStorage.getItem('fittrack_profile'))
 // const goals = JSON.parse(localStorage.getItem('fittrack_goals'))
-const PROFILE_KEY = 'fittrack_profile';
 const GOALS_KEY   = 'fittrack_goals';
 const FITNESS_API_URL = 'http://localhost:3000/api/v1/fitness-tracker'
+const PROFILE_API_URL = 'http://localhost:3000/api/v1/profile'
 
 // ── BACKEND ACTIVITY API HELPERS ──────────────────────────────────────────────
 
@@ -50,7 +50,7 @@ async function parseApiResponse(response) {
     if (!text) return {};// if backend sent ntg, just return empty object instead of crashing
 
     try {
-        return JSON.parse(text);// if there is object, convert into js object
+        return JSON.parse(text);// if there is object, convert into JS object
     } catch (error) {
         return {};
     }
@@ -124,9 +124,42 @@ function getActivityLogs() {
     return activityLogs;
 }
 
+async function loadProfile() {
+    try {
+        const response = await fetch(PROFILE_API_URL);
+        // convert JSON into JS object
+        // example: { user: { displayName: 'Xin Yu'}} -> data.user.displayName
+        const data = await parseApiResponse(response);
+
+        // check whether response succeeded (etc: 200 = OK, 201 = Created, ...)
+        if (!response.ok) {
+            throw new Error(data.detail || data.message || 'Profile request failed.');
+        }
+
+        // if user data exists, use it. otherwise, use empty object
+        const user = data.user || {};
+        const healthProfile = data.healthProfile || {};
+
+        // mapper 
+        // create front-end profile object & map to back-end
+        profileData = {
+            name: user.displayName || '',
+            // frontend = name, back = user{ disyplayName: 'Xin Yu'}
+            email: user.email || '',
+            goal: user.goal || '',
+            height: healthProfile.heightCm || '',
+            // front = height, back = healthProfile{ weightKg: 60 }
+            weight: healthProfile.weightKg || '',
+            activityLevel: healthProfile.activityLevel || ''
+        };
+    } catch (error) {
+        profileData = {};
+        console.warn('Could not load profile from backend.', error);
+    }
+}
+
 function getProfile() {
-    try { return JSON.parse(localStorage.getItem(PROFILE_KEY)) || {}; }
-    catch (e) { return {}; }
+    return profileData;
 }
 
 function getGoals() {
@@ -563,6 +596,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('duration').addEventListener('input',  updateWorkoutCalDisplay);
     document.getElementById('stepsCount').addEventListener('input', updateStepsCalDisplay);
 
+    await loadProfile();
     loadActivities();
 
     // Delete modal confirmation

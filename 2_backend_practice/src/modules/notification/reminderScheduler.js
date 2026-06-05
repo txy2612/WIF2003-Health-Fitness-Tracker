@@ -12,6 +12,8 @@ function logProcessorResult(result) {
   }
 }
 
+// runs a cron schedule while backend is open
+// calls processDueReminders()
 function startReminderScheduler() {
   // if running automated tests, dont start corn 
   if (env.NODE_ENV === 'test') return null

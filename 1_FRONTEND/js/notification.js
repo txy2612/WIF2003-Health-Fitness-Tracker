@@ -103,8 +103,8 @@ function buildReminderPayload({ type, title, note, scheduledFor, completed = fal
         type,
         title: title || type,
         message,
-        scheduledFor,
-        completed,
+        scheduledFor,// used to calculate delay
+        completed,// used to track if sent
     };
 }
 
@@ -127,6 +127,7 @@ async function migrateOldLocalReminders() {
             // Past reminders cannot be created in the backend, so skip them.
             if (!scheduledDate || scheduledDate <= new Date()) continue;
 
+            // sends reminder to backend, must be stored in DB for email scheduler to find them later
             await api("", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
