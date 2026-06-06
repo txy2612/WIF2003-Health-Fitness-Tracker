@@ -8,7 +8,7 @@ import { postActivitySchema, deleteActivitySchema } from './fitnessTrackerSchema
 
 // creates a mini router for fitness tracker (mini receptionist for the department)
 const router = express.Router()
-
+router.use(requireAuth)
  
 
 // '/' = root of fitness tracker module
