@@ -289,8 +289,8 @@ function getReminderNotificationText(reminder) {
     const body = reminder.message && reminder.message.trim()
         ? reminder.message.trim()
         : reminder.note && reminder.note.trim()
-        ? reminder.note.trim()
-        : `Time for ${reminder.type || 'your activity'}.`;
+            ? reminder.note.trim()
+            : `Time for ${reminder.type || 'your activity'}.`;
 
     return { title, body };
 }
@@ -356,9 +356,9 @@ function scheduleFitTrackReminders() {
             const now = new Date();
 
             reminders
-            // igore reminders that shouldn't trigger
-            // trigger only : not yet completed + hvn notified
-            // browserNotifiedAt = null OR 2026-06-05...
+                // igore reminders that shouldn't trigger
+                // trigger only : not yet completed + hvn notified
+                // browserNotifiedAt = null OR 2026-06-05...
                 .filter(reminder => !reminder.completed && !reminder.browserNotifiedAt)
                 .forEach(reminder => {
                     const dueDate = getReminderDueDate(reminder);
@@ -434,14 +434,40 @@ document.addEventListener('DOMContentLoaded', function () {
         fitTrackReminderInterval = setInterval(scheduleFitTrackReminders, 30000);
     }
 
-    // Restore saved profile photo in topbar (works on every page)
-    try {
-        const profile = JSON.parse(localStorage.getItem('fittrack_profile')) || {};
-        if (profile.photo) {
-            const pic = document.getElementById('topbarProfilePic');
-            if (pic) pic.innerHTML = `<img src="${profile.photo}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
+    //fetch profile picture from backend
+    async function loadTopbarProfilePic() {
+
+        if (!window.AuthService || !window.AuthService.isAuthenticated() || !window.ProfileService) {
+            return;
         }
-    } catch (e) { }
+
+        try {
+            const result = await window.ProfileService.getProfile();
+
+            if (result.success && result.data) {
+
+                let profile = result.data;
+                if (profile.user) profile = profile.user;
+                if (profile.profile) profile = profile.profile;
+                if (profile.data) profile = profile.data;
+
+                if (profile.photo) {
+                    const BACKEND_URL = 'http://localhost:3000/';
+                    const photoUrl = profile.photo.startsWith('http') ? profile.photo : BACKEND_URL + profile.photo.replace(/\\/g, '/');
+
+                    const pic = document.getElementById('topbarProfilePic');
+                    if (pic) {
+                        pic.innerHTML = `<img src="${photoUrl}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
+                    }
+                }
+            }
+        } catch (error) {
+            console.warn("Could not load topbar profile picture:", error);
+        }
+    }
+
+    loadTopbarProfilePic();
 
     document.body.classList.add('layout-ready');
 });
+

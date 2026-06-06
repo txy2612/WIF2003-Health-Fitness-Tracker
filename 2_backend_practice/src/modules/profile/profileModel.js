@@ -40,7 +40,7 @@ const profileSchema = new mongoose.Schema({
   },
   goal: {
     type: String,
-    enum: ['lose', 'maintain', 'gain', null],
+    enum: ['lose', 'maintain', 'gain', 'fitness', 'endurance', null],
     default: null,
   },
   timezone: {

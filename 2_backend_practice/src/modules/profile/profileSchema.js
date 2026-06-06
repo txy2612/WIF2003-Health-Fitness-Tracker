@@ -8,7 +8,7 @@ export const updateProfileSchema = z.object({
     height: z.coerce.number().min(50).max(300).optional(),
     weight: z.coerce.number().min(20).max(300).optional(),
     gender: z.enum(['male', 'female', 'other']).optional(),
-    goal: z.enum(['lose', 'maintain', 'gain']).optional(),
+    goal: z.enum(['lose', 'maintain', 'gain', 'fitness', 'endurance']).optional(),
     timezone: z.string().min(1).max(80).optional(),
     activityLevel: z.enum(['low', 'moderate', 'high']).optional(),
   }).strict(),
