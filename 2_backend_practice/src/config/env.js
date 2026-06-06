@@ -26,6 +26,7 @@ const envSchema = z.object({
     CORS_ORIGIN: z.string().min(1).default('http://localhost:5173'),//frontend = visitor to backend , CORS = backend's guest list (app still work well w/o this)
     MONGODB_URI: z.string().min(1, 'MONGODB_URI is required.'),
     MONGODB_DNS_SERVERS: z.string().default('1.1.1.1,8.8.8.8'),
+    JWT_SECRET: z.string().trim().min(1).default('fittrack-development-secret'),
     SMTP_HOST: z.string().trim().default(''),
     SMTP_PORT: positiveIntWithDefault(587),
     SMTP_SECURE: booleanFromEnv,

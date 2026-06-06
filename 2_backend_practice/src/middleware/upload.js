@@ -1,47 +1,71 @@
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
+import fs from 'fs'
+import path from 'path'
 
-//Ensure the "uploads" folder actually exists, otherwise Multer will crash
-const uploadDir = 'uploads/';
+const uploadDir = 'uploads/'
+let cachedUpload = null
+
+// Ensure the uploads folder exists before saving profile photos.
 if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
+  fs.mkdirSync(uploadDir)
 }
 
-//Configure Storage Engine
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, uploadDir); // Save files in the 'uploads' folder
-    },
-    filename: function (req, file, cb) {
-        // Create a unique filename: timestamp + original extension
-        // e.g., 1678901234-avatar.jpg
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
-});
+async function getMulterUpload() {
+  if (cachedUpload) return cachedUpload
 
-//Configure File Filter (Security!)
-const fileFilter = (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+  let multer
+  try {
+    multer = (await import('multer')).default
+  } catch (error) {
+    const missingDependencyError = new Error('Photo upload needs multer. Run npm install inside 2_backend_practice.')
+    missingDependencyError.statusCode = 424
+    throw missingDependencyError
+  }
+
+  const storage = multer.diskStorage({
+    destination(request, file, callback) {
+      callback(null, uploadDir)
+    },
+    filename(request, file, callback) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
+      callback(null, uniqueSuffix + path.extname(file.originalname))
+    },
+  })
+
+  const fileFilter = (request, file, callback) => {
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 
     if (allowedTypes.includes(file.mimetype)) {
-        cb(null, true); // Accept the file
-    } else {
-        //Reject the file and throw an error to our global errorHandler
-        const error = new Error('Invalid file type. Only JPG, PNG, and WEBP are allowed.');
-        error.statusCode = 400;
-        cb(error, false);
+      callback(null, true)
+      return
     }
-};
 
-//Build the final Multer object
-const upload = multer({
-    storage: storage,
-    fileFilter: fileFilter,
+    const error = new Error('Invalid file type. Only JPG, PNG, and WEBP are allowed.')
+    error.statusCode = 400
+    callback(error, false)
+  }
+
+  cachedUpload = multer({
+    storage,
+    fileFilter,
     limits: {
-        fileSize: 5 * 1024 * 1024 // 5 Megabytes max
-    }
-});
+      fileSize: 5 * 1024 * 1024,
+    },
+  })
 
-export default upload;
+  return cachedUpload
+}
+
+const upload = {
+  single(fieldName) {
+    return async (request, response, next) => {
+      try {
+        const multerUpload = await getMulterUpload()
+        multerUpload.single(fieldName)(request, response, next)
+      } catch (error) {
+        next(error)
+      }
+    }
+  },
+}
+
+export default upload

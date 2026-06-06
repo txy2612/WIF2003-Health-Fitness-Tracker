@@ -10,10 +10,16 @@ async function handleLogin() {
     const emailInput = document.getElementById('inputEmail');
     const passwordInput = document.getElementById('inputPassword');
     const btn = document.getElementById('loginBtn');
+    const errorContainer = document.getElementById('loginError') || document.querySelector('.login-error');
     const originalText = btn.innerHTML;
 
     if (!emailInput.value.trim() || !passwordInput.value) {
         alert("Please enter both email and password.");
+        return;
+    }
+
+    if (!window.AuthService) {
+        alert('Login service is not ready. Please refresh the page.');
         return;
     }
 
@@ -25,8 +31,12 @@ async function handleLogin() {
     if (result.success) {
         window.location.href = 'dashboard.html';
     } else {
-        errorContainer.textContent = result.message;
-        errorContainer.style.display = 'block';
+        if (errorContainer) {
+            errorContainer.textContent = result.message;
+            errorContainer.style.display = 'block';
+        } else {
+            alert(result.message);
+        }
         passwordInput.value = '';
         passwordInput.focus();
         btn.innerHTML = originalText;

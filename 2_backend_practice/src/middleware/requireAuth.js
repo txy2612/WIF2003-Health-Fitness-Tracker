@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { StatusCodes } from 'http-status-codes'
+import env from '../config/env.js'
 import profileModel from '../modules/profile/profileModel.js'
 
 const requireAuth = async (request, response, next) => {
@@ -15,7 +16,7 @@ const requireAuth = async (request, response, next) => {
         const token = authHeader.split(' ')[1]
 
         //verify token using secret key in env
-        const decodedPayload = jwt.verify(token, process.env.JWT_SECRET)
+        const decodedPayload = jwt.verify(token, env.JWT_SECRET)
 
         //find and get user id in database
         const userId = await profileModel.findById(decodedPayload.id).select('_id')

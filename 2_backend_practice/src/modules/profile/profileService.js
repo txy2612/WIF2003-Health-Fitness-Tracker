@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcrypt'
 import profileModel from './profileModel.js'
 
 async function getProfileOverview(userId) {

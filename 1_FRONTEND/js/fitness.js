@@ -135,14 +135,18 @@ function getActivityLogs() {
 
 async function loadProfile() {
     try {
-        const response = await fetch(PROFILE_API_URL);
+        const token = localStorage.getItem('fittrack_token');
+        const response = await fetch(PROFILE_API_URL, {
+            headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
         // convert JSON into JS object
         // example: { user: { displayName: 'Xin Yu'}} -> data.user.displayName
-        const data = await parseApiResponse(response);
+        const apiData = await parseApiResponse(response);
+        const data = apiData.data || apiData;
 
         // check whether response succeeded (etc: 200 = OK, 201 = Created, ...)
         if (!response.ok) {
-            throw new Error(data.detail || data.message || 'Profile request failed.');
+            throw new Error(apiData.detail || apiData.message || 'Profile request failed.');
         }
 
         // if user data exists, use it. otherwise, use empty object

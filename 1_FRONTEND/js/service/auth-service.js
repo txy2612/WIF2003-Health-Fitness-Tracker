@@ -19,7 +19,7 @@ window.AuthService = {
 
             return {
                 success: false,
-                message: data.details || data.title || 'Login failed'
+                message: data.detail || data.message || data.title || 'Login failed'
             };
 
         } catch (error) {
@@ -51,7 +51,7 @@ window.AuthService = {
 
             return {
                 success: false,
-                message: data.details || data.title || 'Registration failed'
+                message: data.detail || data.message || data.title || 'Registration failed'
             };
 
         } catch (error) {

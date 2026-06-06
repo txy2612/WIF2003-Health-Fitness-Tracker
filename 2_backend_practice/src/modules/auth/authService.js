@@ -1,10 +1,11 @@
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import env from '../../config/env.js'
 import profileModel from '../profile/profileModel.js'
 
 // Helper function to generate the token
 const generateToken = (userId) => {
-    return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+    return jwt.sign({ id: userId }, env.JWT_SECRET, {
         expiresIn: '30d' // Token expires in 30 days
     })
 }

@@ -55,6 +55,8 @@ function goStep2() {
 
     // Email
     if (!email || !email.includes('@')) {
+        const emailError = document.getElementById('err-email');
+        if (emailError) emailError.textContent = 'Please enter a valid email address.';
         showErr('email', true); valid = false;
     } else { showErr('email', false); }
 
@@ -110,8 +112,16 @@ async function submitRegister() {
         backendErr.textContent = result.message;
         backendErr.style.display = 'block';
 
-        if (result.message.toLowerCase().includes('email')) {
+        const message = result.message.toLowerCase();
+        if (message.includes('invalid email')) {
             goStep1();
+            showErr('email', true);
+        } else if (message.includes('email')) {
+            goStep1();
+            const emailError = document.getElementById('err-email');
+            if (emailError) {
+                emailError.textContent = result.message;
+            }
             showErr('email', true);
         }
     }
@@ -135,6 +145,7 @@ function showErr(field, show) {
         this.classList.remove('error');
         const field = id.replace('reg', '').toLowerCase();
         const errEl = document.getElementById('err-' + field);
+        if (field === 'email' && errEl) errEl.textContent = 'Please enter a valid email address.';
         if (errEl) errEl.style.display = 'none';
     });
 });

@@ -21,7 +21,7 @@ window.ProfileService = {
             }
             return {
                 success: false,
-                message: data.details || data.title || 'Failed to fetch profile'
+                message: data.detail || data.message || data.title || 'Failed to fetch profile'
             }
         } catch (error) {
             console.error("ProfileService Get Profile Error: ", error);
@@ -54,7 +54,7 @@ window.ProfileService = {
             }
             return {
                 success: false,
-                message: data.details || data.title || 'Failed to update profile'
+                message: data.detail || data.message || data.title || 'Failed to update profile'
             }
         } catch (error) {
             console.error("ProfileService Update Profile Error: ", error);
@@ -89,7 +89,7 @@ window.ProfileService = {
             }
             return {
                 success: false,
-                message: data.details || data.title || 'Failed to upload photo'
+                message: data.detail || data.message || data.title || 'Failed to upload photo'
             }
         } catch (error) {
             console.error("ProfileService Upload Photo Error: ", error);
@@ -122,7 +122,7 @@ window.ProfileService = {
             }
             return {
                 success: false,
-                message: data.details || data.title || 'Failed to update goals'
+                message: data.detail || data.message || data.title || 'Failed to update goals'
             }
         } catch (error) {
             console.error("ProfileService Update Goals Error: ", error);
@@ -153,7 +153,7 @@ window.ProfileService = {
             }
             return {
                 success: false,
-                message: data.details || data.title || 'Failed to clear goals'
+                message: data.detail || data.message || data.title || 'Failed to clear goals'
             }
         } catch (error) {
             console.error("ProfileService Clear Goals Error: ", error);
@@ -183,7 +183,7 @@ window.ProfileService = {
             }
             return {
                 success: false,
-                message: data.details || data.title || 'Failed to delete profile'
+                message: data.detail || data.message || data.title || 'Failed to delete profile'
             }
 
         } catch (error) {
@@ -216,7 +216,7 @@ window.ProfileService = {
             }
             return {
                 success: false,
-                message: data.details || data.title || 'Failed to change password'
+                message: data.detail || data.message || data.title || 'Failed to change password'
             }
         } catch (error) {
             console.error("ProfileService Change Password Error: ", error);
