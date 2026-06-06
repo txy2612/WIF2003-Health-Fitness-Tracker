@@ -1,251 +1,255 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>FitTrack — Sign In</title>
-    
-        <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
-        <link href="../css/sb-admin-2.min.css" rel="stylesheet">
-        <link href="../css/register.css" rel="stylesheet">
-    </head>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>FitTrack — Sign In</title>
+
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap"
+        rel="stylesheet">
+    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../css/register.css" rel="stylesheet">
+</head>
 
 <div class="left-panel">
- 
-        <a href="index.html" class="brand-name">FitTrack</a>
- 
-        <div class="left-content">
-            <div class="left-tag">✦ Join for free</div>
-            <h2 class="left-headline">Start your<br><em>fitness journey.</em></h2>
-            <p class="left-sub">Create your account in under a minute and start tracking your health today.</p>
- 
-            <div class="perks-list">
-                <div class="perk-item">
-                    <div class="perk-icon"><i class="fas fa-dumbbell fa-xs"></i></div>
-                    Log workouts with auto-calculated calories
-                </div>
-                <div class="perk-item">
-                    <div class="perk-icon"><i class="fas fa-apple-alt fa-xs"></i></div>
-                    Plan meals and track daily nutrition
-                </div>
-                <div class="perk-item">
-                    <div class="perk-icon"><i class="fas fa-chart-line fa-xs"></i></div>
-                    Visualise progress with detailed charts
-                </div>
-                <div class="perk-item">
-                    <div class="perk-icon"><i class="fas fa-tint fa-xs"></i></div>
-                    Track water intake and daily goals
-                </div>
+
+    <a href="index.html" class="brand-name">FitTrack</a>
+
+    <div class="left-content">
+        <div class="left-tag">✦ Join for free</div>
+        <h2 class="left-headline">Start your<br><em>fitness journey.</em></h2>
+        <p class="left-sub">Create your account in under a minute and start tracking your health today.</p>
+
+        <div class="perks-list">
+            <div class="perk-item">
+                <div class="perk-icon"><i class="fas fa-dumbbell fa-xs"></i></div>
+                Log workouts with auto-calculated calories
+            </div>
+            <div class="perk-item">
+                <div class="perk-icon"><i class="fas fa-apple-alt fa-xs"></i></div>
+                Plan meals and track daily nutrition
+            </div>
+            <div class="perk-item">
+                <div class="perk-icon"><i class="fas fa-chart-line fa-xs"></i></div>
+                Visualise progress with detailed charts
+            </div>
+            <div class="perk-item">
+                <div class="perk-icon"><i class="fas fa-tint fa-xs"></i></div>
+                Track water intake and daily goals
             </div>
         </div>
- 
-        <div class="left-footer">© 2026 FitTrack · WIF2003</div>
     </div>
- 
-    <!-- ── RIGHT PANEL ──────────────────────────────────────────────────── -->
-    <div class="right-panel">
- 
-        <a href="login.html" class="back-link">
-            <i class="fas fa-arrow-left fa-xs"></i> Back to sign in
-        </a>
- 
-        <div class="right-inner">
- 
-            <div class="form-header">
-                <h1>Create account.</h1>
-                <p>Already have an account? <a href="login.html">Sign in here</a></p>
-            </div>
- 
-            <!-- Step dots -->
-            <div class="step-indicator">
-                <div class="step-dot active" id="dot1"></div>
-                <div class="step-dot" id="dot2"></div>
-                <div class="step-dot" id="dot3"></div>
-                <small class="text-muted ml-1" id="stepLabel" style="font-size:0.72rem;">Account details</small>
-            </div>
- 
-            <!-- ── STEP 1: Account details ── -->
-            <div id="step1">
-                <div class="section-label">Account Details</div>
- 
-                <!-- Social signup -->
-                <div class="social-btns">
-                    <a href="#" class="btn-social">
-                        <i class="fab fa-google"></i> Google
-                    </a>
-                    <a href="#" class="btn-social">
-                        <i class="fab fa-facebook-f"></i> Facebook
-                    </a>
-                </div>
- 
-                <div class="divider">
-                    <div class="divider-line"></div>
-                    <span class="divider-text">or with email</span>
-                    <div class="divider-line"></div>
-                </div>
- 
-                <div class="field-group">
-                    <label class="field-label" for="regName">Full Name</label>
-                    <div class="field-input-wrap">
-                        <i class="fas fa-user"></i>
-                        <input type="text" class="field-input" id="regName" placeholder="e.g. Ahmad Hafiz">
-                    </div>
-                    <div class="field-error" id="err-name">Please enter your full name.</div>
-                </div>
- 
-                <div class="field-group">
-                    <label class="field-label" for="regEmail">Email</label>
-                    <div class="field-input-wrap">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" class="field-input" id="regEmail" placeholder="you@example.com">
-                    </div>
-                    <div class="field-error" id="err-email">Please enter a valid email address.</div>
-                </div>
- 
-                <div class="field-group">
-                    <label class="field-label" for="regPassword">Password</label>
-                    <div class="field-input-wrap">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" class="field-input" id="regPassword"
-                               placeholder="Min. 8 characters"
-                               oninput="checkPasswordStrength(this.value)">
-                    </div>
-                    <div class="pw-strength" id="pwStrength">
-                        <div class="pw-strength-bar">
-                            <div class="pw-strength-fill" id="pwStrengthFill"></div>
-                        </div>
-                        <span class="pw-strength-label" id="pwStrengthLabel"></span>
-                    </div>
-                    <div class="field-error" id="err-password">Password must be at least 8 characters.</div>
-                </div>
- 
-                <div class="field-group">
-                    <label class="field-label" for="regConfirm">Confirm Password</label>
-                    <div class="field-input-wrap">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" class="field-input" id="regConfirm" placeholder="Re-enter password">
-                    </div>
-                    <div class="field-error" id="err-confirm">Passwords do not match.</div>
-                </div>
- 
-                <button class="btn-register" type="button" onclick="goStep2()">
-                    Continue <i class="fas fa-arrow-right fa-sm ml-1"></i>
-                </button>
-            </div>
- 
-            <!-- ── STEP 2: Personal info ── -->
-            <div id="step2" style="display:none;">
-                <div class="section-label">Personal Information</div>
-                <p class="text-muted small mb-3">Help us personalise your experience. You can update this later.</p>
- 
-                <div class="field-row mb-3">
-                    <div class="field-group" style="margin-bottom:0;">
-                        <label class="field-label" for="regAge">Age</label>
-                        <div class="field-input-wrap">
-                            <i class="fas fa-birthday-cake"></i>
-                            <input type="number" class="field-input" id="regAge"
-                                   placeholder="e.g. 22" min="10" max="100">
-                        </div>
-                    </div>
-                    <div class="field-group" style="margin-bottom:0;">
-                        <label class="field-label" for="regWeight">Weight (kg)</label>
-                        <div class="field-input-wrap">
-                            <i class="fas fa-weight"></i>
-                            <input type="number" class="field-input" id="regWeight"
-                                   placeholder="e.g. 68" min="30" max="200" step="0.5">
-                        </div>
-                    </div>
-                </div>
 
-                <div class="field-group">
-                    <label class="field-label" for="regHeight">Height (cm)</label>
-                    <div class="field-input-wrap">
-                        <i class="fas fa-ruler-vertical"></i>
-                        <input type="number" class="field-input" id="regHeight"
-                            placeholder="e.g. 170" min="100" max="250">
-                    </div>
-                </div>
- 
-                <div class="field-group">
-                    <label class="field-label" for="regGender">Gender</label>
-                    <div class="field-input-wrap">
-                        <i class="fas fa-venus-mars"></i>
-                        <select class="field-select" id="regGender">
-                            <option value="" disabled selected>Select gender...</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Prefer not to say</option>
-                        </select>
-                    </div>
-                </div>
- 
-                <div class="field-group">
-                    <label class="field-label" for="regGoal">Fitness Goal</label>
-                    <div class="field-input-wrap">
-                        <i class="fas fa-bullseye"></i>
-                        <select class="field-select" id="regGoal">
-                            <option value="" disabled selected>Select your goal...</option>
-                            <option value="lose">Lose weight</option>
-                            <option value="maintain">Maintain weight</option>
-                            <option value="gain">Gain muscle</option>
-                            <option value="maintain">Improve fitness</option>
-                            <option value="maintain">Increase endurance</option>
-                        </select>
-                    </div>
-                </div>
- 
-                <!-- Terms -->
-                <div class="terms-row">
-                    <input type="checkbox" id="agreeTerms">
-                    <label for="agreeTerms">
-                        I agree to the <a href="#">Terms of Service</a> and
-                        <a href="#">Privacy Policy</a>. I understand my data will be
-                        used to personalise my fitness experience.
-                    </label>
-                </div>
-                <div class="field-error" id="err-terms" style="display:none; margin-bottom:0.75rem;">
-                    Please agree to the terms to continue.
-                </div>
- 
-                <div class="d-flex gap-2" style="gap:0.6rem;">
-                    <button class="btn-register" style="background:transparent;color:var(--primary);border:1.5px solid var(--gray-2);box-shadow:none;"
-                            type="button" onclick="goStep1()">
-                        <i class="fas fa-arrow-left fa-sm mr-1"></i> Back
-                    </button>
-                    <button class="btn-register" type="button" onclick="submitRegister()"
-                            style="flex:2;">
-                        Create Account
-                        <!-- TODO: wire to backend — POST /api/auth/register -->
-                    </button>
-                </div>
-            </div>
- 
-            <!-- ── STEP 3: Success ── -->
-            <div id="step3" style="display:none; text-align:center; padding:1.5rem 0;">
-                <div style="width:60px;height:60px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
-                    <i class="fas fa-check" style="color:#16a34a;font-size:1.5rem;"></i>
-                </div>
-                <h2 style="font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--black);margin-bottom:0.5rem;">
-                    You're all set!
-                </h2>
-                <p class="text-muted small mb-1">Account created for <strong id="successName"></strong>.</p>
-                <p class="text-muted small mb-3">Let's get your fitness journey started.</p>
-                <a href="dashboard.html" class="btn-register" style="display:block; text-decoration:none; text-align:center;">
-                    <i class="fas fa-tachometer-alt fa-sm mr-1"></i> Go to Dashboard
+    <div class="left-footer">© 2026 FitTrack · WIF2003</div>
+</div>
+
+<!-- ── RIGHT PANEL ──────────────────────────────────────────────────── -->
+<div class="right-panel">
+
+    <a href="login.html" class="back-link">
+        <i class="fas fa-arrow-left fa-xs"></i> Back to sign in
+    </a>
+
+    <div class="right-inner">
+
+        <div class="form-header">
+            <h1>Create account.</h1>
+            <p>Already have an account? <a href="login.html">Sign in here</a></p>
+        </div>
+
+        <!-- Step dots -->
+        <div class="step-indicator">
+            <div class="step-dot active" id="dot1"></div>
+            <div class="step-dot" id="dot2"></div>
+            <div class="step-dot" id="dot3"></div>
+            <small class="text-muted ml-1" id="stepLabel" style="font-size:0.72rem;">Account details</small>
+        </div>
+
+        <!-- ── STEP 1: Account details ── -->
+        <div id="step1">
+            <div class="section-label">Account Details</div>
+
+            <!-- Social signup -->
+            <div class="social-btns">
+                <a href="#" class="btn-social">
+                    <i class="fab fa-google"></i> Google
+                </a>
+                <a href="#" class="btn-social">
+                    <i class="fab fa-facebook-f"></i> Facebook
                 </a>
             </div>
- 
-            <div class="signin-link" id="signinLink">
-                Already have an account? <a href="login.html">Sign in →</a>
-            </div>
- 
-        </div>
-    </div>
 
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="../js/sb-admin-2.min.js"></script>
-    <script src="../js/register.js"></script>
+            <div class="divider">
+                <div class="divider-line"></div>
+                <span class="divider-text">or with email</span>
+                <div class="divider-line"></div>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="regName">Full Name</label>
+                <div class="field-input-wrap">
+                    <i class="fas fa-user"></i>
+                    <input type="text" class="field-input" id="regName" placeholder="e.g. Ahmad Hafiz">
+                </div>
+                <div class="field-error" id="err-name">Please enter your full name.</div>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="regEmail">Email</label>
+                <div class="field-input-wrap">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" class="field-input" id="regEmail" placeholder="you@example.com">
+                </div>
+                <div class="field-error" id="err-email">Please enter a valid email address.</div>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="regPassword">Password</label>
+                <div class="field-input-wrap">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" class="field-input" id="regPassword" placeholder="Min. 8 characters"
+                        oninput="checkPasswordStrength(this.value)">
+                </div>
+                <div class="pw-strength" id="pwStrength">
+                    <div class="pw-strength-bar">
+                        <div class="pw-strength-fill" id="pwStrengthFill"></div>
+                    </div>
+                    <span class="pw-strength-label" id="pwStrengthLabel"></span>
+                </div>
+                <div class="field-error" id="err-password">Password must be at least 8 characters.</div>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="regConfirm">Confirm Password</label>
+                <div class="field-input-wrap">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" class="field-input" id="regConfirm" placeholder="Re-enter password">
+                </div>
+                <div class="field-error" id="err-confirm">Passwords do not match.</div>
+            </div>
+
+            <button class="btn-register" type="button" onclick="goStep2()">
+                Continue <i class="fas fa-arrow-right fa-sm ml-1"></i>
+            </button>
+        </div>
+
+        <!-- ── STEP 2: Personal info ── -->
+        <div id="step2" style="display:none;">
+            <div class="section-label">Personal Information</div>
+            <p class="text-muted small mb-3">Help us personalise your experience. You can update this later.</p>
+
+            <div class="field-row mb-3">
+                <div class="field-group" style="margin-bottom:0;">
+                    <label class="field-label" for="regAge">Age</label>
+                    <div class="field-input-wrap">
+                        <i class="fas fa-birthday-cake"></i>
+                        <input type="number" class="field-input" id="regAge" placeholder="e.g. 22" min="10" max="100">
+                    </div>
+                </div>
+                <div class="field-group" style="margin-bottom:0;">
+                    <label class="field-label" for="regWeight">Weight (kg)</label>
+                    <div class="field-input-wrap">
+                        <i class="fas fa-weight"></i>
+                        <input type="number" class="field-input" id="regWeight" placeholder="e.g. 68" min="30" max="200"
+                            step="0.5">
+                    </div>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="regHeight">Height (cm)</label>
+                <div class="field-input-wrap">
+                    <i class="fas fa-ruler-vertical"></i>
+                    <input type="number" class="field-input" id="regHeight" placeholder="e.g. 170" min="100" max="250">
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="regGender">Gender</label>
+                <div class="field-input-wrap">
+                    <i class="fas fa-venus-mars"></i>
+                    <select class="field-select" id="regGender">
+                        <option value="" disabled selected>Select gender...</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Prefer not to say</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="regGoal">Fitness Goal</label>
+                <div class="field-input-wrap">
+                    <i class="fas fa-bullseye"></i>
+                    <select class="field-select" id="regGoal">
+                        <option value="" disabled selected>Select your goal...</option>
+                        <option value="lose">Lose weight</option>
+                        <option value="maintain">Maintain weight</option>
+                        <option value="gain">Gain muscle</option>
+                        <option value="maintain">Improve fitness</option>
+                        <option value="maintain">Increase endurance</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Terms -->
+            <div class="terms-row">
+                <input type="checkbox" id="agreeTerms">
+                <label for="agreeTerms">
+                    I agree to the <a href="#">Terms of Service</a> and
+                    <a href="#">Privacy Policy</a>. I understand my data will be
+                    used to personalise my fitness experience.
+                </label>
+            </div>
+            <div class="field-error" id="err-terms" style="display:none; margin-bottom:0.75rem;">
+                Please agree to the terms to continue.
+            </div>
+            <div class="field-error" id="err-backend" style="display:none; margin-bottom:0.75rem; color:#e74a3b;">
+            </div>
+
+            <div class="d-flex gap-2" style="gap:0.6rem;">
+                <button class="btn-register"
+                    style="background:transparent;color:var(--primary);border:1.5px solid var(--gray-2);box-shadow:none;"
+                    type="button" onclick="goStep1()">
+                    <i class="fas fa-arrow-left fa-sm mr-1"></i> Back
+                </button>
+                <button class="btn-register" type="button" onclick="submitRegister()" style="flex:2;" id="registerBtn">
+                    Create Account
+                </button>
+            </div>
+        </div>
+
+        <!-- ── STEP 3: Success ── -->
+        <div id="step3" style="display:none; text-align:center; padding:1.5rem 0;">
+            <div
+                style="width:60px;height:60px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+                <i class="fas fa-check" style="color:#16a34a;font-size:1.5rem;"></i>
+            </div>
+            <h2 style="font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--black);margin-bottom:0.5rem;">
+                You're all set!
+            </h2>
+            <p class="text-muted small mb-1">Account created for <strong id="successName"></strong>.</p>
+            <p class="text-muted small mb-3">Let's get your fitness journey started.</p>
+            <a href="dashboard.html" class="btn-register"
+                style="display:block; text-decoration:none; text-align:center;">
+                <i class="fas fa-tachometer-alt fa-sm mr-1"></i> Go to Dashboard
+            </a>
+        </div>
+
+        <div class="signin-link" id="signinLink">
+            Already have an account? <a href="login.html">Sign in →</a>
+        </div>
+
+    </div>
+</div>
+
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="../js/sb-admin-2.min.js"></script>
+<script src="../js/register.js"></script>
+<script src="../js/service/auth-service.js"></script>

@@ -1,76 +1,48 @@
+// 1_FRONTEND/js/profile.js
+
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
-
-const PROFILE_KEY    = 'fittrack_profile';
-const GOAL_KEY       = 'fittrack_goals';
 const PROFILE_FIELDS = ['name', 'email', 'age', 'gender', 'weight', 'height', 'goal'];
-const PROFILE_API_URL = 'http://localhost:3000/api/v1/profile';
+const BACKEND_URL = 'http://localhost:3000/';
 
-// ── LOCALSTORAGE HELPERS ──────────────────────────────────────────────────────
+let currentProfileData = {};
 
-function getProfile() {
-    try { return JSON.parse(localStorage.getItem(PROFILE_KEY)) || {}; }
-    catch (e) { return {}; }
+function getProfileFromResponse(data) {
+    if (!data) return {};
+    return data.user || data.profile || data.data || data;
 }
 
-function saveProfileField(field, rawValue) {
-    const profile = getProfile();
-    profile[field] = rawValue;
-    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
-    syncProfileToBackend();
+function getGoalsFromResponse(data) {
+    if (!data) return {};
+    return data.goals || data.user?.goals || data.profile?.goals || {};
 }
 
-function getGoals() {
-    try { return JSON.parse(localStorage.getItem(GOAL_KEY)) || {}; }
-    catch (e) { return {}; }
-}
+function getDisplayValue(field, input, value) {
+    if (value === undefined || value === null || value === '') return '—';
 
-function getInputValue(id, fallback = '') {
-    const input = document.getElementById(id);
-    return input && input.value ? input.value : fallback;
-}
-
-function buildBackendProfilePayload() {
-    const profile = getProfile();
-    const goals = getGoals();
-
-    return {
-        displayName: profile.name || document.getElementById('profileNameDisplay')?.textContent?.trim() || 'FitTrack User',
-        email: profile.email || getInputValue('input-email'),
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Kuala_Lumpur',
-        goal: profile.goal || getInputValue('input-goal', 'maintain'),
-        heightCm: profile.height || getInputValue('input-height', '170'),
-        weightKg: profile.weight || getInputValue('input-weight', '70'),
-        activityLevel: profile.activityLevel || 'moderate',
-        stepsGoal: goals.steps || undefined,
-        caloriesGoal: goals.calories || undefined,
-        weightGoal: goals.weight || undefined,
-    };
-}
-
-async function syncProfileToBackend() {
-    const profile = getProfile();
-    if (!profile.email) return;
-
-    try {
-        await fetch(PROFILE_API_URL, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(buildBackendProfilePayload()),
-        });
-    } catch (error) {
-        console.warn('Could not sync profile to backend.', error);
+    if (input.tagName === 'SELECT') {
+        const matchedOption = [...input.options].find(option => option.value == value);
+        return matchedOption ? matchedOption.text : value;
     }
+
+    if (field === 'age') return value + ' years';
+    if (field === 'height') return value + ' cm';
+    if (field === 'weight') return value + ' kg';
+    return value;
 }
 
-// ── TOGGLE EDIT ───────────────────────────────────────────────────────────────
+function getPhotoUrl(photo) {
+    if (!photo) return '';
+    return photo.startsWith('http') ? photo : BACKEND_URL + photo.replace(/\\/g, '/');
+}
 
-function toggleEdit(field) {
-    var display = document.getElementById('display-' + field);
-    var input   = document.getElementById('input-' + field);
-    var row     = display.closest('.profile-field');
-    var btn     = row.querySelector('.edit-btn i');
+// ── TOGGLE EDIT & API SAVE ────────────────────────────────────────────────────
+
+async function toggleEdit(field) {
+    const display = document.getElementById('display-' + field);
+    const input = document.getElementById('input-' + field);
+    const row = display.closest('.profile-field');
+    const btn = row.querySelector('.edit-btn i');
+    const button = btn.closest('button');
 
     if (input.classList.contains('d-none')) {
         // Enter edit mode
@@ -79,193 +51,307 @@ function toggleEdit(field) {
         input.focus();
         btn.classList.remove('fa-pencil-alt');
         btn.classList.add('fa-check');
-        btn.closest('button').style.color = '#1cc88a';
+        button.style.color = '#1cc88a';
         row.style.backgroundColor = '#eaf1fb';
-        row.style.borderLeft      = '4px solid #4e73df';
-        row.style.paddingLeft     = '12px';
-        row.style.borderRadius    = '4px';
-        row.style.transition      = 'all 0.2s ease';
-    } else {
-        // Confirm edit
-        const rawValue = (input.tagName === 'SELECT') ? input.value : input.value;
+        row.style.borderLeft = '4px solid #4e73df';
+        row.style.paddingLeft = '12px';
+        row.style.borderRadius = '4px';
+        row.style.transition = 'all 0.2s ease';
+        return;
+    }
 
-        var displayValue = (input.tagName === 'SELECT')
-            ? input.options[input.selectedIndex].text
-            : input.value;
-        if (field === 'age')    displayValue += ' years';
-        if (field === 'height') displayValue += ' cm';
-        if (field === 'weight') displayValue += ' kg';
+    const rawValue = input.value;
 
-        display.textContent = displayValue;
-        input.classList.add('d-none');
-        display.classList.remove('d-none');
-        btn.classList.remove('fa-check');
-        btn.classList.add('fa-pencil-alt');
-        btn.closest('button').style.color = '#4e73df';
-        row.style.backgroundColor = '';
-        row.style.borderLeft      = '';
-        row.style.paddingLeft     = '';
-        row.style.borderRadius    = '';
+    btn.classList.remove('fa-check');
+    btn.classList.add('fa-spinner', 'fa-spin');
+    button.style.color = '#f6c23e';
+    input.disabled = true;
 
-        if (PROFILE_FIELDS.includes(field)) saveProfileField(field, rawValue);
-        if (field === 'goal') updateCalHint();
+    const result = await window.ProfileService.updateProfile({ [field]: rawValue });
+    input.disabled = false;
+
+    if (!result.success) {
+        alert(result.message || 'Failed to update profile.');
+        btn.classList.remove('fa-spinner', 'fa-spin');
+        btn.classList.add('fa-check');
+        button.style.color = '#1cc88a';
+        return;
+    }
+
+    currentProfileData[field] = rawValue;
+    display.textContent = getDisplayValue(field, input, rawValue);
+    input.classList.add('d-none');
+    display.classList.remove('d-none');
+    btn.classList.remove('fa-spinner', 'fa-spin');
+    btn.classList.add('fa-pencil-alt');
+    button.style.color = '#4e73df';
+    row.style.backgroundColor = '';
+    row.style.borderLeft = '';
+    row.style.paddingLeft = '';
+    row.style.borderRadius = '';
+
+    if (field === 'goal') updateCalHint();
+    if (field === 'name') {
+        const nameEl = document.getElementById('profileNameDisplay');
+        if (nameEl) nameEl.textContent = rawValue || '—';
     }
 }
 
 // ── RESTORE PROFILE ON PAGE LOAD ─────────────────────────────────────────────
 
-function restoreProfile() {
-    const profile = getProfile();
+async function restoreProfile() {
+    const result = await window.ProfileService.getProfile();
 
-    // Restore avatar image in the profile card
-    if (profile.photo) {
-        var avatarDiv = document.getElementById('profileAvatar');
-        if (avatarDiv) {
-            avatarDiv.innerHTML = '<img src="' + profile.photo + '" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
-        }
-        // NOTE: topbarProfilePic is already restored by layout.js on page load — no need to repeat it here
+    if (!result.success || !result.data) {
+        console.error('Could not load profile:', result.message);
+        return;
     }
 
-    // Name display
-    const nameEl = document.getElementById('profileNameDisplay');
-    if (nameEl && profile.name) nameEl.textContent = profile.name;
+    const profile = getProfileFromResponse(result.data);
+    const goals = getGoalsFromResponse(result.data);
+    currentProfileData = profile;
 
-    // Restore all editable fields
+    const photoUrl = getPhotoUrl(profile.photo);
+    if (photoUrl) {
+        const avatarDiv = document.getElementById('profileAvatar');
+        if (avatarDiv) {
+            avatarDiv.innerHTML = `<img src="${photoUrl}" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+        }
+
+        const topbar = document.getElementById('topbarProfilePic');
+        if (topbar) {
+            topbar.innerHTML = `<img src="${photoUrl}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
+        }
+    }
+
+    const nameEl = document.getElementById('profileNameDisplay');
+    if (nameEl) nameEl.textContent = profile.name || profile.displayName || '—';
+
     PROFILE_FIELDS.forEach(field => {
-        if (!profile[field]) return;
-        const input   = document.getElementById('input-'   + field);
+        const input = document.getElementById('input-' + field);
         const display = document.getElementById('display-' + field);
         if (!input || !display) return;
 
-        input.value = profile[field];
-
-        let displayValue = (input.tagName === 'SELECT')
-            ? input.options[[...input.options].findIndex(o => o.value === profile[field])]?.text || profile[field]
-            : profile[field];
-        if (field === 'age')    displayValue += ' years';
-        if (field === 'height') displayValue += ' cm';
-        if (field === 'weight') displayValue += ' kg';
-
-        display.textContent = displayValue;
+        const value = profile[field] ?? '';
+        input.value = value;
+        display.textContent = getDisplayValue(field, input, value);
     });
 
     const weightHint = document.getElementById('currentWeightHint');
-    if (weightHint && profile.weight) weightHint.textContent = profile.weight + ' kg';
+    if (weightHint) weightHint.textContent = profile.weight ? profile.weight + ' kg' : '—';
+
+    loadGoalSettings(goals);
 }
 
 // ── GOAL CALORIE HINT ─────────────────────────────────────────────────────────
 
 function updateCalHint() {
-    const profile = getProfile();
-    const hintEl  = document.getElementById('goalCalHint');
+    const hintEl = document.getElementById('goalCalHint');
     if (!hintEl) return;
 
-    const goal = profile.goal || document.getElementById('display-goal')?.textContent?.toLowerCase() || '';
-    if (goal.includes('lose'))      hintEl.textContent = '1,500 – 1,800 kcal';
+    const goal = currentProfileData.goal || document.getElementById('display-goal')?.textContent?.toLowerCase() || '';
+    if (goal.includes('lose')) hintEl.textContent = '1,500 – 1,800 kcal';
     else if (goal.includes('gain')) hintEl.textContent = '2,500 – 3,000 kcal';
-    else                            hintEl.textContent = '2,000 – 2,200 kcal';
+    else hintEl.textContent = '2,000 – 2,200 kcal';
 }
 
-// ── GOAL SETTINGS ─────────────────────────────────────────────────────────────
+// ── GOAL SETTINGS API ─────────────────────────────────────────────────────────
 
-function loadGoalSettings() {
-    const saved = localStorage.getItem(GOAL_KEY);
-    if (!saved) return;
-    try {
-        const goals = JSON.parse(saved);
-        if (goals.steps)    document.getElementById('goalSteps').value    = goals.steps;
-        if (goals.calories) document.getElementById('goalCalories').value = goals.calories;
-        if (goals.weight)   document.getElementById('goalWeight').value   = goals.weight;
-        if (goals.savedAt)  document.getElementById('goalLastSaved').textContent = 'Last saved: ' + goals.savedAt;
-        showPreview(goals);
-    } catch (e) {
-        console.warn('Goal settings parse error', e);
-    }
+function loadGoalSettings(goals = {}) {
+    if (goals.steps) document.getElementById('goalSteps').value = goals.steps;
+    if (goals.calories) document.getElementById('goalCalories').value = goals.calories;
+    if (goals.weight) document.getElementById('goalWeight').value = goals.weight;
+
+    const lastSavedEl = document.getElementById('goalLastSaved');
+    if (lastSavedEl) lastSavedEl.textContent = 'Data synced with server';
+
+    showPreview(goals);
 }
 
-function saveGoalSettings() {
-    const steps    = document.getElementById('goalSteps').value;
+async function saveGoalSettings() {
+    const steps = document.getElementById('goalSteps').value;
     const calories = document.getElementById('goalCalories').value;
-    const weight   = document.getElementById('goalWeight').value;
+    const weight = document.getElementById('goalWeight').value;
 
     if (!steps && !calories && !weight) {
         alert('Please fill in at least one goal before saving.');
         return;
     }
 
-    const now   = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    const goals = { steps, calories, weight, savedAt: now };
+    const goals = {
+        steps: steps || undefined,
+        calories: calories || undefined,
+        weight: weight || undefined,
+    };
 
-    localStorage.setItem(GOAL_KEY, JSON.stringify(goals));
-    syncProfileToBackend();
+    const result = await window.ProfileService.updateGoals(goals);
+
+    if (!result.success) {
+        alert(result.message || 'Failed to save goals.');
+        return;
+    }
+
+    const now = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
     showPreview(goals);
 
     const badge = document.getElementById('goalsSavedBadge');
-    badge.style.display = 'inline-block';
-    document.getElementById('goalLastSaved').textContent = 'Last saved: ' + now;
-    setTimeout(() => badge.style.display = 'none', 3000);
+    if (badge) {
+        badge.style.display = 'inline-block';
+        setTimeout(() => badge.style.display = 'none', 3000);
+    }
+
+    const lastSavedEl = document.getElementById('goalLastSaved');
+    if (lastSavedEl) lastSavedEl.textContent = 'Last saved: ' + now;
 }
 
-function clearGoalSettings() {
+async function clearGoalSettings() {
     if (!confirm('Clear all saved goals?')) return;
-    localStorage.removeItem(GOAL_KEY);
-    document.getElementById('goalSteps').value    = '';
+
+    const result = await window.ProfileService.clearGoals();
+
+    if (!result.success) {
+        alert(result.message || 'Failed to clear goals.');
+        return;
+    }
+
+    document.getElementById('goalSteps').value = '';
     document.getElementById('goalCalories').value = '';
-    document.getElementById('goalWeight').value   = '';
-    document.getElementById('goalLastSaved').textContent = '';
-    document.getElementById('currentGoalsPreview').style.display = 'none';
-    document.getElementById('goalsSavedBadge').style.display     = 'none';
+    document.getElementById('goalWeight').value = '';
+
+    const lastSavedEl = document.getElementById('goalLastSaved');
+    if (lastSavedEl) lastSavedEl.textContent = '';
+
+    const preview = document.getElementById('currentGoalsPreview');
+    if (preview) preview.style.display = 'none';
+
+    const badge = document.getElementById('goalsSavedBadge');
+    if (badge) badge.style.display = 'none';
 }
 
-function showPreview(goals) {
+function showPreview(goals = {}) {
     const preview = document.getElementById('currentGoalsPreview');
+    if (!preview) return;
+
     preview.style.display = 'block';
-    document.getElementById('previewSteps').textContent    = goals.steps    ? parseInt(goals.steps).toLocaleString()    + ' steps' : '—';
-    document.getElementById('previewCalories').textContent = goals.calories ? parseInt(goals.calories).toLocaleString() + ' kcal'  : '—';
-    document.getElementById('previewWeight').textContent   = goals.weight   ? goals.weight + ' kg' : '—';
+    document.getElementById('previewSteps').textContent = goals.steps ? parseInt(goals.steps).toLocaleString() + ' steps' : '—';
+    document.getElementById('previewCalories').textContent = goals.calories ? parseInt(goals.calories).toLocaleString() + ' kcal' : '—';
+    document.getElementById('previewWeight').textContent = goals.weight ? goals.weight + ' kg' : '—';
 }
 
 // ── INIT (DOMContentLoaded) ───────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
+    if (!window.AuthService || !window.AuthService.isAuthenticated()) {
+        window.location.href = 'login.html';
+        return;
+    }
 
-    restoreProfile();
-    loadGoalSettings();
-    syncProfileToBackend();
+    await restoreProfile();
     updateCalHint();
 
-    // Goal select change → update calorie hint
     const goalSelect = document.getElementById('input-goal');
     if (goalSelect) goalSelect.addEventListener('change', updateCalHint);
 
-    // Photo upload — kept inside DOMContentLoaded so all elements are guaranteed present
     const photoUpload = document.getElementById('photoUpload');
     if (photoUpload) {
-        photoUpload.addEventListener('change', function (e) {
-            var file = e.target.files[0];
+        photoUpload.addEventListener('change', async function (event) {
+            const file = event.target.files[0];
             if (!file) return;
 
-            var reader = new FileReader();
-            reader.onload = function (ev) {
-                var dataUrl = ev.target.result;
+            const previewUrl = URL.createObjectURL(file);
+            const avatarDiv = document.getElementById('profileAvatar');
+            if (avatarDiv) {
+                avatarDiv.innerHTML = `<img src="${previewUrl}" alt="Uploading..." style="width:100%;height:100%;object-fit:cover;border-radius:50%; opacity: 0.5;">`;
+            }
 
-                // Update avatar in profile card
-                var avatarDiv = document.getElementById('profileAvatar');
+            const result = await window.ProfileService.uploadPhoto(file);
+
+            if (result.success && result.data?.photo) {
+                const finalUrl = getPhotoUrl(result.data.photo);
+
                 if (avatarDiv) {
-                    avatarDiv.innerHTML = '<img src="' + dataUrl + '" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+                    avatarDiv.innerHTML = `<img src="${finalUrl}" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
                 }
 
-                // Update topbar on this page immediately (layout.js only runs once on load)
-                var topbar = document.getElementById('topbarProfilePic');
-                if (topbar) topbar.innerHTML = '<img src="' + dataUrl + '" alt="Profile" style="width:100%;height:100%;object-fit:cover;">';
-
-                // Persist to localStorage so all other pages pick it up via layout.js
-                var profile = getProfile();
-                profile.photo = dataUrl;
-                localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
-            };
-            reader.readAsDataURL(file);
+                const topbar = document.getElementById('topbarProfilePic');
+                if (topbar) {
+                    topbar.innerHTML = `<img src="${finalUrl}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
+                }
+            } else {
+                alert(result.message || 'Failed to upload photo.');
+                await restoreProfile();
+            }
         });
     }
 
+    const btnSavePassword = document.getElementById('btnSavePassword');
+    if (btnSavePassword) {
+        btnSavePassword.addEventListener('click', async function () {
+            const currentInput = document.getElementById('currentPassword');
+            const newInput = document.getElementById('newPassword');
+            const confirmInput = document.getElementById('confirmPassword');
+
+            if (!currentInput.value || !newInput.value || !confirmInput.value) {
+                alert('Please fill out all password fields.');
+                return;
+            }
+
+            if (newInput.value !== confirmInput.value) {
+                alert("New password and confirm password didn't match!");
+                return;
+            }
+
+            if (newInput.value.length < 8) {
+                alert('Password needs to be at least 8 characters long.');
+                return;
+            }
+
+            const originalText = btnSavePassword.innerHTML;
+            btnSavePassword.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            btnSavePassword.disabled = true;
+
+            const result = await window.ProfileService.changePassword(currentInput.value, newInput.value);
+
+            btnSavePassword.innerHTML = originalText;
+            btnSavePassword.disabled = false;
+
+            if (!result.success) {
+                alert(result.message || 'Failed to update password.');
+                return;
+            }
+
+            alert('Password updated successfully!');
+            currentInput.value = '';
+            newInput.value = '';
+            confirmInput.value = '';
+
+            if (window.$) {
+                $('#changePasswordSection').collapse('hide');
+            }
+        });
+    }
+
+    const btnConfirmDelete = document.getElementById('btnConfirmDelete');
+    if (btnConfirmDelete) {
+        btnConfirmDelete.addEventListener('click', async function () {
+            const originalText = btnConfirmDelete.innerHTML;
+            btnConfirmDelete.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Deleting...';
+            btnConfirmDelete.disabled = true;
+
+            const result = await window.ProfileService.deleteProfile();
+
+            if (result.success) {
+                if (window.$) {
+                    $('#deleteAccountModal').modal('hide');
+                }
+                alert('Account successfully deleted.');
+                window.AuthService.logout();
+                return;
+            }
+
+            btnConfirmDelete.innerHTML = originalText;
+            btnConfirmDelete.disabled = false;
+            alert(result.message || 'Failed to delete account.');
+        });
+    }
 });

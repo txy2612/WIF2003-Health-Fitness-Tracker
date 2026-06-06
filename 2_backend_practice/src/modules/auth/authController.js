@@ -1,21 +1,36 @@
 import express from 'express'
 import { StatusCodes } from 'http-status-codes'
+import authService from './authService.js'
 import validate from '../../middleware/validate.js'
-import { getSchema, postSchema } from './authSchema.js'
+import { registerSchema, loginSchema } from './authSchema.js'
 
 const router = express.Router()
 
-router.get('/', validate(getSchema), async (request, response, next) => {
+router.post('/register', validate(registerSchema), async (request, response, next) => {
   try {
-    response.status(StatusCodes.NO_CONTENT).send()
+    const { body } = request.validated
+    const data = await authService.registerUser(body)
+
+    response.status(StatusCodes.CREATED).json({
+      success: true,
+      message: 'Registration successful',
+      data
+    })
   } catch (error) {
     next(error)
   }
 })
 
-router.post('/', validate(postSchema), async (request, response, next) => {
+router.post('/login', validate(loginSchema), async (request, response, next) => {
   try {
-    response.status(StatusCodes.NO_CONTENT).send()
+    const { body } = request.validated
+    const data = await authService.loginUser(body.email, body.password)
+
+    response.status(StatusCodes.OK).json({
+      success: true,
+      message: 'Login successful',
+      data
+    })
   } catch (error) {
     next(error)
   }

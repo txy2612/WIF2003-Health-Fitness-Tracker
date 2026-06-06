@@ -1,5 +1,5 @@
 import express from 'express' //backend framework
-import cors from 'cors' 
+import cors from 'cors'
 import helmet from 'helmet'
 import env from './config/env.js' //instead of const PORT = 300, now use env.PORT
 import connectDatabase from './config/database.js'
@@ -28,6 +28,11 @@ app.use(requestId)//request-id be earlier -> evn cors can get an id
 app.use(helmet())
 app.use(cors()) // allow front-end to communicate with back-end
 app.use(express.json())// translate incoming JSON body
+app.use('/uploads', express.static('uploads', {
+  setHeaders: (res, path, stat) => {
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin'); //allowed browser to display this photo anywhere
+  }
+}));
 
 // test route
 app.get('/', (request, response) => {
