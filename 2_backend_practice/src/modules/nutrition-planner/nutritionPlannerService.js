@@ -1,4 +1,5 @@
 import nutritionPlannerModel from './nutritionPlannerModel.js'
+import progressChartsModel from '../progress-charts/progressChartsModel.js'
 import favouriteModel from './favouriteModel.js'
 import mealPlanModel from './mealPlanModel.js'
 
@@ -47,6 +48,31 @@ function calculateCalorieGoal(profile) {
   }
 }
 
+// GET /hydration — used by the fitness page's water insight.
+// Water is stored in the progress-charts collection (metric: 'waterGlasses').
+async function getHydrationForDate(query = {}) {
+  const date = query.date || new Date().toISOString().slice(0, 10)
+  const startOfDay = new Date(`${date}T00:00:00.000Z`)
+  const endOfDay = new Date(startOfDay)
+  endOfDay.setUTCDate(endOfDay.getUTCDate() + 1)
+
+  const waterEntry = await progressChartsModel
+    .findOne({
+      metric: 'waterGlasses',
+      recordedFor: {
+        $gte: startOfDay,
+        $lt: endOfDay,
+      },
+    })
+    .sort({ updatedAt: -1 })
+    .lean()
+
+  return {
+    date,
+    glasses: waterEntry ? waterEntry.value : 0,
+  }
+}
+
 async function findMeals(search) {
   if (!search) {
     return nutritionPlannerModel.find({}).sort({ name: 1 }).lean()
@@ -83,7 +109,6 @@ async function getFavourites(userId) {
 }
 
 async function addFavourite(userId, body) {
-  // Idempotent: if this user already favourited the meal, return it.
   const existing = await favouriteModel
     .findOne({ userId, mealId: body.mealId })
     .lean()
@@ -96,7 +121,6 @@ async function addFavourite(userId, body) {
 }
 
 async function removeFavourite(userId, mealId) {
-  // Match userId too, so a user can only delete their own favourite.
   const deleted = await favouriteModel.findOneAndDelete({ userId, mealId })
   return deleted ? formatDoc(deleted) : null
 }
@@ -114,7 +138,6 @@ async function getPlan(userId, date) {
 async function savePlan(userId, body) {
   const { date, breakfast = [], lunch = [], dinner = [] } = body
 
-  // Upsert by (userId, date): one plan per user per day.
   const plan = await mealPlanModel.findOneAndUpdate(
     { userId, date },
     { userId, date, breakfast, lunch, dinner },
@@ -127,6 +150,7 @@ async function savePlan(userId, body) {
 export default {
   calculateCalorieGoal,
   getNutritionPlannerOverview,
+  getHydrationForDate,
   getFavourites,
   addFavourite,
   removeFavourite,

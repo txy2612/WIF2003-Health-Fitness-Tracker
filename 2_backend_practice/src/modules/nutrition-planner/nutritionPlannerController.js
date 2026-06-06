@@ -5,6 +5,7 @@ import validate from '../../middleware/validate.js'
 import requireAuth from '../../middleware/requireAuth.js'
 import {
   getSchema,
+  getHydrationSchema,
   postCalorieGoalSchema,
   postFavouriteSchema,
   deleteFavouriteSchema,
@@ -13,12 +14,25 @@ import {
 
 const router = express.Router()
 
-// ── public: catalogue + calorie calculator (not user-specific) ───────────────
+// ── public: catalogue + calorie calculator + hydration (not user-specific) ───
 
 router.get('/', validate(getSchema), async (request, response, next) => {
   try {
     const { query } = request.validated
     const data = await nutritionPlannerService.getNutritionPlannerOverview(query)
+
+    response.status(StatusCodes.OK).json(data)
+  } catch (error) {
+    next(error)
+  }
+})
+
+// GET /api/v1/nutrition-planner/hydration?date=YYYY-MM-DD
+// Used by the fitness page water insight. Kept public to match original.
+router.get('/hydration', validate(getHydrationSchema), async (request, response, next) => {
+  try {
+    const { query } = request.validated
+    const data = await nutritionPlannerService.getHydrationForDate(query)
 
     response.status(StatusCodes.OK).json(data)
   } catch (error) {

@@ -10,6 +10,15 @@ export const getSchema = z.object({
   }),
 })
 
+// GET /hydration?date=YYYY-MM-DD  (used by the fitness page's water insight)
+export const getHydrationSchema = z.object({
+  body: z.object({}),
+  params: z.object({}),
+  query: z.object({
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  }),
+})
+
 export const postCalorieGoalSchema = z.object({
   body: z.object({
     age: z.coerce.number().int().min(13).max(120),
@@ -56,15 +65,6 @@ const planItem = z.object({
   name: z.string().min(1),
   calories: z.coerce.number().nonnegative(),
   img: z.string().optional(),
-})
-
-// GET /plan?date=YYYY-MM-DD
-export const getPlanSchema = z.object({
-  body: z.object({}),
-  params: z.object({}),
-  query: z.object({
-    date: dateString,
-  }),
 })
 
 // PUT /plan  — saves the whole day's plan in one request
