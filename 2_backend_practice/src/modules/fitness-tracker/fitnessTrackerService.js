@@ -5,9 +5,9 @@ import { StatusCodes } from 'http-status-codes'
 // because later we'll do 'await databaseQuery()'
 
 //Purpose: Prepare dashboard overview data for fitness tracker.
-async function getFitnessTrackerOverview() {
+async function getFitnessTrackerOverview(userId) {
     const activities = await fitnessTrackerModel
-    .find({})//retrieve all from MongoDB
+    .find({ userId })//retrieve only this user's records from MongoDB
     .sort({ loggedAt : -1 })//sort -1 = descending = latest first
     .lean()//convert MongoDB doc into plain JS objects
 
@@ -27,7 +27,7 @@ async function getFitnessTrackerOverview() {
     //return API reponse data
     return {
         generatedAt: new Date().toISOString(),//generates current timestamp - for front-end to know
-        activities,
+        activities: activities.map(formatActivity),
         totalCalories,
         weeklyGoal: {
           activeMinutes,
@@ -46,13 +46,14 @@ function formatActivity(activity){
 
     delete plainActivity._id
     delete plainActivity.__v
+    delete plainActivity.userId
 
     return plainActivity
 }
 
-async function getActivities(){
+async function getActivities(userId){
     const activities = await fitnessTrackerModel
-    .find({})
+    .find({ userId })
     .sort({ loggedAt: -1 })
     .lean()
 
@@ -76,9 +77,10 @@ function isDuplicateStepsKeyError(error){
 }
 
 //save activity function
-async function createActivity(activity){
+async function createActivity(userId, activity){
     if(activity.type === 'steps'){
         const existingStepsActivity = await fitnessTrackerModel.exists({
+            userId,
             type: 'steps',
             date: activity.date,
         })
@@ -91,7 +93,10 @@ async function createActivity(activity){
     //Model = database manager/helper !!!
     //create() = insert new into db
     try{
-        const createdActivity = await fitnessTrackerModel.create(activity)
+        const createdActivity = await fitnessTrackerModel.create({
+            ...activity,
+            userId,
+        })
         return formatActivity(createdActivity)
     }catch(error){
         if(isDuplicateStepsKeyError(error)){
@@ -103,8 +108,8 @@ async function createActivity(activity){
 }
 
 // createActivity does not use ID bcz activity DOESNT EXIST YET
-async function deleteActivity(id){
-    const deletedActivity = await fitnessTrackerModel.findOneAndDelete({id})
+async function deleteActivity(userId, id){
+    const deletedActivity = await fitnessTrackerModel.findOneAndDelete({ id, userId })
     return deletedActivity ? formatActivity(deletedActivity) : null
     // findAndDelete() = built-in Mongoose method
     // id VS {id} :

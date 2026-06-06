@@ -67,7 +67,17 @@ async function parseApiResponse(response) {
 // Purpose: Reduce amount of times of writing fetch()
 // options = {} - allows the helper func to work for GET, POST & DELETE
 async function requestFitnessApi(path, options = {}) {
-    const response = await fetch(`${FITNESS_API_URL}${path}`, options);
+
+    const token = localStorage.getItem('fittrack_token');
+    const headers = {
+        ...(options.headers || {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
+
+    const response = await fetch(`${FITNESS_API_URL}${path}`, {
+        ...options,
+        headers
+    });
     const data = await parseApiResponse(response);
 
     if (!response.ok) {
