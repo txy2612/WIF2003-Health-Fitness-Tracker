@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'// lib that helps Node.js communicate with MongoDB, prov functions like .find() .create() .findOne() .deleteOne()
-import { connectDatabase } from './database.js'
+import  connectDatabase from './database.js'
 
 //import seeds (data)
 import fitnessTrackerSeeds from './seeds/fitnessTrackerSeeds.js'
@@ -7,7 +7,7 @@ import notificationSeeds from './seeds/notificationSeeds.js'
 import nutritionPlannerSeeds from './seeds/nutritionPlannerSeeds.js'
 import profileSeeds from './seeds/profileSeeds.js'
 import progressChartsSeeds from './seeds/progressChartsSeeds.js'
-import sampleSeeds from './seeds/sampleSeeds.js'
+
 
 // imports models
 import fitnessTrackerModel from '../modules/fitness-tracker/fitnessTrackerModel.js'
@@ -15,7 +15,7 @@ import notificationModel from '../modules/notification/notificationModel.js'
 import nutritionPlannerModel from '../modules/nutrition-planner/nutritionPlannerModel.js'
 import profileModel from '../modules/profile/profileModel.js'
 import progressChartsModel from '../modules/progress-charts/progressChartsModel.js'
-import sampleModel from '../modules/sample/sampleModel.js'
+
 
 
 // pair seed data & models tgt
@@ -61,15 +61,6 @@ const seedJobs = [
     uniqueFilter: (entry) => ({
       metric: entry.metric,
       recordedFor: entry.recordedFor,
-    }),
-  },
-  {
-    name: 'Sample',
-    model: sampleModel,
-    documents: sampleSeeds,
-    uniqueFilter: (sample) => ({
-      name: sample.name,
-      goal: sample.goal,
     }),
   },
 ]
