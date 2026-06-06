@@ -22,6 +22,7 @@ function getExpiredLockDate() {
 // Purpose: find reminders that need sending
 function buildDueReminderFilter(now = new Date()) {
   return {
+    userId: { $exists: true, $ne: null },// old shared reminders have no owner, so leave them hidden/ignored
     scheduledFor: { $lte: now },// reminder time rch
     completed: false,// AND not comlpeted 
     emailSentAt: null,// AND not sent
@@ -34,25 +35,18 @@ function buildDueReminderFilter(now = new Date()) {
   }
 }
 
-// Purpose: get recipient email
-async function getReminderRecipient() {
+// Purpose: get the email for the profile that owns this reminder
+async function getReminderRecipient(reminder) {
+  if (!reminder?.userId) return null
+
   const profile = await profileModel
-    .findOne({
-      email: { $exists: true, $ne: '' },
-    })
-    .sort({ createdAt: -1 })
+    .findById(reminder.userId)
+    .select('email timezone')
     .lean()
 
   if (profile?.email) return profile
 
-  // Useful for local testing when the profile page has not saved an email yet.
-  const fallbackEmail = env.REMINDER_RECIPIENT_EMAIL || (env.NODE_ENV === 'development' ? env.SMTP_USER : '')
-  if (!fallbackEmail) return null
-
-  return {
-    email: fallbackEmail,
-    timezone: env.REMINDER_TIMEZONE,
-  }
+  return null
 }
 
 
@@ -122,14 +116,6 @@ async function processDueReminders() {
     return { processed: 0, sent: 0, failed: 0, skippedReason: 'smtp-not-configured' }
   }
 
-  const recipient = await getReminderRecipient()
-
-  if (!recipient?.email) {
-    console.warn('Reminder processor skipped: no profile email found.')
-    await markDueRemindersSkipped('No profile email or REMINDER_RECIPIENT_EMAIL found.')
-    return { processed: 0, sent: 0, failed: 0, skippedReason: 'missing-recipient' }
-  }
-
   // Find due reminders
   const reminders = await notificationModel
     .find(buildDueReminderFilter())
@@ -152,6 +138,14 @@ async function processDueReminders() {
     result.processed += 1
 
     try {
+      const recipient = await getReminderRecipient(claimedReminder)
+
+      if (!recipient?.email) {
+        await markReminderFailed(claimedReminder._id, 'Reminder owner profile email not found.')
+        result.failed += 1
+        continue
+      }
+
       // ACTUALLY Send email, by calling reminderEmailService
       await reminderEmailService.sendReminderEmail({
         to: recipient.email,
