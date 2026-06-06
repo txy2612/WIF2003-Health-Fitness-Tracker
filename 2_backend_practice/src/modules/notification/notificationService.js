@@ -26,9 +26,9 @@ function toNotificationDto(notification) {
   }
 }
 
-async function getNotifications() {
+async function getNotifications(userId) {
   const notifications = await notificationModel// Use the model(DB manager) to talk to MongoDB collection
-    .find({})//no filter , get evth
+    .find({ userId })//only get this user's notifications
     .sort({ scheduledFor: 1 })//ascending order, earlier first
     .lean()//converts Mongoose docs into plain JS objects
 
@@ -37,14 +37,20 @@ async function getNotifications() {
 
 // Purpose: save a new noti
 // notification = data passed from controller
-async function createNotification(notification) {
-  const createdNotification = await notificationModel.create(notification)
+async function createNotification(userId, notification) {
+  const createdNotification = await notificationModel.create({
+    ...notification,
+    userId,
+  })
   return toNotificationDto(createdNotification)
 }
 
 // etc: update status 'to do' -> 'done'
-async function updateNotification(id, notification) {
-  const updatedNotification = await notificationModel.findByIdAndUpdate(id, notification, {
+async function updateNotification(userId, id, notification) {
+  const updatedNotification = await notificationModel.findOneAndUpdate({
+    _id: id,
+    userId,
+  }, notification, {
     new: true,
     runValidators: true,
   })
@@ -53,8 +59,11 @@ async function updateNotification(id, notification) {
 }
 
 // Purpose: delete notification by MongoDB id
-async function deleteNotification(id) {
-  const deletedNotification = await notificationModel.findByIdAndDelete(id)//Mongoose helper
+async function deleteNotification(userId, id) {
+  const deletedNotification = await notificationModel.findOneAndDelete({
+    _id: id,
+    userId,
+  })//Mongoose helper
   return toNotificationDto(deletedNotification)
 }
 

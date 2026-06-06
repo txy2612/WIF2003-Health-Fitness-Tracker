@@ -41,7 +41,9 @@ async function parseDashboardApiResponse(response) {
 }
 
 async function fetchDashboardReminders() {
-    const response = await fetch(DASHBOARD_NOTIFICATION_API_URL);
+    const token = window.AuthService?.getToken?.() || localStorage.getItem('fittrack_token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response = await fetch(DASHBOARD_NOTIFICATION_API_URL, { headers });
     const data = await parseDashboardApiResponse(response);
 
     if (!response.ok) {

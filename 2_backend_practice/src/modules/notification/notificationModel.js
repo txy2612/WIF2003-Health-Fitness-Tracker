@@ -1,6 +1,13 @@
 import mongoose from 'mongoose'
 
 const notificationSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Profiles',
+    required: true,
+    index: true,
+  },
+
   channel: {
     type: String,
     enum: ['workout', 'nutrition', 'hydration', 'progress', 'system', 'other'],

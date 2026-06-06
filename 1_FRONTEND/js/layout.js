@@ -219,7 +219,16 @@ async function parseLayoutApiResponse(response) {
 }
 
 async function requestLayoutNotificationApi(path = '', options = {}) {
-    const response = await fetch(`${LAYOUT_NOTIFICATION_API_URL}${path}`, options);
+    const token = window.AuthService?.getToken?.() || localStorage.getItem('fittrack_token');
+    const headers = {
+        ...(options.headers || {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
+
+    const response = await fetch(`${LAYOUT_NOTIFICATION_API_URL}${path}`, {
+        ...options,
+        headers
+    });
     const data = await parseLayoutApiResponse(response);
 
     if (!response.ok) {

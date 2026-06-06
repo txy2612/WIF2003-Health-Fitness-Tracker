@@ -22,7 +22,16 @@ function escapeHtml(value) {
 }
 
 async function api(path = "", options = {}) {
-    const response = await fetch(`${API_URL}${path}`, options);
+    const token = window.AuthService?.getToken?.() || localStorage.getItem("fittrack_token");
+    const headers = {
+        ...(options.headers || {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
+
+    const response = await fetch(`${API_URL}${path}`, {
+        ...options,
+        headers
+    });
     const text = await response.text();
     const data = text ? JSON.parse(text) : {};
 
