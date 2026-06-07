@@ -335,7 +335,7 @@ Object.keys(localStorage)
 
 // ---- Water Intake (teammate implementation) ----
 const today = new Date().toISOString().split('T')[0];
-let waterGlasses = parseInt(localStorage.getItem('np_water_' + today) || '0', 10); // Update water today so it doesn't load yesterday's data -> Start fresh at 0 everyday
+let waterGlasses = parseInt(localStorage.getItem('np_water_' + today) || '0', 10);
 const waterMax = 8;
 const waterMessages = [
   'Stay hydrated! Start logging your water intake.',
@@ -360,7 +360,7 @@ function renderWaterGrid() {
     glass.onclick = () => {
     waterGlasses = i + 1;
     const today = new Date().toISOString().split('T')[0];
-    localStorage.setItem('np_water_' + today, waterGlasses);  // add dated key
+    WaterService.setWater(today, waterGlasses).catch(() => showToast('Could not save water.'));
     renderWaterGrid();
     updateWaterUI();
 };
@@ -378,7 +378,7 @@ function updateWaterUI() {
 function adjustWater(delta) {
   waterGlasses = Math.max(0, Math.min(waterMax, waterGlasses + delta));
   const today = new Date().toISOString().split('T')[0];
-  localStorage.setItem('np_water_' + today, waterGlasses);
+  WaterService.setWater(today, waterGlasses).catch(() => showToast('Could not save water.'));
   renderWaterGrid();
   updateWaterUI();
 }
@@ -506,9 +506,10 @@ function searchMeals() {
 
 // ---- Initialise ----
 document.addEventListener('DOMContentLoaded', async function () {
-  try {
+   try {
     favourites = await NutritionService.getFavourites();
     todayPlan = await NutritionService.getPlan(todayDate);
+    waterGlasses = await WaterService.getWater(today);
   } catch (error) {
     showToast('Could not load saved data. Is the server running?');
   }
