@@ -145,7 +145,9 @@ async function buildWeekly() {            // ← add async
     // AFTER:  one fetch replaces all of that
     let dates, rows, prevRows
     try {
-        const res  = await fetch(`${API_BASE}/progress-charts/weekly?offset=${weekOffset}`)
+       const res  = await fetch(`${API_BASE}/progress-charts/weekly?offset=${weekOffset}`, {
+            headers: { Authorization: `Bearer ${window.AuthService.getToken()}` }
+        })
         const data = await res.json()
         dates    = data.dates
         rows     = data.rows
@@ -335,7 +337,9 @@ async function buildMonthly() {            // ← add async
  
     let dates, rows, prevRows
     try {
-        const res  = await fetch(`${API_BASE}/progress-charts/monthly?offset=${monthOffset}`)
+        const res  = await fetch(`${API_BASE}/progress-charts/monthly?offset=${monthOffset}`, {
+            headers: { Authorization: `Bearer ${window.AuthService.getToken()}` }
+        })
         const data = await res.json()
         dates    = data.dates
         rows     = data.rows
