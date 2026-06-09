@@ -60,11 +60,17 @@ app.use('/api/v1/notification', notificationController)
 app.use(notFoundHandler)
 app.use(errorHandler)
 
-//connect database first
-await connectDatabase()
-startReminderScheduler()
+// Only start the real server if we are NOT running tests
+if (process.env.NODE_ENV !== 'test') {
 
-// start server
-app.listen(env.PORT, () => {
-  console.log(`Server running on port ${env.PORT}`)
-})
+  await connectDatabase()
+  startReminderScheduler()
+
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+// Export the app for Supertest to use
+export default app;
