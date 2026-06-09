@@ -3,7 +3,6 @@ import app from '../src/app.js';
 import { connectDB, clearDB, closeDB } from './db.js';
 import User from '../src/modules/profile/profileModel.js';
 
-// Setup and Teardown Hooks
 beforeAll(async () => await connectDB());    // Start fake DB before tests
 afterEach(async () => await clearDB());      // Wipe data between tests
 afterAll(async () => await closeDB());       // Shut down DB when done
@@ -21,16 +20,13 @@ describe('Authentication API', () => {
                     password: "Password123!"
                 });
 
-            //Check if the API responded correctly
             expect(res.statusCode).toBe(201);
             expect(res.body.success).toBe(true);
 
-            //Verify the user actually saved to the database
             const userInDb = await User.findOne({ email: "test@test.com" });
             expect(userInDb).toBeTruthy();
             expect(userInDb.name).toBe("Test User");
 
-            //The password should be hashed!
             expect(userInDb.password).not.toBe("Password123!");
         });
 
@@ -43,7 +39,6 @@ describe('Authentication API', () => {
                     password: "short"
                 });
 
-            //Assuming Zod catches this and returns a 400 Bad Request
             expect(res.statusCode).toBe(400);
         });
     });
