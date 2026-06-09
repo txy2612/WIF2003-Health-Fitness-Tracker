@@ -149,7 +149,7 @@ async function getWater(userId, dateStr) {
     .lean()
 
   return {
-    date: start.toISOString().slice(0, 10),
+    date: toDateStr(start),
     glasses: entry ? entry.value : 0,
   }
 }
@@ -166,7 +166,7 @@ async function setWater(userId, dateStr, glasses) {
   ).lean()
 
   return {
-    date: start.toISOString().slice(0, 10),
+    date: toDateStr(start),
     glasses: entry.value,
   }
 }
