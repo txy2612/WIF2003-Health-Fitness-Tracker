@@ -1,5 +1,5 @@
 import nutritionPlannerModel from './nutritionPlannerModel.js'
-import progressChartsModel from '../progress-charts/progressChartsModel.js'
+import progressChartsService from '../progress-charts/progressChartsService.js'
 import favouriteModel from './favouriteModel.js'
 import mealPlanModel from './mealPlanModel.js'
 
@@ -48,31 +48,13 @@ function calculateCalorieGoal(profile) {
   }
 }
 
-// GET /hydration — used by the fitness page's water insight.
-// Water is stored in the progress-charts collection (metric: 'waterGlasses').
-function dayStart(dateStr) {
-  const d = dateStr ? new Date(`${dateStr}T00:00:00`) : new Date()
-  d.setHours(0, 0, 0, 0)
-  return d
-}
-
 async function getHydrationForDate(userId, query = {}) {
   const date = query.date || new Date().toISOString().slice(0, 10)
-  const startOfDay = dayStart(date)
-
-  // tied to logged in user
-
-  const waterEntry = await progressChartsModel
-    .findOne({
-      userId,
-      metric: 'waterGlasses',
-      recordedFor: startOfDay,
-    })
-    .lean()
+  const waterEntry = await progressChartsService.getWater(userId, date)
 
   return {
     date,
-    glasses: waterEntry ? waterEntry.value : 0,
+    glasses: waterEntry.glasses,
   }
 }
 

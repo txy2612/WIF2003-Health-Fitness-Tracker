@@ -10,7 +10,7 @@ const progressChartsSchema = new mongoose.Schema({
   },
   metric: {
     type: String,
-    enum: ['activeMinutes', 'calories', 'waterGlasses'],
+    enum: ['waterGlasses'],
     required: true,
   },
   recordedFor: {

@@ -1,5 +1,5 @@
 import fitnessTrackerModel from '../fitness-tracker/fitnessTrackerModel.js'
-import progressChartsModel from '../progress-charts/progressChartsModel.js'
+import progressChartsService from '../progress-charts/progressChartsService.js'
 import profileModel from '../profile/profileModel.js'
 
 // ── date helpers (local-server time, YYYY-MM-DD strings) ─────────────────────
@@ -51,30 +51,6 @@ async function getGoals(userId) {
   }
 }
 
-// ── water history (from progress-charts) ─────────────────────────────────────
-async function getWaterByDate(userId, dates) {
-  const start = new Date(`${dates[0]}T00:00:00.000`)
-  const endStr = dates[dates.length - 1]
-  const end = new Date(`${endStr}T00:00:00.000`)
-  end.setDate(end.getDate() + 1)
-
-  const entries = await progressChartsModel
-    .find({
-      userId,
-      metric: 'waterGlasses',
-      recordedFor: { $gte: start, $lt: end },
-    })
-    .lean()
-
-  // Map each date -> glasses (latest entry that day wins)
-  const byDate = {}
-  for (const e of entries) {
-    const key = toDateStr(new Date(e.recordedFor))
-    byDate[key] = e.value
-  }
-  return byDate
-}
-
 // ── fitness aggregation per day (per-user) ───────────────────────────────────
 
 function summariseDay(activities, date) {
@@ -112,7 +88,7 @@ export async function getDashboardOverview(userId) {
   // Goals + water are both scoped to the logged-in user.
   const goals = await getGoals(userId)
   const allDates = [...new Set([...weekDates, ...last7, today])].sort()
-  const waterByDate = await getWaterByDate(userId, allDates)
+  const waterByDate = await progressChartsService.getWaterByDate(userId, allDates)
 
   // Today
   const todaySummary = summariseDay(activities, today)

@@ -8,14 +8,114 @@ function dayStart(dateStr) {
   return d
 }
 
+function toDateStr(date) {
+  const d = new Date(date)
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+function addDays(start, days) {
+  const next = new Date(start)
+  next.setDate(next.getDate() + days)
+  return next
+}
+
+function createDateRange(days) {
+  const end = dayStart()
+  const start = addDays(end, -(days - 1))
+
+  return { start, end }
+}
+
+function getRangeWindow(range) {
+  return range === 'last-30-days'
+    ? createDateRange(30)
+    : createDateRange(7)
+}
+
+async function getWaterEntries(userId, start, end) {
+  return progressChartsModel
+    .find({
+      userId,
+      metric: 'waterGlasses',
+      recordedFor: {
+        $gte: start,
+        $lte: end,
+      },
+    })
+    .sort({ recordedFor: 1 })
+    .lean()
+}
+
+function getDateLabels(start, end) {
+  const labels = []
+
+  for (let cursor = new Date(start); cursor <= end; cursor = addDays(cursor, 1)) {
+    labels.push(toDateStr(cursor))
+  }
+
+  return labels
+}
+
+function groupFitnessLogsByDate(logs, labels) {
+  const byDate = Object.create(null)
+
+  for (const label of labels) {
+    byDate[label] = {
+      activeMinutes: 0,
+      calories: 0,
+    }
+  }
+
+  for (const log of logs) {
+    if (!byDate[log.date]) {
+      continue
+    }
+
+    byDate[log.date].calories += log.calories || 0
+
+    if (log.type === 'workout') {
+      byDate[log.date].activeMinutes += log.duration || 0
+    }
+  }
+
+  return byDate
+}
+
+function groupWaterByDate(entries) {
+  const byDate = Object.create(null)
+
+  for (const entry of entries) {
+    byDate[toDateStr(entry.recordedFor)] = entry.value
+  }
+
+  return byDate
+}
+
+async function buildMetricSeries(userId, labels, start, end) {
+  const [waterEntries, fitnessLogs] = await Promise.all([
+    getWaterEntries(userId, start, end),
+    fitnessTrackerModel.find({ userId, date: { $in: labels } }).lean(),
+  ])
+
+  const waterByDate = groupWaterByDate(waterEntries)
+  const fitnessByDate = groupFitnessLogsByDate(fitnessLogs, labels)
+
+  return {
+    activeMinutes: labels.map((label) => fitnessByDate[label]?.activeMinutes ?? 0),
+    calories: labels.map((label) => fitnessByDate[label]?.calories ?? 0),
+    waterGlasses: labels.map((label) => waterByDate[label] ?? 0),
+  }
+}
+
 async function getProgressChartsOverview(userId) {
-  const entries = await progressChartsModel.find({ userId }).sort({ recordedFor: 1 }).lean()
-  const labels = getLabels(entries)
-  const series = getSeries(entries)
+  const range = 'last-7-days'
+  const { start, end } = getRangeWindow(range)
+  const labels = getDateLabels(start, end)
+  const series = await buildMetricSeries(userId, labels, start, end)
 
   return {
     generatedAt: new Date().toISOString(),
-    range: 'last-7-days',
+    range,
     labels,
     series,
     summary: {
@@ -27,16 +127,15 @@ async function getProgressChartsOverview(userId) {
 }
 
 async function createRangePreview(userId, query) {
-  const entries = await progressChartsModel
-    .find({ userId, metric: query.metric })
-    .sort({ recordedFor: 1 })
-    .lean()
+  const { start, end } = getRangeWindow(query.range)
+  const labels = getDateLabels(start, end)
+  const series = await buildMetricSeries(userId, labels, start, end)
 
   return {
     range: query.range,
     metric: query.metric,
-    labels: getLabels(entries),
-    values: entries.map((entry) => entry.value),
+    labels,
+    values: series[query.metric],
   }
 }
 
@@ -72,26 +171,15 @@ async function setWater(userId, dateStr, glasses) {
   }
 }
 
-function getLabels(entries) {
-  return [...new Set(entries.map((entry) => formatLabel(entry.recordedFor)))]
-}
-
-function formatLabel(date) {
-  return new Date(date).toLocaleDateString('en-US', { weekday: 'short' })
-}
-
-function getSeries(entries) {
-  return {
-    activeMinutes: valuesForMetric(entries, 'activeMinutes'),
-    calories: valuesForMetric(entries, 'calories'),
-    waterGlasses: valuesForMetric(entries, 'waterGlasses'),
+async function getWaterByDate(userId, dates) {
+  if (dates.length === 0) {
+    return {}
   }
-}
 
-function valuesForMetric(entries, metric) {
-  return entries
-    .filter((entry) => entry.metric === metric)
-    .map((entry) => entry.value)
+  const start = dayStart(dates[0])
+  const end = dayStart(dates[dates.length - 1])
+
+  return groupWaterByDate(await getWaterEntries(userId, start, end))
 }
 
 function average(values, decimalPlaces) {
@@ -213,5 +301,6 @@ export default {
   getWeeklyFitnessData,
   getMonthlyFitnessData,
   getWater,
+  getWaterByDate,
   setWater,
 }
