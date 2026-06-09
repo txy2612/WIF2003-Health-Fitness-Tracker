@@ -50,21 +50,24 @@ function calculateCalorieGoal(profile) {
 
 // GET /hydration — used by the fitness page's water insight.
 // Water is stored in the progress-charts collection (metric: 'waterGlasses').
-async function getHydrationForDate(query = {}) {
+function dayStart(dateStr) {
+  const d = dateStr ? new Date(`${dateStr}T00:00:00`) : new Date()
+  d.setHours(0, 0, 0, 0)
+  return d
+}
+
+async function getHydrationForDate(userId, query = {}) {
   const date = query.date || new Date().toISOString().slice(0, 10)
-  const startOfDay = new Date(`${date}T00:00:00.000Z`)
-  const endOfDay = new Date(startOfDay)
-  endOfDay.setUTCDate(endOfDay.getUTCDate() + 1)
+  const startOfDay = dayStart(date)
+
+  // tied to logged in user
 
   const waterEntry = await progressChartsModel
     .findOne({
+      userId,
       metric: 'waterGlasses',
-      recordedFor: {
-        $gte: startOfDay,
-        $lt: endOfDay,
-      },
+      recordedFor: startOfDay,
     })
-    .sort({ updatedAt: -1 })
     .lean()
 
   return {
