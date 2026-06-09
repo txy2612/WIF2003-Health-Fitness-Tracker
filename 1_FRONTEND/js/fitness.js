@@ -45,8 +45,6 @@ let waterInsightData = {
 // Profile and goals now come from the profile backend endpoint.
 const FITNESS_API_URL = 'http://localhost:3000/api/v1/fitness-tracker'
 const PROFILE_API_URL = 'http://localhost:3000/api/v1/profile'
-const NUTRITION_API_URL = 'http://localhost:3000/api/v1/nutrition-planner'
-
 // ── BACKEND ACTIVITY API HELPERS ──────────────────────────────────────────────
 
 // Purpose: Prevent crashing if there is nothing in response by API
@@ -203,16 +201,9 @@ function getGoals() {
 // replaced localStorage.getItem
 async function loadWaterInsight(date) {
     try {
-        const response = await fetch(`${NUTRITION_API_URL}/hydration?date=${date}`);
-        const data = await parseApiResponse(response);
-
-        if (!response.ok) {
-            throw new Error(data.detail || data.message || 'Hydration request failed.');
-        }
-
-        // mapper
+        // instead of calling fetch, this is cleaner
         waterInsightData = {
-            glasses: Number(data.glasses) || 0,
+            glasses: Number(await window.WaterService.getWater(date)) || 0,
             loaded: true
         };
     } catch (error) {

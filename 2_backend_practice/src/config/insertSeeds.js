@@ -59,8 +59,9 @@ const seedJobs = [
   {
     name: 'ProgressChartEntry',
     model: progressChartsModel,
-    documents: progressChartsSeeds,
+    documents: buildProgressChartSeedDocuments,
     uniqueFilter: (entry) => ({
+      userId: entry.userId,
       metric: entry.metric,
       recordedFor: entry.recordedFor,
     }),
@@ -73,8 +74,12 @@ async function run() {
   try {
     //loops through every module's seed job
     for (const job of seedJobs) {
+      const documents = typeof job.documents === 'function'
+        ? await job.documents()
+        : job.documents
+
       // inserts only records that do not alr exist (into MongoDB)
-      const result = await insertMissingDocuments(job)
+      const result = await insertMissingDocuments({ ...job, documents })
 
       console.log(`${job.name}: inserted ${result.inserted}, skipped ${result.skipped}`)
     }
@@ -108,6 +113,31 @@ async function insertMissingDocuments({ model, documents, uniqueFilter }) {
   }
 
   return result
+}
+
+async function buildProgressChartSeedDocuments() {
+  const profileByEmail = new Map()
+  const seededEmails = [...new Set(progressChartsSeeds.map(seed => seed.ownerEmail).filter(Boolean))]
+
+  for (const email of seededEmails) {
+    const profile = await profileModel.findOne({ email }).select('_id email').lean()
+    if (!profile) {
+      throw new Error(`Could not seed progress charts because profile ${email} was not found.`)
+    }
+    profileByEmail.set(email, profile._id)
+  }
+
+  return progressChartsSeeds.map(({ ownerEmail, ...entry }) => {
+    const userId = profileByEmail.get(ownerEmail)
+    if (!userId) {
+      throw new Error(`Could not resolve progress chart owner for ${ownerEmail || 'unknown email'}.`)
+    }
+
+    return {
+      ...entry,
+      userId,
+    }
+  })
 }
 
 // if seeding crashes, log error, disconnect, and stop process

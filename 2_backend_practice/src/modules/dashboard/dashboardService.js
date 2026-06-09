@@ -52,10 +52,7 @@ async function getGoals(userId) {
 }
 
 // ── water history (from progress-charts) ─────────────────────────────────────
-// NOTE: progressChartsModel has no userId yet, so this is GLOBAL for now.
-// TODO: when progress-charts is user-scoped, add `userId` to this query and
-// pass userId in. The rest of the dashboard does not need to change.
-async function getWaterByDate(/* userId, */ dates) {
+async function getWaterByDate(userId, dates) {
   const start = new Date(`${dates[0]}T00:00:00.000`)
   const endStr = dates[dates.length - 1]
   const end = new Date(`${endStr}T00:00:00.000`)
@@ -63,6 +60,7 @@ async function getWaterByDate(/* userId, */ dates) {
 
   const entries = await progressChartsModel
     .find({
+      userId,
       metric: 'waterGlasses',
       recordedFor: { $gte: start, $lt: end },
     })
@@ -111,10 +109,10 @@ export async function getDashboardOverview(userId) {
   // Per-user fitness activities
   const activities = await fitnessTrackerModel.find({ userId }).lean()
 
-  // Goals (per-user) + water (global for now)
+  // Goals + water are both scoped to the logged-in user.
   const goals = await getGoals(userId)
   const allDates = [...new Set([...weekDates, ...last7, today])].sort()
-  const waterByDate = await getWaterByDate(allDates)
+  const waterByDate = await getWaterByDate(userId, allDates)
 
   // Today
   const todaySummary = summariseDay(activities, today)

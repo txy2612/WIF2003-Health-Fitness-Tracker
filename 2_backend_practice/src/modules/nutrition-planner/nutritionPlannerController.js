@@ -14,7 +14,7 @@ import {
 
 const router = express.Router()
 
-// ── public: catalogue + calorie calculator + hydration (not user-specific) ───
+// ── public: catalogue + calorie calculator ───────────────────────────────────
 
 router.get('/', validate(getSchema), async (request, response, next) => {
   try {
@@ -28,11 +28,11 @@ router.get('/', validate(getSchema), async (request, response, next) => {
 })
 
 // GET /api/v1/nutrition-planner/hydration?date=YYYY-MM-DD
-// Used by the fitness page water insight. Kept public to match original.
-router.get('/hydration', validate(getHydrationSchema), async (request, response, next) => {
+// backend route receives the request, checks the token first (requireAuth)
+router.get('/hydration', requireAuth, validate(getHydrationSchema), async (request, response, next) => {
   try {
     const { query } = request.validated
-    const data = await nutritionPlannerService.getHydrationForDate(query)
+    const data = await nutritionPlannerService.getHydrationForDate(request.user.id, query)// request.user = user info after token check, request.user.id = loged in user info
 
     response.status(StatusCodes.OK).json(data)
   } catch (error) {
