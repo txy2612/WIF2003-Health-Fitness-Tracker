@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'// lib that helps Node.js communicate with MongoDB, prov functions like .find() .create() .findOne() .deleteOne()
-import { connectDatabase } from './database.js'
+import  connectDatabase from './database.js'
 
 //import seeds (data)
 import fitnessTrackerSeeds from './seeds/fitnessTrackerSeeds.js'
@@ -7,7 +7,7 @@ import notificationSeeds from './seeds/notificationSeeds.js'
 import nutritionPlannerSeeds from './seeds/nutritionPlannerSeeds.js'
 import profileSeeds from './seeds/profileSeeds.js'
 import progressChartsSeeds from './seeds/progressChartsSeeds.js'
-import sampleSeeds from './seeds/sampleSeeds.js'
+
 
 // imports models
 import fitnessTrackerModel from '../modules/fitness-tracker/fitnessTrackerModel.js'
@@ -15,7 +15,7 @@ import notificationModel from '../modules/notification/notificationModel.js'
 import nutritionPlannerModel from '../modules/nutrition-planner/nutritionPlannerModel.js'
 import profileModel from '../modules/profile/profileModel.js'
 import progressChartsModel from '../modules/progress-charts/progressChartsModel.js'
-import sampleModel from '../modules/sample/sampleModel.js'
+
 
 
 // pair seed data & models tgt
@@ -35,7 +35,9 @@ const seedJobs = [
     model: notificationModel,
     documents: notificationSeeds,
     uniqueFilter: (notification) => ({
-      id: notification.id,//before inserting a noti, check if a notification with the same channel, title, and scheduledFor already exist
+      channel: notification.channel,
+      title: notification.title,
+      scheduledFor: notification.scheduledFor,//before inserting a noti, check if a notification with the same channel, title, and scheduledFor already exist
     }),
   },
   {
@@ -57,19 +59,11 @@ const seedJobs = [
   {
     name: 'ProgressChartEntry',
     model: progressChartsModel,
-    documents: progressChartsSeeds,
+    documents: buildProgressChartSeedDocuments,
     uniqueFilter: (entry) => ({
+      userId: entry.userId,
       metric: entry.metric,
       recordedFor: entry.recordedFor,
-    }),
-  },
-  {
-    name: 'Sample',
-    model: sampleModel,
-    documents: sampleSeeds,
-    uniqueFilter: (sample) => ({
-      name: sample.name,
-      goal: sample.goal,
     }),
   },
 ]
@@ -80,8 +74,12 @@ async function run() {
   try {
     //loops through every module's seed job
     for (const job of seedJobs) {
+      const documents = typeof job.documents === 'function'
+        ? await job.documents()
+        : job.documents
+
       // inserts only records that do not alr exist (into MongoDB)
-      const result = await insertMissingDocuments(job)
+      const result = await insertMissingDocuments({ ...job, documents })
 
       console.log(`${job.name}: inserted ${result.inserted}, skipped ${result.skipped}`)
     }
@@ -115,6 +113,31 @@ async function insertMissingDocuments({ model, documents, uniqueFilter }) {
   }
 
   return result
+}
+
+async function buildProgressChartSeedDocuments() {
+  const profileByEmail = new Map()
+  const seededEmails = [...new Set(progressChartsSeeds.map(seed => seed.ownerEmail).filter(Boolean))]
+
+  for (const email of seededEmails) {
+    const profile = await profileModel.findOne({ email }).select('_id email').lean()
+    if (!profile) {
+      throw new Error(`Could not seed progress charts because profile ${email} was not found.`)
+    }
+    profileByEmail.set(email, profile._id)
+  }
+
+  return progressChartsSeeds.map(({ ownerEmail, ...entry }) => {
+    const userId = profileByEmail.get(ownerEmail)
+    if (!userId) {
+      throw new Error(`Could not resolve progress chart owner for ${ownerEmail || 'unknown email'}.`)
+    }
+
+    return {
+      ...entry,
+      userId,
+    }
+  })
 }
 
 // if seeding crashes, log error, disconnect, and stop process

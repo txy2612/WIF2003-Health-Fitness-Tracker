@@ -32,32 +32,54 @@ const BADGE_MAP = {
 let activityLogs = [];
 let activitiesLoadStatus = 'idle'; // idle | loading | success | error
 
-// Still localStorage-backed until backend endpoints exist:
-// const profile = JSON.parse(localStorage.getItem('fittrack_profile'))
-// const goals = JSON.parse(localStorage.getItem('fittrack_goals'))
-const PROFILE_KEY = 'fittrack_profile';
-const GOALS_KEY   = 'fittrack_goals';
-const FITNESS_API_URL = 'http://localhost:3000/api/v1/fitness-tracker'
+// profile data (etc: weight) -> calculate calories
+// goals data (etc: steps) -> check progress
+// separation -> cleaner
+let profileData = {};
+let goalsData = {};
+let waterInsightData = {
+    glasses: 0,
+    loaded: false
+};
 
+// Profile and goals now come from the profile backend endpoint.
+const FITNESS_API_URL = 'http://localhost:3000/api/v1/fitness-tracker'
+const PROFILE_API_URL = 'http://localhost:3000/api/v1/profile'
 // ── BACKEND ACTIVITY API HELPERS ──────────────────────────────────────────────
 
-
+// Purpose: Prevent crashing if there is nothing in response by API
+// const data = await reponse.json()
+// may crach if backend returns empty response
+// response.json() may fail bcz there's ntg to parse
 async function parseApiResponse(response) {
-    const text = await response.text();
-    if (!text) return {};
+    const text = await response.text();// first read the response as plain text
+    if (!text) return {};// if backend sent ntg, just return empty object instead of crashing
 
     try {
-        return JSON.parse(text);
+        return JSON.parse(text);// if there is object, convert into JS object
     } catch (error) {
         return {};
     }
 }
 
+// Purpose: Reduce amount of times of writing fetch()
+// options = {} - allows the helper func to work for GET, POST & DELETE
 async function requestFitnessApi(path, options = {}) {
-    const response = await fetch(`${FITNESS_API_URL}${path}`, options);
+
+    const token = localStorage.getItem('fittrack_token');
+    const headers = {
+        ...(options.headers || {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
+
+    const response = await fetch(`${FITNESS_API_URL}${path}`, {
+        ...options,
+        headers
+    });
     const data = await parseApiResponse(response);
 
     if (!response.ok) {
+        // priority: data.detail -> data.msg -> fitness failed
         const error = new Error(data.detail || data.message || 'Fitness tracker request failed.');
         error.status = response.status;
         error.data = data;
@@ -67,9 +89,10 @@ async function requestFitnessApi(path, options = {}) {
     return data;
 }
 
+// Purpose: loads activity logs from backend
 async function loadActivityLogs() {
-    const data = await requestFitnessApi('/activities');
-    activityLogs = Array.isArray(data.activities) ? data.activities : [];
+    const data = await requestFitnessApi('/activities');// calls 
+    activityLogs = Array.isArray(data.activities) ? data.activities : []; // data.activities is really an array ,store into activityLogs. Otherwise, use empty array
     return activityLogs;
 }
 
@@ -92,6 +115,7 @@ async function loadActivities() {
     }
 }
 
+// == Centralized Create & Delete, for steps & workout
 async function createActivityLog(activity) {
     const createdActivity = await requestFitnessApi('/activities', {
         method: 'POST',
@@ -117,14 +141,78 @@ function getActivityLogs() {
     return activityLogs;
 }
 
+async function loadProfile() {
+    try {
+        const token = localStorage.getItem('fittrack_token');
+        const response = await fetch(PROFILE_API_URL, {
+            headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        // convert JSON into JS object
+        // example: { user: { displayName: 'Xin Yu'}} -> data.user.displayName
+        const apiData = await parseApiResponse(response);
+        const data = apiData.data || apiData;
+
+        // check whether response succeeded (etc: 200 = OK, 201 = Created, ...)
+        if (!response.ok) {
+            throw new Error(apiData.detail || apiData.message || 'Profile request failed.');
+        }
+
+        // if user data exists, use it. otherwise, use empty object
+        const user = data.user || {};
+        const healthProfile = data.healthProfile || {};
+
+        // mapper 
+        // create front-end profile object & map to back-end
+        profileData = {
+            name: user.displayName || '',
+            // frontend = name, back = user{ disyplayName: 'Xin Yu'}
+            email: user.email || '',
+            goal: user.goal || '',
+            height: healthProfile.heightCm || '',
+            // front = height, back = healthProfile{ weightKg: 60 }
+            weight: healthProfile.weightKg || '',
+            activityLevel: healthProfile.activityLevel || ''
+        };
+
+        loadGoals(data);
+    } catch (error) {
+        console.warn('Could not load profile from backend.', error);
+    }
+}
+
+function loadGoals(profileResponse) {
+    // if backend return data -> store; othwise, use empty
+    goalsData = profileResponse.goals || {};
+}
+
+// why use getters?
+// Don't let every function access variables directly.
+
+// suppose change from localStorage -> session storage or await fetch
+// only change getter
 function getProfile() {
-    try { return JSON.parse(localStorage.getItem(PROFILE_KEY)) || {}; }
-    catch (e) { return {}; }
+    return profileData;
 }
 
 function getGoals() {
-    try { return JSON.parse(localStorage.getItem(GOALS_KEY)) || {}; }
-    catch (e) { return {}; }
+    return goalsData;
+}
+
+// replaced localStorage.getItem
+async function loadWaterInsight(date) {
+    try {
+        // instead of calling fetch, this is cleaner
+        waterInsightData = {
+            glasses: Number(await window.WaterService.getWater(date)) || 0,
+            loaded: true
+        };
+    } catch (error) {
+        console.warn('Could not load hydration from backend.', error);
+        waterInsightData = {
+            glasses: 0,
+            loaded: false
+        };
+    }
 }
 
 
@@ -520,9 +608,13 @@ function getStepInsight() {
 }
 
 function getWaterInsight() {
-    const today = new Date().toISOString().split('T')[0];
-    const waterGlasses = parseInt(localStorage.getItem('np_water_' + today) || '0', 10);
-    const waterMax = 8;
+    if (!waterInsightData.loaded) {
+        return 'Hydration data is not available yet.';
+    }
+
+    const goals = getGoals();
+    const waterGlasses = waterInsightData.glasses;
+    const waterMax = parseInt(goals.water) || 8;
     const remaining = waterMax - waterGlasses;
     if (remaining <= 0)  return "🎉 You've hit your water goal today!";
     if (remaining === 1) return "Just 1 more glass of water to hit your goal!";
@@ -547,17 +639,18 @@ function getWeekendWorkoutInsight() {
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', async function () {
-    const today = new Date().toISOString().split('T')[0];
+function setDefaultDates(today) {
     document.getElementById('activityDate').value = today;
     document.getElementById('stepsDate').value    = today;
+}
 
+function setupFitnessFormEvents() {
     document.getElementById('activityType').addEventListener('change', updateWorkoutCalDisplay);
     document.getElementById('duration').addEventListener('input',  updateWorkoutCalDisplay);
     document.getElementById('stepsCount').addEventListener('input', updateStepsCalDisplay);
+}
 
-    loadActivities();
-
+function setupDeleteModal() {
     // Delete modal confirmation
     document.getElementById('confirmDeleteBtn').addEventListener('click', async function () {
         if (_rowToDelete) {
@@ -577,4 +670,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
         $('#deleteModal').modal('hide');
     });
+}
+
+// instead of big DOMContent blocl ->
+    // setDefaultDates()
+    // setupFitnessFormEvents()
+    //setupDeleteModal()
+document.addEventListener('DOMContentLoaded', async function () {
+    const today = new Date().toISOString().split('T')[0];
+
+    setDefaultDates(today);
+    setupFitnessFormEvents();
+    setupDeleteModal();
+
+    await loadProfile();
+    await loadWaterInsight(today);
+    await loadActivities();
+    updateQuickSummary();
 });

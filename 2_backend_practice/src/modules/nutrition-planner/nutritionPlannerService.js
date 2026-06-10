@@ -1,4 +1,18 @@
 import nutritionPlannerModel from './nutritionPlannerModel.js'
+import progressChartsService from '../progress-charts/progressChartsService.js'
+import favouriteModel from './favouriteModel.js'
+import mealPlanModel from './mealPlanModel.js'
+
+// Strip Mongo internals (and userId) before returning to the frontend.
+function formatDoc(doc) {
+  const plain = doc?.toObject ? doc.toObject() : { ...doc }
+  delete plain._id
+  delete plain.__v
+  delete plain.userId
+  return plain
+}
+
+// ── existing: catalogue + calorie calculator ─────────────────────────────────
 
 async function getNutritionPlannerOverview(query = {}) {
   const meals = await findMeals(query.search)
@@ -34,6 +48,16 @@ function calculateCalorieGoal(profile) {
   }
 }
 
+async function getHydrationForDate(userId, query = {}) {
+  const date = query.date || new Date().toISOString().slice(0, 10)
+  const waterEntry = await progressChartsService.getWater(userId, date)
+
+  return {
+    date,
+    glasses: waterEntry.glasses,
+  }
+}
+
 async function findMeals(search) {
   if (!search) {
     return nutritionPlannerModel.find({}).sort({ name: 1 }).lean()
@@ -59,7 +83,62 @@ function getGoalAdjustment(goal) {
   return 0
 }
 
+// ── favourites (scoped to the logged-in user) ────────────────────────────────
+
+async function getFavourites(userId) {
+  const favourites = await favouriteModel
+    .find({ userId })
+    .sort({ createdAt: -1 })
+    .lean()
+  return { favourites: favourites.map(formatDoc) }
+}
+
+async function addFavourite(userId, body) {
+  const existing = await favouriteModel
+    .findOne({ userId, mealId: body.mealId })
+    .lean()
+  if (existing) {
+    return formatDoc(existing)
+  }
+
+  const created = await favouriteModel.create({ ...body, userId })
+  return formatDoc(created)
+}
+
+async function removeFavourite(userId, mealId) {
+  const deleted = await favouriteModel.findOneAndDelete({ userId, mealId })
+  return deleted ? formatDoc(deleted) : null
+}
+
+// ── today's plan (scoped to the logged-in user) ──────────────────────────────
+
+async function getPlan(userId, date) {
+  const plan = await mealPlanModel.findOne({ userId, date }).lean()
+  if (!plan) {
+    return { date, breakfast: [], lunch: [], dinner: [] }
+  }
+  return formatDoc(plan)
+}
+
+async function savePlan(userId, body) {
+  const { date, breakfast = [], lunch = [], dinner = [] } = body
+
+  const plan = await mealPlanModel.findOneAndUpdate(
+    { userId, date },
+    { userId, date, breakfast, lunch, dinner },
+    { new: true, upsert: true, setDefaultsOnInsert: true }
+  ).lean()
+
+  return formatDoc(plan)
+}
+
 export default {
   calculateCalorieGoal,
   getNutritionPlannerOverview,
+  getHydrationForDate,
+  getFavourites,
+  addFavourite,
+  removeFavourite,
+  getPlan,
+  savePlan,
 }

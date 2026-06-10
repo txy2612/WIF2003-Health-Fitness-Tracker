@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const profileSchema = new mongoose.Schema({
-  displayName: {
+  name: {
     type: String,
     required: true,
     trim: true,
@@ -9,36 +9,72 @@ const profileSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
     trim: true,
     lowercase: true,
   },
-  timezone: {
+  password: {
     type: String,
     required: true,
-    trim: true,
+  },
+  photo: {
+    type: String,
+    default: null,
+  },
+  age: {
+    type: Number,
+    default: null,
+  },
+  height: {
+    type: Number,
+    default: null,
+  },
+  weight: {
+    type: Number,
+    default: null,
+  },
+  gender: {
+    type: String,
+    enum: ['male', 'female', 'other', null],
+    default: null,
   },
   goal: {
     type: String,
-    required: true,
+    enum: ['lose', 'maintain', 'gain', 'fitness', 'endurance', null],
+    default: null,
+  },
+  timezone: {
+    type: String,
     trim: true,
-  },
-  heightCm: {
-    type: Number,
-    min: 1,
-  },
-  weightKg: {
-    type: Number,
-    min: 1,
+    default: 'Asia/Kuala_Lumpur',
   },
   activityLevel: {
     type: String,
     enum: ['low', 'moderate', 'high'],
     default: 'moderate',
   },
+  goals: {
+    steps: {
+      type: Number,
+      default: null,
+    },
+    calories: {
+      type: Number,
+      default: null,
+    },
+    weight: {
+      type: Number,
+      default: null,
+    },
+    water: {
+      type: Number,
+      default: null,
+    },
+  },
 }, {
   timestamps: true,
 })
 
-const profileModel = mongoose.model('Profile', profileSchema)
+const profileModel = mongoose.model('Profiles', profileSchema)
 
 export default profileModel

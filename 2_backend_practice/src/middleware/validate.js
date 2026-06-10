@@ -5,7 +5,8 @@ export default function validate(schema) {//receives zod schema
   return (request, response, next) => {
     try {
       const validated = schema.parse({//checks whether request data is valid
-        body: request.body,
+        // GET requests usually do not have a body, so use an empty object.
+        body: request.body || {},
         query: request.query,
         params: request.params,
       })

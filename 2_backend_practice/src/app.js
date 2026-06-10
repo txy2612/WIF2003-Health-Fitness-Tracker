@@ -1,5 +1,5 @@
 import express from 'express' //backend framework
-import cors from 'cors' 
+import cors from 'cors'
 import helmet from 'helmet'
 import env from './config/env.js' //instead of const PORT = 300, now use env.PORT
 import connectDatabase from './config/database.js'
@@ -12,13 +12,14 @@ import progressChartsController from './modules/progress-charts/progressChartsCo
 import profileController from './modules/profile/profileController.js'
 import authController from './modules/auth/authController.js'
 import dashboardController from './modules/dashboard/dashboardController.js'
+import { startReminderScheduler } from './modules/notification/reminderScheduler.js'
+import notificationController from './modules/notification/notificationController.js'
 
 // Temporarily disabled until these legacy module paths exist again:
 // import nutritionController from './modules/nutrition/nutritionController.js'
 // import progressController from './modules/progress/progressController.js'
 // import userProfileController from './modules/user-profile/userProfileController.js'
 // import dashboard from './dashboard/dashboardController.js'
-// import notificationController from './modules/notification/notificationController.js'
 
 const app = express() // create app
 
@@ -27,6 +28,11 @@ app.use(requestId)//request-id be earlier -> evn cors can get an id
 app.use(helmet())
 app.use(cors()) // allow front-end to communicate with back-end
 app.use(express.json())// translate incoming JSON body
+app.use('/uploads', express.static('uploads', {
+  setHeaders: (res, path, stat) => {
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin'); //allowed browser to display this photo anywhere
+  }
+}));
 
 // test route
 app.get('/', (request, response) => {
@@ -42,22 +48,29 @@ app.use('/api/v1/dashboard', dashboardController)
 app.use('/api/v1/nutrition-planner', nutritionPlannerController)
 app.use('/api/v1/progress-charts', progressChartsController)
 app.use('/api/v1/profile', profileController)
+app.use('/api/v1/notification', notificationController)
 
 // Temporarily disabled until these legacy route modules are restored:
 // app.use('/api/v1/nutrition', nutritionController)
 // app.use('/api/v1/progress', progressController)
 // app.use('/api/v1/user-profile', userProfileController)
-// app.use('/api/v1/notification', notificationController)
 
 // Why after test route? notFoundHandler -> "No routes matched"
 //these two ORDER matters 'Not found' -> 'error'
 app.use(notFoundHandler)
 app.use(errorHandler)
 
-//connect database first
-await connectDatabase()
+// Only start the real server if we are NOT running tests
+if (process.env.NODE_ENV !== 'test') {
 
-// start server
-app.listen(env.PORT, () => {
-  console.log(`Server running on port ${env.PORT}`)
-})
+  await connectDatabase()
+  startReminderScheduler()
+
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+// Export the app for Supertest to use
+export default app;

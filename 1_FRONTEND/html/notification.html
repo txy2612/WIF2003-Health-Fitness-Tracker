@@ -72,8 +72,10 @@
                                                         <i class="fas fa-list fa-sm text-gray-500 mr-1"></i> Reminder
                                                         Type
                                                     </label>
-                                                    <select class="form-control" id="type">
-                                                        <option disabled selected>Select reminder type...</option>
+                                                    <!-- value = actual data sent/read -->
+                                                    <select class="form-control" id="type" required>
+                                                        <option value="" disabled selected>Select reminder type...
+                                                        </option>
                                                         <option>🏃 Running</option>
                                                         <option>🚴 Cycling</option>
                                                         <option>🏊 Swimming</option>
@@ -138,6 +140,7 @@
                                 </div>
 
                                 <div class="card-body">
+                                    <div id="reminderStatus" class="alert mb-3 d-none" role="alert"></div>
 
                                     <!-- EMPTY STATE -->
                                     <div id="emptyState" class="text-center py-4">
@@ -164,7 +167,8 @@
                                     <i class="fas fa-lightbulb text-primary mr-2"></i>
                                     <div>
                                         <h6 class="m-0 font-weight-bold text-primary">Feedback / Insights</h6>
-                                        <small class="text-muted style=1.2rem">Smart suggestions based on your activity</small>
+                                        <small class="text-muted style=1.2rem">Smart suggestions based on your
+                                            activity</small>
                                     </div>
                                 </div>
 
@@ -184,6 +188,48 @@
 
             <!-- FOOTER (injected by layout.js) -->
             <div id="footer-placeholder"></div>
+
+            <div class="modal fade" id="editModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form id="editReminderForm">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Reminder</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="editTitle">Name</label>
+                                    <input type="text" id="editTitle" class="form-control" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="editDate">Date</label>
+                                            <input type="date" id="editDate" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="editTime">Time</label>
+                                            <input type="time" id="editTime" class="form-control" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-outline-secondary" type="button"
+                                    data-dismiss="modal">Cancel</button>
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-save mr-1"></i> Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
             <div class="modal fade" id="deleteModal" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -211,6 +257,9 @@
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="../js/sb-admin-2.min.js"></script>
+
+    <script src="../js/service/auth-service.js"></script>
+    <script src="../js/service/profile-service.js"></script>
 
     <!-- layout.js before page scripts -->
     <script src="../js/layout.js"></script>

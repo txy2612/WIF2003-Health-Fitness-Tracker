@@ -2,7 +2,10 @@
 //  PROGRESS CHARTS WIRING
 //  Requires: C_BLUE, C_GREEN etc defined in progress-charts.js
 // ══════════════════════════════════════════════════════════════════
-
+// ADD THIS ↓
+const API_BASE = 'http://localhost:3000/api/v1'
+const USER_ID  = localStorage.getItem('userId') || 'test-user'
+// ↑ Change 'test-user' to the real user ID once auth is connected
 // ── NAVIGATION STATE ──────────────────────────────────────────────
 let weekOffset  = 0;
 let monthOffset = 0;
@@ -83,8 +86,8 @@ function _avgNonZero(arr) {
     return vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : 0;
 }
 
-function _getCurrentStreak() {
-    const logs = _getLogs().filter(l => l.type === 'workout');
+function _getCurrentStreak(rows = []) {
+    const logs = rows.filter(r => r.workouts && r.workouts.length > 0).map(r => ({ date: r.date }));
     if (!logs.length) return 0;
     const uniqueDates = [...new Set(logs.map(l => l.date))].sort().reverse();
     let streak = 0;
@@ -101,9 +104,8 @@ function _getCurrentStreak() {
     return streak;
 }
 
-function _getLongestStreak() {
-    const logs = _getLogs().filter(l => l.type === 'workout');
-    if (!logs.length) return 0;
+function _getLongestStreak(rows = []) {
+    const logs = rows.filter(r => r.workouts && r.workouts.length > 0).map(r => ({ date: r.date }));
     const uniqueDates = [...new Set(logs.map(l => l.date))].sort();
     let longest = 1, current = 1;
     for (let i = 1; i < uniqueDates.length; i++) {
@@ -134,19 +136,52 @@ let _mSessionsChart = null;
 
 // ── WEEKLY ────────────────────────────────────────────────────────
 
-function buildWeekly() {
-    const logs      = _getLogs();
-    const goals     = _getGoals();
-    const stepGoal  = parseInt(goals.steps) || 10000;
-    const dates     = _getWeekDates(weekOffset);
-    const prevDates = _getWeekDates(weekOffset - 1);
-    const DAYS      = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+async function buildWeekly() {            // ← add async
+    const goals    = _getGoals();
+    const stepGoal = parseInt(goals.steps) || 10000;
+    const DAYS     = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+ 
+    // BEFORE: const logs = _getLogs() then _getWeekDates() + _stepsOnDates() etc.
+    // AFTER:  one fetch replaces all of that
+    let dates, rows, prevRows
+    try {
+       const res  = await fetch(`${API_BASE}/progress-charts/weekly?offset=${weekOffset}`, {
+            headers: { Authorization: `Bearer ${window.AuthService.getToken()}` }
+        })
+        const data = await res.json()
+        dates    = data.dates
+        rows     = data.rows
+        prevRows = data.prevRows
+    } catch (err) {
+        console.warn('API failed, falling back to localStorage', err)
+        // offline fallback — keeps working if server is down
+        const logs = _getLogs()
+        dates    = _getWeekDates(weekOffset)
+        const prevDates = _getWeekDates(weekOffset - 1)
+        rows = dates.map(date => {
+            const dayLogs = logs.filter(l => l.date === date)
+            return {
+                date,
+                steps:    dayLogs.filter(l => l.type === 'steps').reduce((s, l) => s + (l.steps||0), 0),
+                calories: dayLogs.reduce((s, l) => s + (l.calories||0), 0),
+                workouts: dayLogs.filter(l => l.type === 'workout').map(l => ({ activity: l.activity, duration: l.duration, calories: l.calories })),
+            }
+        })
+        prevRows = prevDates.map(date => {
+            const dayLogs = logs.filter(l => l.date === date)
+            return {
+                date,
+                steps:    dayLogs.filter(l => l.type === 'steps').reduce((s, l) => s + (l.steps||0), 0),
+                workouts: dayLogs.filter(l => l.type === 'workout').map(l => ({ activity: l.activity, duration: l.duration, calories: l.calories })),
+            }
+        })
+    }
 
     document.getElementById('weeklyRangeLabel').textContent = _formatWeekLabel(dates);
     document.getElementById('weekNextBtn').disabled = weekOffset >= 0;
 
     // Steps chart
-    const stepsData  = _stepsOnDates(logs, dates);
+    const stepsData  = rows.map(r => r.steps);
     const maxSteps   = Math.max(...stepsData, 0);
     const hasSteps   = stepsData.some(v => v > 0);
 
@@ -184,7 +219,7 @@ function buildWeekly() {
     });
 
     // Sessions chart
-    const sessionsData = _workoutsOnDates(logs, dates);
+    const sessionsData = rows.map(r => r.workouts ? r.workouts.length : 0);
     const hasSessions = sessionsData.some(v => v > 0);
     const maxSessions = Math.max(...sessionsData, 0);
 
@@ -221,7 +256,7 @@ function buildWeekly() {
 
     // This Week insights
     const thisAvgSteps = _avgNonZero(stepsData);
-    const prevStepsData = _stepsOnDates(logs, prevDates);
+    const prevStepsData = prevRows.map(r => r.steps);
     const prevAvgSteps = _avgNonZero(prevStepsData);
     const stepsDiff = thisAvgSteps - prevAvgSteps;
 
@@ -234,8 +269,8 @@ function buildWeekly() {
             : `${stepsDiff >= 0 ? '↑' : '↓'} ${Math.abs(stepsDiff).toLocaleString()} vs last week's ${prevAvgSteps.toLocaleString()}`;
     }
 
-    const thisWeekWorkouts = logs.filter(l => l.type === 'workout' && dates.includes(l.date));
-    const prevWeekWorkouts = logs.filter(l => l.type === 'workout' && prevDates.includes(l.date));
+    const thisWeekWorkouts = rows.flatMap(r => r.workouts || []);
+    const prevWeekWorkouts = prevRows.flatMap(r => r.workouts || []);
     const sessionsDiff = thisWeekWorkouts.length - prevWeekWorkouts.length;
 
     const wSessionsEl = document.getElementById('wSessions');
@@ -247,15 +282,14 @@ function buildWeekly() {
             : `${sessionsDiff >= 0 ? '↑' : '↓'} ${Math.abs(sessionsDiff)} vs last week's ${prevWeekWorkouts.length}`;
     }
 
-    const activeDays = dates.filter(date =>
-        logs.some(l => (l.type === 'workout' || l.type === 'steps') && l.date === date && (l.steps > 0 || l.type === 'workout'))
-    ).length;
+    const activeDays = rows.filter(r => r.steps > 0 || (r.workouts && r.workouts.length > 0)).length;
     const wActiveDaysEl = document.getElementById('wActiveDays');
     if (wActiveDaysEl) wActiveDaysEl.textContent = activeDays + '/7 days';
 
     // Consistency insights
-    const currentStreak = _getCurrentStreak();
-    const longestStreak = _getLongestStreak();
+    const allRows       = [...prevRows, ...rows];
+    const currentStreak = _getCurrentStreak(allRows);
+    const longestStreak = _getLongestStreak(allRows);
     const consistWeeks = _getConsistencyWeeks();
 
     const wStreakEl = document.getElementById('wStreak');
@@ -297,12 +331,42 @@ function buildWeekly() {
 
 // ── MONTHLY ───────────────────────────────────────────────────────
 
-function buildMonthly() {
-    const logs = _getLogs();
-    const goals = _getGoals();
+async function buildMonthly() {            // ← add async
+    const goals    = _getGoals();
     const stepGoal = parseInt(goals.steps) || 10000;
-    const dates = _getMonthDates(monthOffset);
-    const prevDates = _getMonthDates(monthOffset - 1);
+ 
+    let dates, rows, prevRows
+    try {
+        const res  = await fetch(`${API_BASE}/progress-charts/monthly?offset=${monthOffset}`, {
+            headers: { Authorization: `Bearer ${window.AuthService.getToken()}` }
+        })
+        const data = await res.json()
+        dates    = data.dates
+        rows     = data.rows
+        prevRows = data.prevRows
+    } catch (err) {
+        console.warn('API failed, falling back to localStorage', err)
+        const logs = _getLogs()
+        dates    = _getMonthDates(monthOffset)
+        const prevDates = _getMonthDates(monthOffset - 1)
+        rows = dates.map(date => {
+            const dayLogs = logs.filter(l => l.date === date)
+            return {
+                date,
+                steps:    dayLogs.filter(l => l.type === 'steps').reduce((s, l) => s + (l.steps||0), 0),
+                calories: dayLogs.reduce((s, l) => s + (l.calories||0), 0),
+                workouts: dayLogs.filter(l => l.type === 'workout').map(l => ({ activity: l.activity, duration: l.duration, calories: l.calories })),
+            }
+        })
+        prevRows = prevDates.map(date => {
+            const dayLogs = logs.filter(l => l.date === date)
+            return {
+                date,
+                steps:    dayLogs.filter(l => l.type === 'steps').reduce((s, l) => s + (l.steps||0), 0),
+                workouts: dayLogs.filter(l => l.type === 'workout').map(l => ({ activity: l.activity, duration: l.duration, calories: l.calories })),
+            }
+        })
+    }
 
     document.getElementById('monthlyRangeLabel').textContent = _formatMonthLabel(monthOffset);
     document.getElementById('monthNextBtn').disabled = monthOffset >= 0;
@@ -310,7 +374,7 @@ function buildMonthly() {
     const labels = dates.map(d => new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }));
 
     // Steps chart
-    const stepsData = _stepsOnDates(logs, dates);
+    const stepsData = rows.map(r => r.steps);
     const maxSteps = Math.max(...stepsData, 0);
     const hasSteps = stepsData.some(v => v > 0);
 
@@ -350,8 +414,8 @@ function buildMonthly() {
     // Workout Sessions Per Week chart
     const weekLabels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
     const weekSessionCounts = [0, 1, 2, 3].map(w => {
-        const wDates = dates.slice(w * 7, (w + 1) * 7);
-        return logs.filter(l => l.type === 'workout' && wDates.includes(l.date)).length;
+        const wRows = rows.slice(w * 7, (w + 1) * 7);
+        return wRows.reduce((sum, r) => sum + (r.workouts ? r.workouts.length : 0), 0);
     });
     const maxMSessions = Math.max(...weekSessionCounts, 0);
     const hasMSessions = weekSessionCounts.some(v => v > 0);
@@ -395,7 +459,7 @@ function buildMonthly() {
 
     // This Month insights
     const thisAvgSteps = _avgNonZero(stepsData);
-    const prevStepsData = _stepsOnDates(logs, prevDates);
+    const prevStepsData = prevRows.map(r => r.steps);
     const prevAvgSteps = _avgNonZero(prevStepsData);
     const stepsDiff = thisAvgSteps - prevAvgSteps;
 
@@ -408,8 +472,8 @@ function buildMonthly() {
             : `${stepsDiff >= 0 ? '↑' : '↓'} ${Math.abs(stepsDiff).toLocaleString()} vs last month's ${prevAvgSteps.toLocaleString()}`;
     }
 
-    const thisMonthWorkouts = logs.filter(l => l.type === 'workout' && dates.includes(l.date));
-    const prevMonthWorkouts = logs.filter(l => l.type === 'workout' && prevDates.includes(l.date));
+    const thisMonthWorkouts = rows.flatMap(r => r.workouts || []);
+    const prevMonthWorkouts = prevRows.flatMap(r => r.workouts || []);
     const sessionsDiff = thisMonthWorkouts.length - prevMonthWorkouts.length;
 
     const mSessionsEl = document.getElementById('mSessions');
@@ -421,9 +485,7 @@ function buildMonthly() {
             : `${sessionsDiff >= 0 ? '↑' : '↓'} ${Math.abs(sessionsDiff)} vs last month's ${prevMonthWorkouts.length}`;
     }
 
-    const activeDays = dates.filter(date =>
-        logs.some(l => l.date === date && (l.type === 'workout' || (l.type === 'steps' && l.steps > 0)))
-    ).length;
+    const activeDays = rows.filter(r => r.steps > 0 || (r.workouts && r.workouts.length > 0)).length;
     const mActiveDaysEl = document.getElementById('mActiveDays');
     if (mActiveDaysEl) mActiveDaysEl.textContent = activeDays + '/' + dates.length;
     const mActiveTotalEl = document.getElementById('mActiveDaysTotal');
@@ -431,8 +493,8 @@ function buildMonthly() {
 
     // Consistency
     const weeks = [0, 1, 2, 3].map(w => {
-        const wDates = dates.slice(w * 7, (w + 1) * 7);
-        return { week: w + 1, count: logs.filter(l => l.type === 'workout' && wDates.includes(l.date)).length };
+        const wRows = rows.slice(w * 7, (w + 1) * 7);
+        return { week: w + 1, count: wRows.reduce((sum, r) => sum + (r.workouts ? r.workouts.length : 0), 0) };
     });
     const bestWeek = [...weeks].sort((a, b) => b.count - a.count)[0];
 
@@ -585,9 +647,9 @@ function resetAll() {
 
 // ── INIT ──────────────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', function () {
-    buildWeekly();
-    buildMonthly();
+document.addEventListener('DOMContentLoaded', async function () {   // ← add async
+    await buildWeekly();
+    await buildMonthly();
 
     document.querySelector('a[href="#weeklyPanel"]').addEventListener('shown.bs.tab', buildWeekly);
     document.querySelector('a[href="#monthlyPanel"]').addEventListener('shown.bs.tab', buildMonthly);

@@ -3,11 +3,19 @@ import mongoose from 'mongoose'
 
 // mongoose.Schema = Define document/database structure
 const fitnessTrackerSchema = new mongoose.Schema(
-  {
+  {// added userId to separate users
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Profiles',
+      required: true,
+      index: true,// keep query faster
+    },
+
     id: {
       type: String,
       required: true,
-      unique: true,
+      // removed unique: true
+      // so id is no longer unique in the entire db
     },
     type: {
       type: String,
@@ -58,8 +66,17 @@ const fitnessTrackerSchema = new mongoose.Schema(
   }
 )
 
+// userId must be unique
+// Business rule 1: a user(userId) cannot have record of same frontend id(id)
 fitnessTrackerSchema.index(
-  { type: 1, date: 1 },
+  {userId:1, id:1},
+  { unique: true }
+)
+
+// added userId, so thee wont be duplicated key for ( type + date )
+// Business rule 2: no two 'steps records' on same date for one user
+fitnessTrackerSchema.index(
+  { userId:1 , type: 1, date: 1 },
   {
     unique: true,
     partialFilterExpression: { type: 'steps' },

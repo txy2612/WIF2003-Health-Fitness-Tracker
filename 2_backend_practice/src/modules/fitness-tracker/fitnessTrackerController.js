@@ -3,10 +3,13 @@ import express from 'express'
 import { StatusCodes } from 'http-status-codes'
 import fitnessTrackerService from './fitnessTrackerService.js'
 import validate from '../../middleware/validate.js'
+import requireAuth from '../../middleware/requireAuth.js'
 import { postActivitySchema, deleteActivitySchema } from './fitnessTrackerSchema.js'
 
 // creates a mini router for fitness tracker (mini receptionist for the department)
 const router = express.Router()
+router.use(requireAuth)
+ 
 
 // '/' = root of fitness tracker module
 // when connected in app.js , it bcms /api/v1/fitness-tracker
@@ -14,7 +17,7 @@ const router = express.Router()
 router.get('/', async (request, response, next) => {
     try {
         //await = wait until SERVICE finishes (bcz services is async)
-        const data = await fitnessTrackerService.getFitnessTrackerOverview()
+        const data = await fitnessTrackerService.getFitnessTrackerOverview(request.user.id)
 
         //if route succeeds, send reponse
         response.status(StatusCodes.OK).json(data)
@@ -25,7 +28,7 @@ router.get('/', async (request, response, next) => {
 
 router.get('/activities', async (request, response, next) => {
     try {
-        const data = await fitnessTrackerService.getActivities()
+        const data = await fitnessTrackerService.getActivities(request.user.id)
 
         response.status(StatusCodes.OK).json(data)
     } catch (error) {
@@ -41,7 +44,7 @@ router.post('/activities', validate(postActivitySchema), async (request, respons
 
         console.log('Vaidated body:', body)
 
-        const data = await fitnessTrackerService.createActivity(body)
+        const data = await fitnessTrackerService.createActivity(request.user.id, body)
         
         response.status(StatusCodes.CREATED).json(data)
     }catch(error){
@@ -57,7 +60,7 @@ router.delete('/activities/:id', validate(deleteActivitySchema), async (request,
         const {id} = request.validated.params//params of validated request
         //DESTRUCTURING !! {id} = bla.bla.bla.id
 
-        const deletedActivity = await fitnessTrackerService.deleteActivity(id)
+        const deletedActivity = await fitnessTrackerService.deleteActivity(request.user.id, id)
 
         if (!deletedActivity){
             response.status(404).json({

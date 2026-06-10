@@ -2,16 +2,11 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
     <title>Profile</title>
 
-    <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -20,32 +15,24 @@
         href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap"
         rel="stylesheet">
 
-    <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
     <link href="../css/profile.css" rel="stylesheet">
     <link href="../css/shared.css" rel="stylesheet">
-
 </head>
 
 <body id="page-top">
 
-    <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <!-- SIDEBAR (injected by layout.js) -->
         <div id="sidebar-placeholder"></div>
 
-        <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
 
-                <!-- TOPBAR (injected by layout.js) -->
                 <div id="topbar-placeholder"></div>
 
-                <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <div>
                             <h1 class="h3 mb-1 text-gray-800">Profile</h1>
@@ -54,12 +41,8 @@
                         </div>
                     </div>
 
-                    <!-- ══════════════════════════════════════════════════════════════════
-                        SECTION 1 — PROFILE OVERVIEW + FITNESS SNAPSHOT
-                    ══════════════════════════════════════════════════════════════════ -->
                     <div class="row">
 
-                        <!-- Left: Profile card -->
                         <div class="col-lg-5 mb-4">
                             <div class="card shadow h-100">
                                 <div class="card-header py-3">
@@ -70,7 +53,6 @@
                                 </div>
                                 <div class="card-body p-4">
 
-                                    <!-- Avatar -->
                                     <div class="text-center mb-4">
                                         <div id="profileAvatar"
                                             class="rounded-circle mb-3 d-flex align-items-center justify-content-center mx-auto"
@@ -87,21 +69,19 @@
                                             <i class="fas fa-camera mr-1"></i> Change Photo
                                         </label>
                                         <input type="file" id="photoUpload" accept="image/*" style="display:none;">
-                                        <h5 class="font-weight-bold mb-0" id="profileNameDisplay">Ahmad Hafiz</h5>
+                                        <h5 class="font-weight-bold mb-0" id="profileNameDisplay"></h5>
                                     </div>
 
                                     <hr style="border-color:rgba(0,0,0,0.08);">
 
-                                    <!-- Editable fields -->
                                     <div class="profile-field d-flex align-items-center justify-content-between py-3"
                                         style="border-bottom:1px solid rgba(0,0,0,0.08);">
                                         <div style="flex:1;">
                                             <p class="text-muted small mb-1">Email</p>
-                                            <p class="font-weight-bold mb-0 field-display" id="display-email">
-                                                ahmad@email.com</p>
+                                            <p class="font-weight-bold mb-0 field-display" id="display-email"></p>
                                             <input type="email"
                                                 class="form-control form-control-sm field-input d-none mt-1"
-                                                id="input-email" value="ahmad@email.com">
+                                                id="input-email" value="">
                                         </div>
                                         <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('email')"
                                             style="color:#4e73df;">
@@ -113,10 +93,10 @@
                                         style="border-bottom:1px solid rgba(0,0,0,0.08);">
                                         <div style="flex:1;">
                                             <p class="text-muted small mb-1">Age</p>
-                                            <p class="font-weight-bold mb-0 field-display" id="display-age">24 years</p>
+                                            <p class="font-weight-bold mb-0 field-display" id="display-age"></p>
                                             <input type="number"
                                                 class="form-control form-control-sm field-input d-none mt-1"
-                                                id="input-age" value="24">
+                                                id="input-age" value="">
                                         </div>
                                         <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('age')"
                                             style="color:#4e73df;">
@@ -128,11 +108,10 @@
                                         style="border-bottom:1px solid rgba(0,0,0,0.08);">
                                         <div style="flex:1;">
                                             <p class="text-muted small mb-1">Height (cm)</p>
-                                            <p class="font-weight-bold mb-0 field-display" id="display-height">172 cm
-                                            </p>
+                                            <p class="font-weight-bold mb-0 field-display" id="display-height"></p>
                                             <input type="number"
                                                 class="form-control form-control-sm field-input d-none mt-1"
-                                                id="input-height" value="172">
+                                                id="input-height" value="">
                                         </div>
                                         <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('height')"
                                             style="color:#4e73df;">
@@ -144,10 +123,10 @@
                                         style="border-bottom:1px solid rgba(0,0,0,0.08);">
                                         <div style="flex:1;">
                                             <p class="text-muted small mb-1">Weight (kg)</p>
-                                            <p class="font-weight-bold mb-0 field-display" id="display-weight">68 kg</p>
+                                            <p class="font-weight-bold mb-0 field-display" id="display-weight"></p>
                                             <input type="number"
                                                 class="form-control form-control-sm field-input d-none mt-1"
-                                                id="input-weight" value="68">
+                                                id="input-weight" value="">
                                         </div>
                                         <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('weight')"
                                             style="color:#4e73df;">
@@ -159,16 +138,15 @@
                                         style="border-bottom:1px solid rgba(0,0,0,0.08);">
                                         <div style="flex:1;">
                                             <p class="text-muted small mb-1">Goal / Plan</p>
-                                            <p class="font-weight-bold mb-0 field-display" id="display-goal">Lose weight
-                                            </p>
+                                            <p class="font-weight-bold mb-0 field-display" id="display-goal"></p>
                                             <select class="form-control form-control-sm field-input d-none mt-1"
                                                 id="input-goal">
                                                 <option value="" disabled selected>Select goal...</option>
                                                 <option value="lose">Lose weight</option>
                                                 <option value="maintain">Maintain weight</option>
                                                 <option value="gain">Gain muscle</option>
-                                                <option value="maintain">Improve fitness</option>
-                                                <option value="maintain">Increase endurance</option>
+                                                <option value="fitness">Improve fitness</option>
+                                                <option value="endurance">Increase endurance</option>
                                             </select>
                                         </div>
                                         <button class="btn btn-sm edit-btn ml-3" onclick="toggleEdit('goal')"
@@ -181,7 +159,7 @@
                                         style="border-bottom:1px solid rgba(0,0,0,0.08);">
                                         <div style="flex:1;">
                                             <p class="text-muted small mb-1">Gender</p>
-                                            <p class="font-weight-bold mb-0 field-display" id="display-gender">Male</p>
+                                            <p class="font-weight-bold mb-0 field-display" id="display-gender"></p>
                                             <select class="form-control form-control-sm field-input d-none mt-1"
                                                 id="input-gender">
                                                 <option value="" disabled selected>Select gender...</option>
@@ -200,12 +178,8 @@
                             </div>
                         </div>
 
-                        <!-- Right: Goal Settings + Account Settings stacked -->
                         <div class="col-lg-7">
 
-                            <!-- ══════════════════════════════════════════════════════════════════
-                                SECTION 2 — GOAL SETTINGS (full width)
-                            ══════════════════════════════════════════════════════════════════ -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3 d-flex align-items-center justify-content-between">
                                     <div>
@@ -224,7 +198,6 @@
 
                                     <div class="row">
 
-                                        <!-- Step Goal -->
                                         <div class="col-md-4 mb-4">
                                             <div class="p-3 rounded h-100"
                                                 style="border:1px solid #e3e6f0; background:#f8f9fc;">
@@ -236,7 +209,6 @@
                                                     <div>
                                                         <div class="text-xs font-weight-bold text-uppercase text-muted">
                                                             Daily Step Goal</div>
-                                                        <small class="text-muted">Tracked on Progress Charts</small>
                                                     </div>
                                                 </div>
                                                 <div class="form-group mb-1">
@@ -249,7 +221,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- Calorie Goal -->
                                         <div class="col-md-4 mb-4">
                                             <div class="p-3 rounded h-100"
                                                 style="border:1px solid #e3e6f0; background:#f8f9fc;">
@@ -261,7 +232,6 @@
                                                     <div>
                                                         <div class="text-xs font-weight-bold text-uppercase text-muted">
                                                             Daily Calorie Goal</div>
-                                                        <small class="text-muted">Used in Nutrition Planner</small>
                                                     </div>
                                                 </div>
                                                 <div class="form-group mb-1">
@@ -271,12 +241,10 @@
                                                         placeholder="e.g. 2000" min="1000" max="5000" step="50">
                                                 </div>
                                                 <small class="text-muted">Suggested: <span id="goalCalHint"
-                                                        class="font-weight-bold text-primary">1,500 – 1,800
-                                                        kcal</span></small>
+                                                        class="font-weight-bold text-primary"></span></small>
                                             </div>
                                         </div>
 
-                                        <!-- Weight Goal -->
                                         <div class="col-md-4 mb-4">
                                             <div class="p-3 rounded h-100"
                                                 style="border:1px solid #e3e6f0; background:#f8f9fc;">
@@ -288,7 +256,6 @@
                                                     <div>
                                                         <div class="text-xs font-weight-bold text-uppercase text-muted">
                                                             Target Weight</div>
-                                                        <small class="text-muted">Tracked on Progress Charts</small>
                                                     </div>
                                                 </div>
                                                 <div class="form-group mb-1">
@@ -298,13 +265,12 @@
                                                         placeholder="e.g. 62" min="30" max="200" step="0.5">
                                                 </div>
                                                 <small class="text-muted">Current: <span id="currentWeightHint"
-                                                        class="font-weight-bold">68 kg</span></small>
+                                                        class="font-weight-bold"></span></small>
                                             </div>
                                         </div>
 
                                     </div>
 
-                                    <!-- Goals preview strip — shown after saving -->
                                     <div class="alert alert-light border mb-3 py-2" id="currentGoalsPreview"
                                         style="display:none;">
                                         <div class="d-flex align-items-center mb-1">
@@ -345,7 +311,6 @@
                                 </div>
                             </div>
 
-                            <!-- Account Settings -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">
@@ -382,8 +347,8 @@
                                                     placeholder="Confirm new password">
                                             </div>
                                             <div>
-                                                <button type="button" class="btn btn-primary btn-sm mr-2">Save
-                                                    Password</button>
+                                                <button type="button" class="btn btn-primary btn-sm mr-2"
+                                                    id="btnSavePassword">Save Password</button>
                                                 <button type="button" class="btn btn-outline-primary btn-sm"
                                                     data-toggle="collapse"
                                                     data-target="#changePasswordSection">Cancel</button>
@@ -396,13 +361,11 @@
                         </div>
                     </div>
 
-                    <!-- Delete Account Confirmation Modal -->
-                    <div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog"
-                        aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteModalLabel">Delete Account</h5>
+                                    <h5 class="modal-title">Delete Account</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -414,36 +377,29 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-outline-primary"
                                         data-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-danger btn-sm">Yes, delete my account</button>
+                                    <button type="button" class="btn btn-danger btn-sm" id="btnConfirmDelete">Yes,
+                                        delete my account</button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <!-- End of Main Content -->
-
             </div>
 
-            <!-- FOOTER (injected by layout.js) -->
             <div id="footer-placeholder"></div>
-
         </div>
-        <!-- End of Content Wrapper -->
-
     </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- SCROLL TO TOP + LOGOUT MODAL (injected by layout.js) -->
     <div id="extras-placeholder"></div>
 
-    <!-- Vendor Scripts -->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="../js/sb-admin-2.min.js"></script>
 
-    <!-- layout.js must come before profile.js -->
+    <script src="../js/service/auth-service.js"></script>
+    <script src="../js/service/profile-service.js"></script>
+
     <script src="../js/layout.js"></script>
     <script src="../js/profile.js"></script>
 

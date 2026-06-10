@@ -91,7 +91,7 @@ const TOPBAR_HTML = `
                 <a class="nav-link" href="notification.html">
                     <i class="fas fa-bell fa-fw"></i>
                     <!-- You can keep the counter badge here! -->
-                    <span class="badge badge-danger badge-counter">2</span>
+                    <span class="badge badge-danger badge-counter" style="display:none;"></span>
                 </a>
             </li>
 
@@ -196,17 +196,216 @@ const EXTRAS_HTML = `
 
 
 
-// functions should exist before called -> placed before DOMContentLoaded
-function updateNotificationBadge() {
-    const reminders = JSON.parse(localStorage.getItem('fittrack_reminders') || '[]');
-    const activeCount = reminders.filter(r => !r.completed).length;
+const LAYOUT_NOTIFICATION_API_URL = 'http://localhost:3000/api/v1/notification';
+const MAX_REMINDER_TIMEOUT_MS = 2147483647;
+let fitTrackReminderTimers = new Map();
+let fitTrackReminderInterval = null;
+let fitTrackReminderCache = [];
+let layoutNotificationBadgeCount = null;
 
-    const badge = document.querySelector('.badge-counter');
-    if (badge) {
-        badge.textContent = activeCount > 0 ? activeCount : '';
-        badge.style.display = activeCount > 0 ? 'inline-block' : 'none';
+function getActiveNotificationCount(reminders) {
+    return reminders.filter(reminder => !reminder.completed).length;
+}
+
+async function parseLayoutApiResponse(response) {
+    const text = await response.text();
+    if (!text) return {};
+
+    try {
+        return JSON.parse(text);
+    } catch (error) {
+        return {};
     }
 }
+
+async function requestLayoutNotificationApi(path = '', options = {}) {
+    const token = window.AuthService?.getToken?.() || localStorage.getItem('fittrack_token');
+    const headers = {
+        ...(options.headers || {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
+
+    const response = await fetch(`${LAYOUT_NOTIFICATION_API_URL}${path}`, {
+        ...options,
+        headers
+    });
+    const data = await parseLayoutApiResponse(response);
+
+    if (!response.ok) {
+        const error = new Error(data.detail || data.message || 'Notification request failed.');
+        error.status = response.status;
+        error.data = data;
+        throw error;
+    }
+
+    return data;
+}
+
+async function fetchFitTrackReminders() {
+    const data = await requestLayoutNotificationApi('');
+    fitTrackReminderCache = Array.isArray(data) ? data : [];
+    setNotificationBadgeCount(getActiveNotificationCount(fitTrackReminderCache));
+    return fitTrackReminderCache;
+}
+
+function setNotificationBadgeCount(activeCount) {
+    const safeCount = Number(activeCount) || 0;
+    layoutNotificationBadgeCount = safeCount;
+
+    document.querySelectorAll('.badge-counter').forEach(badge => {
+        badge.textContent = safeCount > 0 ? safeCount : '';
+        badge.style.display = safeCount > 0 ? 'inline-block' : 'none';
+    });
+}
+
+// functions should exist before called -> placed before DOMContentLoaded
+async function updateNotificationBadge() {
+    try {
+        await fetchFitTrackReminders();
+    } catch (error) {
+        setNotificationBadgeCount(0);
+        console.warn('Could not update notification badge from backend', error);
+    }
+}
+
+// Other pages can call this after they create/update/delete reminders.
+function refreshFitTrackNotificationBadge(activeCount) {
+    if (Number.isFinite(activeCount)) {
+        setNotificationBadgeCount(activeCount);
+    }
+
+    updateNotificationBadge().catch(error => {
+        console.warn('Could not refresh notification badge from backend', error);
+    });
+}
+
+function getReminderDueDate(reminder) {
+    if (reminder.scheduledFor) {
+        const scheduledDate = new Date(reminder.scheduledFor);
+        if (!Number.isNaN(scheduledDate.getTime())) return scheduledDate;
+    }
+
+    if (reminder.datetime) {
+        const localDate = new Date(String(reminder.datetime).replace(' ', 'T'));
+        if (!Number.isNaN(localDate.getTime())) return localDate;
+    }
+
+    return null;
+}
+
+function getReminderNotificationText(reminder) {
+    const title = reminder.title || reminder.type || 'FitTrack Reminder';
+    const body = reminder.message && reminder.message.trim()
+        ? reminder.message.trim()
+        : reminder.note && reminder.note.trim()
+            ? reminder.note.trim()
+            : `Time for ${reminder.type || 'your activity'}.`;
+
+    return { title, body };
+}
+
+function showReminderNotification(reminder) {
+    const { title, body } = getReminderNotificationText(reminder);
+
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, {
+            body,
+            tag: `fittrack-reminder-${reminder.id}`,
+        });
+        return;
+    }
+
+    alert(`${title}\n${body}`);
+}
+
+function markReminderNotificationShown(reminderId) {
+    const reminder = fitTrackReminderCache.find(item => String(item.id) === String(reminderId));
+
+    if (!reminder || reminder.completed || reminder.browserNotifiedAt) return;
+
+    reminder.browserNotifiedAt = new Date().toISOString();
+    requestLayoutNotificationApi(`/${reminder.id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            browserNotifiedAt: reminder.browserNotifiedAt,
+        }),
+    }).catch(error => {
+        console.warn('Could not mark reminder as browser-notified', error);
+    });
+    updateNotificationBadge();
+}
+
+// Purpose: display the noti by calling showReminderNotification(reminder);
+function processDueFitTrackReminder(reminderId) {
+    const reminder = fitTrackReminderCache
+        .find(item => String(item.id) === String(reminderId));
+
+    if (!reminder || reminder.completed || reminder.browserNotifiedAt) return;
+
+    const dueDate = getReminderDueDate(reminder);
+    if (!dueDate || dueDate > new Date()) return;
+
+    showReminderNotification(reminder);
+    markReminderNotificationShown(reminder.id);
+}
+
+// scheduler 
+// create many setTimeout alarams -> wait -> show noti
+function scheduleFitTrackReminders() {
+    // clear old alarms
+    fitTrackReminderTimers.forEach(timerId => clearTimeout(timerId));
+    fitTrackReminderTimers = new Map();
+
+    // fetch backend reminder list from /api/v1/notification
+    fetchFitTrackReminders()
+        .then(reminders => {
+            const now = new Date();
+
+            reminders
+                // igore reminders that shouldn't trigger
+                // trigger only : not yet completed + hvn notified
+                // browserNotifiedAt = null OR 2026-06-05...
+                .filter(reminder => !reminder.completed && !reminder.browserNotifiedAt)
+                .forEach(reminder => {
+                    const dueDate = getReminderDueDate(reminder);
+                    if (!dueDate) return;
+
+                    // calculate how long to wait
+                    const delay = dueDate.getTime() - now.getTime();
+
+                    // if alr due, runs imme
+                    if (delay <= 0) {
+                        processDueFitTrackReminder(reminder.id);
+                        return;
+                    }
+
+                    if (delay <= MAX_REMINDER_TIMEOUT_MS) {
+                        // filters and schedules each reminder with setTimeout
+                        const timerId = setTimeout(() => {
+                            processDueFitTrackReminder(reminder.id);
+                            fitTrackReminderTimers.delete(String(reminder.id));
+                        }, delay);
+
+                        fitTrackReminderTimers.set(String(reminder.id), timerId);
+                    }
+                });
+        })
+        .catch(error => {
+            console.warn('Could not schedule reminders from backend', error);
+        });
+}
+
+window.scheduleFitTrackReminders = scheduleFitTrackReminders;
+window.fetchFitTrackReminders = fetchFitTrackReminders;
+window.updateNotificationBadge = updateNotificationBadge;
+window.refreshFitTrackNotificationBadge = refreshFitTrackNotificationBadge;
+
+window.addEventListener('fittrack:reminders-changed', function (event) {
+    refreshFitTrackNotificationBadge(event.detail?.activeCount);
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     document.body.classList.remove('layout-ready');
@@ -217,6 +416,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const topbarEl = document.getElementById('topbar-placeholder');
     if (topbarEl) topbarEl.innerHTML = TOPBAR_HTML;
+    if (layoutNotificationBadgeCount !== null) setNotificationBadgeCount(layoutNotificationBadgeCount);
 
     const footerEl = document.getElementById('footer-placeholder');
     if (footerEl) footerEl.innerHTML = FOOTER_HTML;
@@ -234,20 +434,49 @@ document.addEventListener('DOMContentLoaded', function () {
     const titleEl = document.querySelector('.topbar-page-title');
     if (activeLinkSpan && titleEl) titleEl.textContent = activeLinkSpan.textContent.trim();
 
-    // Notification badge — count from saved reminders
-    const reminders = JSON.parse(localStorage.getItem('fittrack_reminders') || '[]');
-    const activeCount = reminders.filter(r => !r.completed).length;
-    const badge = document.querySelector('.badge-counter');
-    if (badge) badge.textContent = activeCount > 0 ? activeCount : '';
+    // Notification badge - count backend reminders
+    updateNotificationBadge();
 
-    // Restore saved profile photo in topbar (works on every page)
-    try {
-        const profile = JSON.parse(localStorage.getItem('fittrack_profile')) || {};
-        if (profile.photo) {
-            const pic = document.getElementById('topbarProfilePic');
-            if (pic) pic.innerHTML = `<img src="${profile.photo}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
+    scheduleFitTrackReminders();
+
+    if (!fitTrackReminderInterval) {
+        fitTrackReminderInterval = setInterval(scheduleFitTrackReminders, 30000);
+    }
+
+    //fetch profile picture from backend
+    async function loadTopbarProfilePic() {
+
+        if (!window.AuthService || !window.AuthService.isAuthenticated() || !window.ProfileService) {
+            return;
         }
-    } catch (e) { }
+
+        try {
+            const result = await window.ProfileService.getProfile();
+
+            if (result.success && result.data) {
+
+                let profile = result.data;
+                if (profile.user) profile = profile.user;
+                if (profile.profile) profile = profile.profile;
+                if (profile.data) profile = profile.data;
+
+                if (profile.photo) {
+                    const BACKEND_URL = 'http://localhost:3000/';
+                    const photoUrl = profile.photo.startsWith('http') ? profile.photo : BACKEND_URL + profile.photo.replace(/\\/g, '/');
+
+                    const pic = document.getElementById('topbarProfilePic');
+                    if (pic) {
+                        pic.innerHTML = `<img src="${photoUrl}" alt="Profile" style="width:100%;height:100%;object-fit:cover;">`;
+                    }
+                }
+            }
+        } catch (error) {
+            console.warn("Could not load topbar profile picture:", error);
+        }
+    }
+
+    loadTopbarProfilePic();
 
     document.body.classList.add('layout-ready');
 });
+

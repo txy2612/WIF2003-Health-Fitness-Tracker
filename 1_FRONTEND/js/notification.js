@@ -1,162 +1,399 @@
-// ── STATE (Load from localStorage) ──
-// Fetch saved reminders, or start with an empty array if none exist
-let reminders = JSON.parse(localStorage.getItem("fittrack_reminders")) || [];
+const API_URL = "http://localhost:3000/api/v1/notification";
+const OLD_STORAGE_KEY = "fittrack_reminders";
 
-// Calculate the next available ID so we don't overwrite existing ones
-let idCounter = reminders.length > 0 ? Math.max(...reminders.map(r => r.id)) + 1 : 1;
+let reminders = [];
+let reminderToDeleteId = null;
+let reminderToEditId = null;
 
 const form = document.getElementById("reminderForm");
 const list = document.getElementById("reminderList");
 const emptyState = document.getElementById("emptyState");
 const count = document.getElementById("count");
-let reminderToDeleteId = null;
+const statusBox = document.getElementById("reminderStatus");
+const editForm = document.getElementById("editReminderForm");
 
-// ── LOCAL STORAGE HELPER ──
-// We call this function every time the array changes
-function saveReminders() {
-    localStorage.setItem("fittrack_reminders", JSON.stringify(reminders));
-
-    //  updates the bell instantly 
-    // only call if this function exists (layout.js is called before notification.js in html)
-    if (typeof updateNotificationBadge === "function") {
-        updateNotificationBadge();
-    }
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
 }
 
-// ── ADD REMINDER ──
-form.addEventListener("submit", function (e) {
-    e.preventDefault();
+async function api(path = "", options = {}) {
+    const token = window.AuthService?.getToken?.() || localStorage.getItem("fittrack_token");
+    const headers = {
+        ...(options.headers || {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
 
-    const date = document.getElementById("date").value;
-    const time = document.getElementById("time").value;
+    const response = await fetch(`${API_URL}${path}`, {
+        ...options,
+        headers
+    });
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
 
-    // only allow upcoming date/time to be selected
-    const selectedDateTime = new Date(date + "T" + time);// takes 2026-05-12 + T + 18:30
-    const now = new Date();// creaye a real Date object
+    if (!response.ok) {
+        throw new Error(data.detail || data.message || "Notification request failed.");
+    }
 
-    if (selectedDateTime <= now) {// reject 
-        alert("Please choose an upcoming date and time.");
+    return data;
+}
+
+function showStatus(message, type = "danger") {
+    statusBox.className = `alert alert-${type} mb-3`;
+    statusBox.textContent = message;
+}
+
+function clearStatus() {
+    statusBox.className = "alert mb-3 d-none";
+    statusBox.textContent = "";
+}
+
+function setBusy(isBusy) {
+    document
+        .querySelectorAll("#reminderList button, #confirmDeleteBtn, #editReminderForm button")
+        .forEach(button => {
+            button.disabled = isBusy;
+        });
+}
+
+function getActiveReminderCount() {
+    return reminders.filter(reminder => !reminder.completed).length;
+}
+
+// calls window.scheduleFitTrackReminders()
+// to refresj 'shared browder notification scheduling' after creating a reminder
+function refreshSharedReminderUi() {
+    const activeCount = getActiveReminderCount();
+
+    if (typeof window.refreshFitTrackNotificationBadge === "function") {
+        // other pages call refreshFit... when notification count is updated 
+        window.refreshFitTrackNotificationBadge(activeCount);
+    } else {
+        window.dispatchEvent(new CustomEvent("fittrack:reminders-changed", {
+            detail: { activeCount },
+        }));
+    }
+
+    if (typeof window.scheduleFitTrackReminders === "function") window.scheduleFitTrackReminders();
+}
+
+function getChannel(type) {
+    return type === "Other" ? "other" : "workout";
+}
+
+function getReminderDate(reminder) {
+    const dateValue = reminder.scheduledFor || String(reminder.datetime || "").replace(" ", "T");
+    const date = new Date(dateValue);
+    return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function toDateInput(date) {
+    return [
+        date.getFullYear(),
+        String(date.getMonth() + 1).padStart(2, "0"),
+        String(date.getDate()).padStart(2, "0"),
+    ].join("-");
+}
+
+function toTimeInput(date) {
+    return [
+        String(date.getHours()).padStart(2, "0"),
+        String(date.getMinutes()).padStart(2, "0"),
+    ].join(":");
+}
+
+function formatDateTime(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+
+    return date.toLocaleString("en-MY", {
+        dateStyle: "medium",
+        timeStyle: "short",
+    });
+}
+
+// Purpose: creayes backend reminder object
+// Frontend must send backend consistent data shape
+function buildReminderPayload({ type, title, note, scheduledFor, completed = false }) {
+    const message = note && note.trim() ? note.trim() : `Time for ${type}.`;
+
+    return {
+        channel: getChannel(type),
+        type,
+        title: title || type,
+        message,
+        scheduledFor,// used to calculate delay
+        completed,// used to track if sent
+    };
+}
+
+async function migrateOldLocalReminders() {
+    const saved = localStorage.getItem(OLD_STORAGE_KEY);
+    if (!saved) return;
+
+    let oldReminders = [];
+    try {
+        oldReminders = JSON.parse(saved) || [];
+    } catch (error) {
+        localStorage.removeItem(OLD_STORAGE_KEY);
         return;
     }
 
-    // Safety check in case the title input is removed
-    const titleEl = document.getElementById("title");
-    const titleVal = titleEl ? titleEl.value : "";
+    try {
+        for (const oldReminder of oldReminders) {
+            const scheduledDate = getReminderDate(oldReminder);
 
-    const reminder = {
-        id: idCounter++,
-        type: document.getElementById("type").value,
-        title: titleVal,
-        datetime: date + " " + time,
-        note: document.getElementById("note").value,
-        completed: false
-    };
+            // Past reminders cannot be created in the backend, so skip them.
+            if (!scheduledDate || scheduledDate <= new Date()) continue;
 
-    reminders.push(reminder);
-    saveReminders(); // Save to local storage
-    render();
-    form.reset();
-});
+            // sends reminder to backend, must be stored in DB for email scheduler to find them later
+            await api("", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(buildReminderPayload({
+                    type: oldReminder.type,
+                    title: oldReminder.title || oldReminder.type,
+                    note: oldReminder.note,
+                    scheduledFor: scheduledDate.toISOString(),
+                    completed: Boolean(oldReminder.completed),
+                })),
+            });
+        }
 
-// ── RENDER LIST ──
+        localStorage.removeItem(OLD_STORAGE_KEY);
+    } catch (error) {
+        showStatus("Could not migrate old browser reminders. Start the backend and refresh.");
+    }
+}
+
+async function loadReminders() {
+    clearStatus();
+    list.innerHTML = `
+        <li class="list-group-item text-center text-muted py-4">
+            Loading reminders...
+        </li>
+    `;
+    emptyState.style.display = "none";
+
+    try {
+        await migrateOldLocalReminders();
+        const data = await api("");
+        reminders = Array.isArray(data) ? data : [];
+        reminders.sort((a, b) => new Date(a.scheduledFor) - new Date(b.scheduledFor));
+        render();
+        refreshSharedReminderUi();
+    } catch (error) {
+        reminders = [];
+        render();
+        showStatus("Could not load reminders from the backend. Start the backend and try again.");
+    }
+}
+
 function render() {
     list.innerHTML = "";
-
-    // UPDATED COUNT LOGIC: Only count reminders that are NOT completed
-    const activeReminders = reminders.filter(r => !r.completed);
-    count.textContent = activeReminders.length;
+    count.textContent = getActiveReminderCount();
 
     if (reminders.length === 0) {
         emptyState.style.display = "block";
         return;
-    } else {
-        emptyState.style.display = "none";
     }
 
-    reminders.forEach(r => {
-        const li = document.createElement("li");
-        li.className = "list-group-item d-flex justify-content-between align-items-center";
+    emptyState.style.display = "none";
 
-        // Display logic for the title
-        const displayTitle = r.title ? ` - ${r.title}` : '';
+    reminders.forEach(reminder => {
+        const titleText = reminder.title && reminder.title !== reminder.type
+            ? ` - ${reminder.title}`
+            : "";
 
-        li.innerHTML = `
+        const item = document.createElement("li");
+        item.className = "list-group-item d-flex justify-content-between align-items-center";
+        item.innerHTML = `
             <div>
-                <strong style="${r.completed ? 'text-decoration: line-through; color: #a1a1a1;' : ''}">
-                    ${r.type}${displayTitle}
+                <strong style="${reminder.completed ? "text-decoration: line-through; color: #a1a1a1;" : ""}">
+                    ${escapeHtml(reminder.type)}${escapeHtml(titleText)}
                 </strong><br>
-                <small class="text-muted">${r.datetime}</small>
-                ${r.completed
-                ? '<span class="badge badge-success ml-2">Done</span>'
-                : '<span class="badge badge-secondary ml-2">Active</span>'}
+                <small class="text-muted">${escapeHtml(formatDateTime(reminder.scheduledFor))}</small>
+                ${reminder.completed
+                    ? '<span class="badge badge-success ml-2">Done</span>'
+                    : '<span class="badge badge-secondary ml-2">Active</span>'}
             </div>
 
             <div>
-                <button class="btn btn-outline-primary btn-sm mr-1" onclick="toggle(${r.id})">
-                    <i class="fas ${r.completed ? 'fa-undo' : 'fa-check'}"></i>
+                <button class="btn btn-outline-primary btn-sm mr-1" onclick="toggle('${escapeHtml(reminder.id)}')">
+                    <i class="fas ${reminder.completed ? "fa-undo" : "fa-check"}"></i>
                 </button>
-
-                <button class="btn btn-sm mr-1" onclick="edit(${r.id})" style="color:#4e73df;">
+                <button class="btn btn-sm mr-1" onclick="edit('${escapeHtml(reminder.id)}')" style="color:#4e73df;">
                     <i class="fas fa-pencil-alt"></i>
                 </button>
-
-                <button class="btn btn-danger btn-sm" onclick="openDeleteModal(${r.id})">
+                <button class="btn btn-danger btn-sm" onclick="openDeleteModal('${escapeHtml(reminder.id)}')">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
         `;
-
-        list.appendChild(li);
+        list.appendChild(item);
     });
 }
 
-// ── ACTIONS ──
-function toggle(id) {
-    const r = reminders.find(x => x.id === id);
-    if (r) {
-        r.completed = !r.completed;
-        saveReminders(); // Save change
-        render();
+//  request for browser permission
+async function requestBrowserNotificationPermission() {
+    if ("Notification" in window && Notification.permission === "default") {
+        await Notification.requestPermission();
     }
 }
 
-function removeItem(id) {
-    reminders = reminders.filter(x => x.id !== id);
-    saveReminders(); // Save change
-    render();
+form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    clearStatus();
+
+    // collects type , date, time, and note
+    const type = document.getElementById("type").value;
+    const date = document.getElementById("date").value;
+    const time = document.getElementById("time").value;
+    const note = document.getElementById("note").value;
+    const scheduledDate = new Date(`${date}T${time}`);
+
+    if (!type || Number.isNaN(scheduledDate.getTime()) || scheduledDate <= new Date()) {
+        showStatus("Please choose a reminder type and an upcoming date and time.");
+        return;
+    }
+
+    try {
+        setBusy(true);
+        await requestBrowserNotificationPermission();
+
+        const createdReminder = await api("", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(buildReminderPayload({
+                type,
+                title: type,
+                note,
+                scheduledFor: scheduledDate.toISOString(),
+            })),
+        });
+
+        reminders.push(createdReminder);
+        reminders.sort((a, b) => new Date(a.scheduledFor) - new Date(b.scheduledFor));
+        form.reset();
+        render();
+        refreshSharedReminderUi();
+    } catch (error) {
+        showStatus(error.message || "Failed to create reminder.");
+    } finally {
+        setBusy(false);
+    }
+});
+
+async function toggle(id) {
+    const reminder = reminders.find(item => item.id === id);
+    if (!reminder) return;
+
+    try {
+        setBusy(true);
+        const updatedReminder = await api(`/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ completed: !reminder.completed }),
+        });
+
+        reminders = reminders.map(item => item.id === id ? updatedReminder : item);
+        render();
+        refreshSharedReminderUi();
+    } catch (error) {
+        showStatus(error.message || "Failed to update reminder.");
+    } finally {
+        setBusy(false);
+    }
 }
 
 function openDeleteModal(id) {
     reminderToDeleteId = id;
-    $('#deleteModal').modal('show');
+    $("#deleteModal").modal("show");
 }
 
-document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
-    if (reminderToDeleteId !== null) {
-        removeItem(reminderToDeleteId);
-        reminderToDeleteId = null;
-    }
+document.getElementById("confirmDeleteBtn").addEventListener("click", async function () {
+    if (!reminderToDeleteId) return;
 
-    $('#deleteModal').modal('hide');
+    try {
+        setBusy(true);
+        await api(`/${reminderToDeleteId}`, { method: "DELETE" });
+        reminders = reminders.filter(item => item.id !== reminderToDeleteId);
+        reminderToDeleteId = null;
+        $("#deleteModal").modal("hide");
+        render();
+        refreshSharedReminderUi();
+    } catch (error) {
+        showStatus(error.message || "Failed to delete reminder.");
+    } finally {
+        setBusy(false);
+    }
 });
 
 function edit(id) {
-    const r = reminders.find(x => x.id === id);
-    if (r) {
-        const newTitle = prompt("Edit title:", r.title);
-        if (newTitle !== null && newTitle.trim() !== "") {
-            r.title = newTitle;
-            saveReminders(); // Save change
-            render();
-        }
+    const reminder = reminders.find(item => item.id === id);
+    if (!reminder) return;
+
+    const scheduledDate = getReminderDate(reminder);
+    if (!scheduledDate) {
+        showStatus("This reminder has an invalid time and cannot be edited.");
+        return;
     }
+
+    reminderToEditId = id;
+    document.getElementById("editTitle").value = reminder.title || reminder.type;
+    document.getElementById("editDate").value = toDateInput(scheduledDate);
+    document.getElementById("editTime").value = toTimeInput(scheduledDate);
+    $("#editModal").modal("show");
 }
 
-render(); // Initial render on page load
+editForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    if (!reminderToEditId) return;
+
+    const title = document.getElementById("editTitle").value.trim();
+    const date = document.getElementById("editDate").value;
+    const time = document.getElementById("editTime").value;
+    const scheduledDate = new Date(`${date}T${time}`);
+
+    if (!title || Number.isNaN(scheduledDate.getTime()) || scheduledDate <= new Date()) {
+        showStatus("Please enter a name and an upcoming date and time.");
+        return;
+    }
+
+    try {
+        setBusy(true);
+        const updatedReminder = await api(`/${reminderToEditId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                title,
+                scheduledFor: scheduledDate.toISOString(),
+                browserNotifiedAt: null,
+            }),
+        });
+
+        reminders = reminders.map(item => item.id === reminderToEditId ? updatedReminder : item);
+        reminders.sort((a, b) => new Date(a.scheduledFor) - new Date(b.scheduledFor));
+        reminderToEditId = null;
+        $("#editModal").modal("hide");
+        render();
+        refreshSharedReminderUi();
+    } catch (error) {
+        showStatus(error.message || "Failed to edit reminder.");
+    } finally {
+        setBusy(false);
+    }
+});
+
+loadReminders();
 
 document.addEventListener("DOMContentLoaded", function () {
-    const list = document.getElementById("insightsList");
-    if (!list) return;
+    const insightsList = document.getElementById("insightsList");
+    if (!insightsList) return;
 
     const insights = [
         getStepWeekInsight(),
@@ -168,12 +405,10 @@ document.addEventListener("DOMContentLoaded", function () {
         getWorkoutReminderInsight(),
         getWaterInsight(),
         getMealReminderInsight()
-    ];
+    ].filter(text => text !== null && text !== "");
 
-    const filtered = insights.filter(i => i !== null && i !== "");
-
-    if (filtered.length === 0) {// shows 'You're all caught up!'
-        list.innerHTML = `
+    if (insights.length === 0) {
+        insightsList.innerHTML = `
             <li class="list-group-item text-center text-muted py-4">
                 <i class="fas fa-check-circle fa-2x text-gray-300 mb-2"></i>
                 <p class="mb-0">You're all caught up! No new insights right now.</p>
@@ -183,36 +418,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const MAX_SHOW = 5;
-    let showingAll = false; //show more/less toggle logic
+    let showingAll = false;
 
     function renderInsights() {
-        list.innerHTML = "";
+        insightsList.innerHTML = "";
+        const visibleInsights = showingAll ? insights : insights.slice(0, MAX_SHOW);
 
-        // when showingAll boolean -> true -> filtered
-        //                         -> false -> filtered.slice(0, MAX_SHOW)
-        const itemsToShow = showingAll ? filtered : filtered.slice(0, MAX_SHOW);
-
-        itemsToShow.forEach(text => {
-            const li = document.createElement("li");
-            li.className = "list-group-item d-flex align-items-center";
-            li.innerHTML = `
+        visibleInsights.forEach(text => {
+            const item = document.createElement("li");
+            item.className = "list-group-item d-flex align-items-center";
+            item.innerHTML = `
                 <i class="fas fa-fw fa-info-circle text-primary mr-3"></i>
                 <span>${text}</span>
             `;
-            list.appendChild(li);
+            insightsList.appendChild(item);
         });
 
-        if (filtered.length > MAX_SHOW) {
-            const btnLi = document.createElement("li");
-            btnLi.className = "list-group-item text-center";
-
-            btnLi.innerHTML = `
+        if (insights.length > MAX_SHOW) {
+            const buttonItem = document.createElement("li");
+            buttonItem.className = "list-group-item text-center";
+            buttonItem.innerHTML = `
                 <button class="btn btn-outline-primary btn-sm" id="toggleInsightsBtn">
-                    ${showingAll ? "Show less" : `Show ${filtered.length - MAX_SHOW} more insights`}
+                    ${showingAll ? "Show less" : `Show ${insights.length - MAX_SHOW} more insights`}
                 </button>
-            `;// if collapese -> "Show 3 or more insights"; if expanded -> "Show less"
-
-            list.appendChild(btnLi);
+            `;
+            insightsList.appendChild(buttonItem);
 
             document.getElementById("toggleInsightsBtn").addEventListener("click", function () {
                 showingAll = !showingAll;

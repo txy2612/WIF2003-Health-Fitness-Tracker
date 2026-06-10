@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>FitTrack — Sign In</title>
- 
+
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap"
+        rel="stylesheet">
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
     <link href="../css/login.css" rel="stylesheet">
 </head>
- 
+
 <body>
- 
+
     <!-- ── LEFT PANEL ──────────────────────────────────────────────────── -->
     <div class="left-panel">
- 
+
         <div class="left-brand">
             <a href="index.html">
                 <span class="brand-name">FitTrack</span>
             </a>
         </div>
- 
+
         <div class="left-content">
             <div class="left-tag">✦ Your health companion</div>
             <h2 class="left-headline">Track every rep.<br><em>Feel every result.</em></h2>
-            <p class="left-sub">Log workouts, monitor nutrition, and chart your progress — all in one clean dashboard built for consistency.</p>
- 
+            <p class="left-sub">Log workouts, monitor nutrition, and chart your progress — all in one clean dashboard
+                built for consistency.</p>
+
             <div class="left-stats">
                 <div class="left-stat">
                     <div class="left-stat-num">6</div>
@@ -44,7 +48,7 @@
                     <div class="left-stat-label">Logs</div>
                 </div>
             </div>
- 
+
             <div class="activity-cards">
                 <div class="activity-chip">
                     <span class="activity-chip-icon">🏃</span>
@@ -63,24 +67,24 @@
                 </div>
             </div>
         </div>
- 
+
         <div class="left-footer">© 2026 FitTrack · WIF2003</div>
     </div>
- 
+
     <!-- ── RIGHT PANEL ──────────────────────────────────────────────────── -->
     <div class="right-panel">
- 
+
         <a href="index.html" class="back-link">
             <i class="fas fa-arrow-left fa-xs"></i> Back to home
         </a>
- 
+
         <div class="right-inner">
- 
+
             <div class="form-header">
                 <h1>Welcome back.</h1>
                 <p>Don't have an account? <a href="register.html">Sign up free</a></p>
             </div>
- 
+
             <!-- Email -->
             <div class="field-group">
                 <label class="field-label" for="inputEmail">Email</label>
@@ -89,7 +93,7 @@
                     <input type="email" class="field-input" id="inputEmail" placeholder="you@example.com">
                 </div>
             </div>
- 
+
             <!-- Password -->
             <div class="field-group">
                 <label class="field-label" for="inputPassword">Password</label>
@@ -98,7 +102,7 @@
                     <input type="password" class="field-input" id="inputPassword" placeholder="Enter your password">
                 </div>
             </div>
- 
+
             <!-- Remember + Forgot -->
             <div class="form-meta">
                 <label class="remember-label">
@@ -107,20 +111,20 @@
                 </label>
                 <a href="forgot-password.html" class="forgot-link">Forgot password?</a>
             </div>
- 
+
             <!-- Sign In -->
-            <button class="btn-signin" onclick="window.location.href='dashboard.html'">
+            <button class="btn-signin" id="loginBtn">
                 Sign In
                 <!-- TODO: wire to backend — POST /api/auth/login -->
             </button>
- 
+
             <!-- Divider -->
             <div class="divider">
                 <div class="divider-line"></div>
                 <span class="divider-text">or continue with</span>
                 <div class="divider-line"></div>
             </div>
- 
+
             <!-- Social -->
             <div class="social-btns">
                 <a href="#" class="btn-social">
@@ -130,19 +134,22 @@
                     <i class="fab fa-facebook-f"></i> Facebook
                 </a>
             </div>
- 
+
             <div class="register-link">
                 New to FitTrack? <a href="register.html">Create a free account →</a>
             </div>
- 
+
         </div>
     </div>
- 
+
     <!-- Bootstrap + SB Admin JS (keep for compatibility) -->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="../js/sb-admin-2.min.js"></script>
- 
+    <script src="../js/login.js"></script>
+    <script src="../js/service/auth-service.js"></script>
+
 </body>
+
 </html>

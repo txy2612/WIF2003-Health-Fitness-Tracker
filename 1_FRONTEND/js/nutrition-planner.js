@@ -57,14 +57,13 @@ const GOAL_LABELS = {
 };
 
 // ---- State (backed by localStorage) ----
-let favourites  = JSON.parse(localStorage.getItem('np_favourites')  || '[]');
-const todayKey = 'np_todayPlan_' + new Date().toISOString().split('T')[0];
-let todayPlan  = JSON.parse(localStorage.getItem(todayKey) || '{"breakfast":[],"lunch":[],"dinner":[]}');
+// favourites + today's plan now load from the backend (see nutrition-service.js)
+let favourites = [];
+const todayDate = new Date().toISOString().split('T')[0];
+let todayPlan  = { breakfast: [], lunch: [], dinner: [] };
 let calcResult  = JSON.parse(localStorage.getItem('np_calcResult')  || 'null');
 
 
-function saveFavourites() { localStorage.setItem('np_favourites', JSON.stringify(favourites)); }
-function savePlan() { localStorage.setItem(todayKey, JSON.stringify(todayPlan)); }
 function saveCalcResult(r){ localStorage.setItem('np_calcResult', JSON.stringify(r));           }
 
 // ---- Helpers ----
@@ -155,19 +154,23 @@ function renderMealCards() {
 }
 
 // Toggle favourite heart (white → blue)
-function toggleFavourite(id) {
+async function toggleFavourite(id) {
   const meal = MEALS.find(m => m.id === id);
   const idx  = favourites.findIndex(f => f.id === id);
 
-  if (idx >= 0) {
-    favourites.splice(idx, 1);
-  } else {
-    favourites.push({ id: meal.id, name: meal.name, calories: meal.calories, img: meal.img });
+  try {
+    if (idx >= 0) {
+      await NutritionService.removeFavourite(id);
+      favourites.splice(idx, 1);
+    } else {
+      const saved = await NutritionService.addFavourite({ id: meal.id, name: meal.name, calories: meal.calories, img: meal.img });
+      favourites.push(saved);
+    }
+    renderMealCards();
+    renderFavourites();
+  } catch (error) {
+    showToast('Could not update favourite. Is the server running?');
   }
-
-  saveFavourites();
-  renderMealCards();
-  renderFavourites();
 }
 
 // Open View Details modal
@@ -189,22 +192,33 @@ function openDetails(id) {
 }
 
 // ---- Today's Plan ----
-function addToPlan(mealId, slot) {
+async function addToPlan(mealId, slot) {
   const meal = MEALS.find(m => m.id === mealId);
   if (todayPlan[slot].find(m => m.id === mealId)) {
     showToast(`${meal.name} is already in ${capitalize(slot)}!`);
     return;
   }
   todayPlan[slot].push({ id: meal.id, name: meal.name, calories: meal.calories, img: meal.img });
-  savePlan();
-  renderTodayPlan();
-  showToast(`Added ${meal.name} to ${capitalize(slot)}! ✓`);
+  try {
+    await NutritionService.savePlan(todayDate, todayPlan);
+    renderTodayPlan();
+    showToast(`Added ${meal.name} to ${capitalize(slot)}! ✓`);
+  } catch (error) {
+    todayPlan[slot] = todayPlan[slot].filter(m => m.id !== mealId); // roll back the optimistic add
+    showToast('Could not save plan. Is the server running?');
+  }
 }
 
-function removeFromPlan(mealId, slot) {
+async function removeFromPlan(mealId, slot) {
+  const removed = todayPlan[slot];
   todayPlan[slot] = todayPlan[slot].filter(m => m.id !== mealId);
-  savePlan();
-  renderTodayPlan();
+  try {
+    await NutritionService.savePlan(todayDate, todayPlan);
+    renderTodayPlan();
+  } catch (error) {
+    todayPlan[slot] = removed; // roll back
+    showToast('Could not save plan. Is the server running?');
+  }
 }
 
 function renderTodayPlan() {
@@ -296,11 +310,15 @@ function renderFavourites() {
   </div>`;
 }
 
-function removeFavourite(id) {
-  favourites = favourites.filter(f => f.id !== id);
-  saveFavourites();
-  renderMealCards();
-  renderFavourites();
+async function removeFavourite(id) {
+  try {
+    await NutritionService.removeFavourite(id);
+    favourites = favourites.filter(f => f.id !== id);
+    renderMealCards();
+    renderFavourites();
+  } catch (error) {
+    showToast('Could not remove favourite. Is the server running?');
+  }
 }
 
 // ── Cleanup: remove water keys older than 30 days ──
@@ -317,7 +335,7 @@ Object.keys(localStorage)
 
 // ---- Water Intake (teammate implementation) ----
 const today = new Date().toISOString().split('T')[0];
-let waterGlasses = parseInt(localStorage.getItem('np_water_' + today) || '0', 10); // Update water today so it doesn't load yesterday's data -> Start fresh at 0 everyday
+let waterGlasses = parseInt(localStorage.getItem('np_water_' + today) || '0', 10);
 const waterMax = 8;
 const waterMessages = [
   'Stay hydrated! Start logging your water intake.',
@@ -342,7 +360,7 @@ function renderWaterGrid() {
     glass.onclick = () => {
     waterGlasses = i + 1;
     const today = new Date().toISOString().split('T')[0];
-    localStorage.setItem('np_water_' + today, waterGlasses);  // add dated key
+    WaterService.setWater(today, waterGlasses).catch(() => showToast('Could not save water.'));
     renderWaterGrid();
     updateWaterUI();
 };
@@ -360,7 +378,7 @@ function updateWaterUI() {
 function adjustWater(delta) {
   waterGlasses = Math.max(0, Math.min(waterMax, waterGlasses + delta));
   const today = new Date().toISOString().split('T')[0];
-  localStorage.setItem('np_water_' + today, waterGlasses);
+  WaterService.setWater(today, waterGlasses).catch(() => showToast('Could not save water.'));
   renderWaterGrid();
   updateWaterUI();
 }
@@ -487,7 +505,15 @@ function searchMeals() {
 }
 
 // ---- Initialise ----
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
+   try {
+    favourites = await NutritionService.getFavourites();
+    todayPlan = await NutritionService.getPlan(todayDate);
+    waterGlasses = await WaterService.getWater(today);
+  } catch (error) {
+    showToast('Could not load saved data. Is the server running?');
+  }
+
   renderMealCards();
   renderFavourites();
   renderTodayPlan();
