@@ -1,6 +1,6 @@
 import request from 'supertest';
-import app from '../src/app.js';
-import { connectDB, clearDB, closeDB } from './db.js';
+import app from '../../src/app.js';
+import { connectDB, clearDB, closeDB } from '../db.js';
 
 // Setup and Teardown Hooks
 beforeAll(async () => await connectDB());

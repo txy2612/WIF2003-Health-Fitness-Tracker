@@ -1,7 +1,7 @@
 import request from 'supertest';
-import app from '../src/app.js';
-import { connectDB, clearDB, closeDB } from './db.js';
-import User from '../src/modules/profile/profileModel.js';
+import app from '../../src/app.js';
+import { connectDB, clearDB, closeDB } from '../db.js';
+import User from '../../src/modules/profile/profileModel.js';
 
 beforeAll(async () => await connectDB());    // Start fake DB before tests
 afterEach(async () => await clearDB());      // Wipe data between tests
