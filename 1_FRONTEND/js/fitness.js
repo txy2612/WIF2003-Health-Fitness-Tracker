@@ -431,22 +431,14 @@ async function logSteps() {
         return;
     }
 
-    // Prevent duplicate steps for same date
-    const existing = getActivityLogs().find(l => l.type === 'steps' && l.date === date);
-    if (existing) {
-        alert(`Steps already logged for ${formatDate(date)}. Delete the existing entry first to update.`);
-        return;
-    }
-
     const calories = calcStepsCalories(parseFloat(steps));
-    const badge    = `<span class="badge badge-secondary">🚶 Steps Only</span>`;
     const id       = generateId();
     const loggedAt = new Date().toISOString();
 
     const activity = {
         id,
-        type:     'steps',
-        steps:    parseInt(steps),
+        type: 'steps',
+        steps: parseInt(steps),
         calories: calories ?? 0,
         date,
         loggedAt
@@ -463,16 +455,7 @@ async function logSteps() {
         return;
     }
 
-    appendRow(
-        id,
-        formatDate(date),
-        badge,
-        '—',
-        parseInt(steps).toLocaleString(),
-        (calories !== null ? calories + ' kcal' : '—'),
-        '—'
-    );
-
+    await loadActivities();
     clearStepsForm();
     updateQuickSummary();
 }
