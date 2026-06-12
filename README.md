@@ -1,65 +1,253 @@
-# [Start Bootstrap - SB Admin 2](https://startbootstrap.com/theme/sb-admin-2/)
+# Health & Fitness Tracker
 
-[SB Admin 2](https://startbootstrap.com/theme/sb-admin-2/) is an open source admin dashboard theme for [Bootstrap](https://getbootstrap.com/) created by [Start Bootstrap](https://startbootstrap.com/).
+## Overview
 
-For the legacy Bootstrap 3 version of this theme, you can view the [last stable release](https://github.com/StartBootstrap/startbootstrap-sb-admin-2/releases/tag/v3.3.7%2B1) of SB Admin 2 for Bootstrap 3.
+Health & Fitness Tracker is a web-based application designed to help users monitor and manage their health and fitness activities in a centralized platform. The system allows users to track workouts, daily steps, nutrition intake, hydration, fitness goals, and progress over time while receiving reminders and personalized insights.
 
-## Preview
+The project aims to encourage healthier lifestyles by providing users with an easy-to-use dashboard for monitoring fitness-related activities and performance trends.
 
-[![SB Admin 2 Preview](https://assets.startbootstrap.com/img/screenshots/themes/sb-admin-2.png)](https://startbootstrap.github.io/startbootstrap-sb-admin-2/)
+---
 
-**[Launch Live Preview](https://startbootstrap.github.io/startbootstrap-sb-admin-2/)**
+## Features
 
-## Status
+### Authentication & User Management
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/StartBootstrap/startbootstrap-sb-admin-2/master/LICENSE)
-[![npm version](https://img.shields.io/npm/v/startbootstrap-sb-admin-2.svg)](https://www.npmjs.com/package/startbootstrap-sb-admin-2)
-[![Build Status](https://travis-ci.org/StartBootstrap/startbootstrap-sb-admin-2.svg?branch=master)](https://travis-ci.org/StartBootstrap/startbootstrap-sb-admin-2)
-[![dependencies Status](https://david-dm.org/StartBootstrap/startbootstrap-sb-admin-2/status.svg)](https://david-dm.org/StartBootstrap/startbootstrap-sb-admin-2)
-[![devDependencies Status](https://david-dm.org/StartBootstrap/startbootstrap-sb-admin-2/dev-status.svg)](https://david-dm.org/StartBootstrap/startbootstrap-sb-admin-2?type=dev)
+* User registration and login
+* JWT-based authentication and authorization
+* Secure password hashing using bcrypt
+* Password reset via email
 
-## Download and Installation
+### Fitness Activity Tracking
 
-To begin using this template, choose one of the following options to get started:
+* Log workouts and exercises
+* Record daily step counts
+* Calculate estimated calories burned
+* View activity history
 
-* [Download the latest release on Start Bootstrap](https://startbootstrap.com/theme/sb-admin-2/)
-* Install via npm: `npm i startbootstrap-sb-admin-2`
-* Clone the repo: `git clone https://github.com/StartBootstrap/startbootstrap-sb-admin-2.git`
-* [Fork, Clone, or Download on GitHub](https://github.com/StartBootstrap/startbootstrap-sb-admin-2)
+### Nutrition Planner
 
-## Usage
+* Track daily meals and calorie intake
+* Manage nutrition plans
+* Monitor nutritional progress
 
-After installation, run `npm install` and then run `npm start` which will open up a preview of the template in your default browser, watch for changes to core template files, and live reload the browser when changes are saved. You can view the `gulpfile.js` to see which tasks are included with the dev environment.
+### Hydration Tracking
 
-### Gulp Tasks
+* Record daily water consumption
+* Monitor hydration goals
+  
+### Goal Management
 
-* `gulp` the default task that builds everything
-* `gulp watch` browserSync opens the project in your default browser and live reloads when changes are made
-* `gulp css` compiles SCSS files into CSS and minifies the compiled CSS
-* `gulp js` minifies the themes JS file
-* `gulp vendor` copies dependencies from node_modules to the vendor directory
+* Create fitness goals
+* Track goal completion progress
+* Monitor achievement status
 
-You must have npm installed globally in order to use this build environment. This theme was built using node v11.6.0 and the Gulp CLI v2.0.1. If Gulp is not running properly after running `npm install`, you may need to update node and/or the Gulp CLI locally.
+### Progress Visualization
 
-## Bugs and Issues
+* Interactive charts and graphs
+* Activity trends over time
+* Progress comparison and analysis
 
-Have a bug or an issue with this template? [Open a new issue](https://github.com/StartBootstrap/startbootstrap-sb-admin-2/issues) here on GitHub or leave a comment on the [template overview page at Start Bootstrap](https://startbootstrap.com/theme/sb-admin-2/).
+### Dashboard Analytics
 
-## About
+* Aggregated health statistics
+* Personalized fitness insights
+* Overview of activities, nutrition, hydration, and goals
 
-Start Bootstrap is an open source library of free Bootstrap templates and themes. All of the free templates and themes on Start Bootstrap are released under the MIT license, which means you can use them for any purpose, even for commercial projects.
+### Notifications & Reminders
 
-* <https://startbootstrap.com>
-* <https://twitter.com/SBootstrap>
+* Email reminders using Nodemailer
+* Scheduled email & browser notifications for fitness activities
+* Goal and hydration reminders
 
-Start Bootstrap was created by and is maintained by **[David Miller](https://davidmiller.io/)**.
+---
 
-* <https://davidmiller.io>
-* <https://twitter.com/davidmillerhere>
-* <https://github.com/davidtmiller>
+## System Architecture
 
-Start Bootstrap is based on the [Bootstrap](https://getbootstrap.com/) framework created by [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
+```
+Frontend
+(HTML, CSS, JavaScript, Bootstrap)
+          │
+          ▼
+REST API
+(Node.js + Express.js)
+          │
+          ▼
+MongoDB Atlas
+(Database)
+```
 
-## Copyright and License
+### Technology Stack
 
-Copyright 2013-2021 Start Bootstrap LLC. Code released under the [MIT](https://github.com/StartBootstrap/startbootstrap-resume/blob/master/LICENSE) license.
+#### Frontend
+
+* HTML5
+* CSS3
+* JavaScript (ES6+)
+* Bootstrap 5
+* Chart.js
+
+#### Backend
+
+* Node.js
+* Express.js
+* JWT Authentication
+* bcrypt
+* Zod Validation
+* Nodemailer
+* node-cron
+
+#### Database
+
+* MongoDB Atlas
+* Mongoose ODM
+
+---
+
+## Project Structure
+
+```
+health-fitness-tracker/
+│
+├── public/
+│   ├── css/
+│   ├── js/
+│   └── images/
+│
+├── src/
+│   ├── config/
+│   ├── middleware/
+│   ├── modules/
+│   │   ├── authentication/
+│   │   ├── dashboard/
+│   │   ├── fitness-tracker/
+│   │   ├── nutrition-planner/
+│   │   ├── hydration-tracker/
+│   │   ├── progress-charts/
+│   │   ├── notifications/
+│   │   └── profile/
+│   │
+│   ├── services/
+│   ├── utils/
+│   └── app.js
+│
+├── tests/
+├── docs/
+├── .env
+├── package.json
+└── README.md
+```
+
+---
+
+## Installation
+
+### Prerequisites
+
+Ensure the following are installed:
+
+* Node.js (v18 or above)
+* npm
+* MongoDB Atlas account
+
+### Clone Repository
+
+```bash
+git clone https://github.com/your-username/health-fitness-tracker.git
+
+cd health-fitness-tracker
+```
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Configure Environment Variables
+
+Create a `.env` file in the project root.
+
+```env
+PORT=3000
+
+MONGODB_URI=your_mongodb_connection_string
+
+JWT_SECRET=your_jwt_secret
+
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_email_password
+```
+
+### Run Application
+
+Development Mode:
+
+```bash
+npm run dev
+```
+
+Production Mode:
+
+```bash
+npm start
+```
+
+Server will run on:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## API Modules
+
+| Module            | Description                              |
+| ----------------- | ---------------------------------------- |
+| Authentication    | User registration, login, password reset |
+| Profile           | User profile management                  |
+| Fitness Tracker   | Workout and step tracking                |
+| Nutrition Planner | Meal and calorie management              |
+| Hydration Tracker | Water intake tracking                    |
+| Progress Charts   | Data visualization and analytics         |
+| Dashboard         | Aggregated user insights                 |
+| Notifications     | Email reminders and alerts               |
+
+---
+
+## Testing
+
+The project includes:
+
+### Unit Testing
+
+Tests individual functions, services, and utility modules.
+
+### Integration Testing
+
+Tests interactions between APIs, services, and database components.
+
+### Functional Testing
+
+Validates complete user workflows and system requirements.
+
+Run tests:
+
+```bash
+npm test
+```
+
+---
+
+## Security Features
+
+* JWT Authentication
+* Password Hashing (bcrypt)
+* Input Validation (Zod)
+* Protected API Routes
+* Environment Variable Protection
+* Error Handling Middleware
+
+---
+
+
