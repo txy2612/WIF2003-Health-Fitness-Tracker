@@ -74,6 +74,7 @@ window.AuthService = {
 
     logout() {
         localStorage.removeItem('fittrack_token');
+        localStorage.removeItem('fittrack_user');
         window.location.href = 'login.html';
     },
 
